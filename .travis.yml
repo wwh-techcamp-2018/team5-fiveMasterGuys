@@ -1,0 +1,36 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script: "./gradlew clean build"
+
+notifications:
+    slack: woowahan-techcamp:DUmMgWkADZU9aC7hhTK2HPZc
+
+before_deploy:
+- zip -r springboot-webservice *
+- mkdir -p deploy
+- mv springboot-webservice.zip deploy/springboot-webservice.zip
+
+deploy:
+- provider: s3
+  local_dir: deploy # befo
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: recipehub-deploy
+  region: ap-northeast-2
+  skip_cleanup: true
+  acl: public_read
+  wait-until-deployed: true
+  on:
+    repo: wwh-techcamp-2018/team5-fiveMasterGuys
+    branch: master
+
