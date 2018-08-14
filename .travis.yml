@@ -34,3 +34,16 @@ deploy:
     repo: wwh-techcamp-2018/team5-fiveMasterGuys
     branch: master
 
+- provider: codedeploy
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  bucket: recipehub-deploy
+  key: recipehub-latest.zip
+  bundle_type: zip
+  application: recipehub
+  deployment_group: recipehub-deploy-group
+  region: ap-northeast-2
+  wait-until-deployed: true
+  on:
+    repo: wwh-techcamp-2018/team5-fiveMasterGuys
+    branch: master
