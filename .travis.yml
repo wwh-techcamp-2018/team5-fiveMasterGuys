@@ -16,9 +16,9 @@ notifications:
     slack: woowahan-techcamp:DUmMgWkADZU9aC7hhTK2HPZc
 
 before_deploy:
-- zip -r springboot-webservice *
+- zip -r recipehub-latest *
 - mkdir -p deploy
-- mv springboot-webservice.zip deploy/springboot-webservice.zip
+- mv recipehub-latest.zip deploy/recipehub-latest.zip
 
 deploy:
 - provider: s3
