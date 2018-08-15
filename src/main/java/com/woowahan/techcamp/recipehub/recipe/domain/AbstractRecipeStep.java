@@ -5,7 +5,10 @@ import com.woowahan.techcamp.recipehub.user.domain.User;
 import javax.persistence.*;
 import java.util.List;
 
-@MappedSuperclass
+@Entity
+@Table(name = "RecipeStep")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="type")
 public abstract class AbstractRecipeStep {
 
     @Id
@@ -21,6 +24,6 @@ public abstract class AbstractRecipeStep {
     private User writer;
     private String imgUrl;
 
-    @OneToMany
+    @ManyToMany
     private List<Ingredient> ingredients;
 }

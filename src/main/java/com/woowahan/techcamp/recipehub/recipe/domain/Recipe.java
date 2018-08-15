@@ -38,19 +38,20 @@ public class Recipe {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "recipe")
-    private List<RecipeStep> steps;
+    private List<RecipeStep> recipeSteps;
 
     private String imgUrl;
 
     @Builder
-    public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<RecipeStep> steps, String imgUrl) {
+
+    public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<RecipeStep> recipeSteps, String imgUrl) {
         this.category = category;
         this.owner = owner;
         this.name = name;
         this.completed = completed;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.steps = steps;
+        this.recipeSteps = recipeSteps;
         this.imgUrl = imgUrl;
     }
 }
