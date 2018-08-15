@@ -37,7 +37,7 @@ public class Recipe {
     @Column(nullable = false)
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "steps")
+    @OneToMany(mappedBy = "recipe")
     private List<RecipeStep> steps;
 
     private String imgUrl;
