@@ -26,4 +26,4 @@ JAR_NAME=$(ls $REPOSITORY/jar/ |grep 'recipehub' | tail -n 1)
 
 echo "> JAR Name: $JAR_NAME"
 
-nohup java -jar $REPOSITORY/jar/$JAR_NAME &
+nohup java -jar $REPOSITORY/jar/$JAR_NAME > /dev/null 2>&1 &
