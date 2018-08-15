@@ -5,6 +5,9 @@ jdk:
 branches:
   only:
     - master
+    - develop
+#    - /^feature\/.*$/
+
 cache:
   directories:
     - '$HOME/.m2/repository'
@@ -16,13 +19,13 @@ notifications:
     slack: woowahan-techcamp:DUmMgWkADZU9aC7hhTK2HPZc
 
 before_deploy:
-- zip -r recipehub-latest *
+- zip -r recipehub-develop *
 - mkdir -p deploy
-- mv recipehub-latest.zip deploy/recipehub-latest.zip
+- mv recipehub-develop.zip deploy/recipehub-develop.zip
 
 deploy:
 - provider: s3
-  local_dir: deploy # befo
+  local_dir: deploy
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
   bucket: recipehub-deploy
@@ -32,13 +35,13 @@ deploy:
   wait-until-deployed: true
   on:
     repo: wwh-techcamp-2018/team5-fiveMasterGuys
-    branch: master
+    branch: develop
 
 - provider: codedeploy
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
   bucket: recipehub-deploy
-  key: recipehub-latest.zip
+  key: recipehub-develop.zip
   bundle_type: zip
   application: recipehub
   deployment_group: recipehub-deploy-group
@@ -46,4 +49,4 @@ deploy:
   wait-until-deployed: true
   on:
     repo: wwh-techcamp-2018/team5-fiveMasterGuys
-    branch: master
+    branch: develop
