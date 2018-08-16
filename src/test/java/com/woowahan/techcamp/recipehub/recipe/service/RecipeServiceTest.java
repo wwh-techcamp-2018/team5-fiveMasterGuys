@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public class RecipeServiceTest {
 
         for (int i = 0; i < count; i++) {
             result.add(Recipe.builder()
-                    .name("recipe " + i)
+                    .name(String.format("recipe %d", i))
                     .build());
         }
 
