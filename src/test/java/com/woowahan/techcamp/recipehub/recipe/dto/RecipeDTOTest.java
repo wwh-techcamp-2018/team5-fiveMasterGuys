@@ -20,7 +20,7 @@ public class RecipeDTOTest extends ValidationTest {
     }
 
     @Test
-    public void wihtoutData() {
+    public void withoutData() {
         RecipeDTO dto = RecipeDTO.builder().build();
         assertConstraintViolations(dto, 3);
     }
