@@ -17,6 +17,6 @@ public class HomeController {
     @GetMapping
     public String home(Model model) {
         model.addAttribute("recipes", recipeService.findAll());
-        return "home";
+        return "index";
     }
 }
