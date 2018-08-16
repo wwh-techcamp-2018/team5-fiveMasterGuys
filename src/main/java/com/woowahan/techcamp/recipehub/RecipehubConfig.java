@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-public abstract class RecipehubConfig implements WebMvcConfigurer{
+public abstract class RecipehubConfig implements WebMvcConfigurer {
 
     @Configuration
     @Profile("development")
@@ -19,7 +19,7 @@ public abstract class RecipehubConfig implements WebMvcConfigurer{
 
     @Configuration
     @Profile("production")
-    static class RecipeHubProdConfig extends RecipehubConfig{
+    static class RecipeHubProdConfig extends RecipehubConfig {
 
     }
 }

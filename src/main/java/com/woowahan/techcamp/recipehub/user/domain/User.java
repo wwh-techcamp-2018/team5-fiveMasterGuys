@@ -3,15 +3,13 @@ package com.woowahan.techcamp.recipehub.user.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
 @Getter
+@Entity
 @NoArgsConstructor
 public class User {
 
@@ -19,8 +17,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100, nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(length = 40, nullable = false)
     private String name;
 
     @Builder
@@ -47,5 +50,9 @@ public class User {
     public int hashCode() {
 
         return Objects.hash(id);
+    }
+
+    public boolean matchPassword(String password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password, this.password);
     }
 }
