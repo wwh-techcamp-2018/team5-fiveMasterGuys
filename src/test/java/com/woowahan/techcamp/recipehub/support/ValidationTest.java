@@ -5,7 +5,6 @@ import org.junit.Before;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;

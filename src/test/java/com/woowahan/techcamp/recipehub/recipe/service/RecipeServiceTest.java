@@ -15,10 +15,10 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
-    
+
     @Mock
     private RecipeRepository recipeRepository;
-    
+
     @InjectMocks
     private RecipeService recipeService;
 
