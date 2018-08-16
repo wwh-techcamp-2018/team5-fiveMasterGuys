@@ -20,7 +20,7 @@ public class RecipeService {
     }
 
     public Recipe findById(Long recipeId) {
-
-        return recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
+        return recipe;
     }
 }
