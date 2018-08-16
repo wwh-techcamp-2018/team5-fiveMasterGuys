@@ -14,7 +14,7 @@ public class UserController {
     @GetMapping("/signup")
     public String signup(HttpSession session) {
         if (SessionUtils.isLoggedIn(session)) {
-            return "index";
+            return "redirect:/";
         }
         return "/users/signup";
     }
@@ -22,7 +22,7 @@ public class UserController {
     @GetMapping("/login")
     public String userLogin(HttpSession session) {
         if (SessionUtils.isLoggedIn(session)) {
-            return "index";
+            return "redirect:/";
         }
         return "users/login";
     }
