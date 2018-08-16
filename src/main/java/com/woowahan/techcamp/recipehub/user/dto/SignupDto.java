@@ -27,7 +27,7 @@ public class SignupDto {
     private String passwordCheck;
 
     @NotNull
-    @Size(min = 2, max = 45)
+    @Size(min = 2, max = 40)
     private String name;
 
     @AssertTrue(message = "")

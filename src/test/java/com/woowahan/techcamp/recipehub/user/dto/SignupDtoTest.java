@@ -76,7 +76,7 @@ public class SignupDtoTest extends ValidationTest {
     @Test
     public void name_size_over_max() {
         SignupDto dto = signupDtoBuilder
-                .name(StringUtils.repeat("a", 46))
+                .name(StringUtils.repeat("a", 41))
                 .build();
         assertConstraintViolations(dto, 1);
     }

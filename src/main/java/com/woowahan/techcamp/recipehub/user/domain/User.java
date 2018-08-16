@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -22,7 +21,6 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    @Size(min = 8, max = 16)
     private String password;
 
     @Column(length = 40, nullable = false)
