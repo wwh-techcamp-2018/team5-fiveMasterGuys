@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.domain;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,10 +41,10 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<RecipeStep> recipeSteps;
 
+    @Column
     private String imgUrl;
 
     @Builder
-
     public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<RecipeStep> recipeSteps, String imgUrl) {
         this.category = category;
         this.owner = owner;
