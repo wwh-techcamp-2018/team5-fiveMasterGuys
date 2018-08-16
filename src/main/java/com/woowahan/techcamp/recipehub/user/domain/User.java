@@ -16,7 +16,7 @@ import java.util.Objects;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(length = 100, nullable = false, unique = true)
     private String email;
@@ -29,8 +29,12 @@ public class User {
     private String name;
 
     @Builder
-    public User(String id, String email, String password, String name) {
+    public User(Long id, String email, String password, String name) {
+        this(email, password, name);
         this.id = id;
+    }
+
+    public User(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -41,15 +45,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, email, password, name);
+        return Objects.hash(id);
     }
 }

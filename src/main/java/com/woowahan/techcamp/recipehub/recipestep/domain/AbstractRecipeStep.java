@@ -1,5 +1,7 @@
-package com.woowahan.techcamp.recipehub.recipe.domain;
+package com.woowahan.techcamp.recipehub.recipestep.domain;
 
+import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
+import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 
 import javax.persistence.*;
