@@ -2,6 +2,9 @@ package com.woowahan.techcamp.recipehub.user.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, String> {
     Boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

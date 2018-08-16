@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipestep.domain;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity(name = "RecipeStep")
 @DiscriminatorValue("Step")

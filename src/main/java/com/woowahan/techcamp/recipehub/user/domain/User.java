@@ -3,16 +3,16 @@ package com.woowahan.techcamp.recipehub.user.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@NoArgsConstructor
 @Getter
-@Setter
+@NoArgsConstructor
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,5 +50,9 @@ public class User {
     public int hashCode() {
 
         return Objects.hash(id);
+    }
+
+    public boolean matchPassword(String password, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password, this.password);
     }
 }

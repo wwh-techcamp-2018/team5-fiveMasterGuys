@@ -1,16 +1,20 @@
 package com.woowahan.techcamp.recipehub.user.controller;
 
-import com.woowahan.techcamp.recipehub.user.Service.UserService;
+import com.woowahan.techcamp.recipehub.common.security.SessionUtils;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
 import com.woowahan.techcamp.recipehub.user.dto.SignupDto;
+import com.woowahan.techcamp.recipehub.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserRestController {
+
     @Autowired
     private UserService userService;
 
@@ -18,5 +22,10 @@ public class UserRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@Valid @RequestBody SignupDto dto) {
         userService.add(dto);
+    }
+
+    @PostMapping("/login")
+    public void login(@Valid @RequestBody LoginDto dto, HttpSession session) {
+        SessionUtils.addUserToSession(session, userService.login(dto));
     }
 }
