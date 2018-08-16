@@ -18,8 +18,6 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User login(LoginDto dto) {
-        System.out.println(dto.getEmail());
-        System.out.println(dto.getPassword());
         return userRepository.findByEmail(dto.getEmail())
                 .filter(user -> user.matchPassword(dto.getPassword(), passwordEncoder))
                 .orElseThrow(UnauthorizedException::new);
