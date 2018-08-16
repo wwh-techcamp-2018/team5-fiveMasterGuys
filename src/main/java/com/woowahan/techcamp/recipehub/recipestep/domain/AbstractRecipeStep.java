@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.recipestep.domain;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.user.domain.User;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Table(name = "RecipeStep")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type")
+@Getter
 public abstract class AbstractRecipeStep {
 
     @Id

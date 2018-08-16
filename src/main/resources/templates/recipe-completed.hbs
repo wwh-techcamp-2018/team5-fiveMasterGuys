@@ -1,0 +1,28 @@
+{{#partial "content"}}
+{{#recipe}}
+<div>{{name}}</div>
+<div>{{content}}</div>
+<section>
+    {{#recipeSteps}}
+    <h1>Step {{@index_1}}</h1>
+    <article>
+        <div>
+            <div>
+                <img src="{{imgUrl}}" alt="{{name}}">
+                <div>{{name}}</div>
+                <div>{{content}}</div>
+                <div>{{sequence}}</div>
+            </div>
+            <div>
+                <div class="speech-bubble-triangle"></div>
+                <div></div>
+                <span>{{writer.name}}</span>
+            </div>
+        </div>
+    </article>
+    {{/recipeSteps}}
+</section>
+{{/recipe}}
+{{/partial}}
+
+{{>base}}

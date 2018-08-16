@@ -7,14 +7,20 @@ import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class RecipeService {
-
     @Autowired
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
 
     public Recipe create(User user, RecipeDTO dto) {
         Recipe recipe = dto.toEntity();
         return recipe;
+    }
+
+    public Recipe findById(Long recipeId) {
+
+        return recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
     }
 }
