@@ -20,7 +20,7 @@ public class RecipeRestController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Recipe create(User user, RecipeDTO dto){
+    public Recipe create(User user, RecipeDTO dto) {
         return recipeService.create(user, dto);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class RecipeService {
@@ -25,5 +26,9 @@ public class RecipeService {
             recipe.removeClosedSteps();
         }
         return recipe;
+    }
+
+    public List<Recipe> findAll() {
+        return recipeRepository.findAll();
     }
 }

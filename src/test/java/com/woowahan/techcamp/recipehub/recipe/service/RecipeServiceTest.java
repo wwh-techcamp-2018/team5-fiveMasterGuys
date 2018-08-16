@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +25,23 @@ public class RecipeServiceTest {
     private RecipeService recipeService;
 
     @Test
+    public void getAllRecipes() {
+        recipeService.findAll();
+        verify(recipeRepository).findAll();
+    }
+
+    private static List<Recipe> generateRecipeList(int count) {
+        List<Recipe> result = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            result.add(Recipe.builder()
+                    .name(String.format("recipe %d", i))
+                    .build());
+        }
+
+        return result;
+    }
+
     public void getCompletedRecipe() {
         long recipeId = 1L;
         Recipe recipe = spy(Recipe.builder().recipeSteps(new ArrayList<>()).completed(true).build());
