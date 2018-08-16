@@ -5,8 +5,8 @@ import org.junit.Test;
 
 public class LoginDtoTest extends ValidationTest {
 
-    public static final String EMAIL = "team5@recipehub.com";
-    public static final String PASSWORD = "password1234!";
+    private static final String EMAIL = "team5@recipehub.com";
+    private static final String PASSWORD = "password1234!";
 
     @Test
     public void valid() {

@@ -17,7 +17,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
     @Autowired
     private UserRepository userRepository;
 
-    private final String loginUrl = "/api/users/login";
+    private static final String LOGIN_URL = "/api/users/login";
 
     @Test
     public void login() throws Exception {
@@ -50,7 +50,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
     }
 
     private ResultActions buildLoginRequest(String email, String password) throws Exception {
-        return mvc.perform(post(loginUrl).contentType(MediaType.APPLICATION_JSON)
+        return mvc.perform(post(LOGIN_URL).contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjectToJsonBytes(new LoginDto(email, password))));
     }
 }

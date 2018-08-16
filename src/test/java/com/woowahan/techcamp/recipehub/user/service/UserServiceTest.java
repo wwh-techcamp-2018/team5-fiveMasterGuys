@@ -18,8 +18,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-    private final String USER_EMAIL = "email";
-    private final String USER_PASSWORD = "password";
+    private static final String USER_EMAIL = "email";
+    private static final String USER_PASSWORD = "password";
 
     @Mock
     private PasswordEncoder passwordEncoder;

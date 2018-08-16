@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.Assert.assertTrue;
 
 public class UserTest {
-    private final String USER_PASSWORD = "USER_PASSWORD";
+    private static final String USER_PASSWORD = "USER_PASSWORD";
 
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Test
     public void passwordMatch() {
