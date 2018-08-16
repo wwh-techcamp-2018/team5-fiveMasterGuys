@@ -7,29 +7,33 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@NotNull
 public class SignupDto {
+    @NotNull
     @Email(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$",
             flags = Pattern.Flag.CASE_INSENSITIVE)
     private String email;
 
-    @Size(min = 8, max = 16)
+    @NotNull
+    @Pattern(regexp = "^.*(?=^.{8,16}$)(?=.*\\d)(?=.*[a-zA-Z]).*$")
     private String password;
 
-    @Size(min = 8, max = 16)
+    @NotNull
+    @Pattern(regexp = "^.*(?=^.{8,16}$)(?=.*\\d)(?=.*[a-zA-Z]).*$")
     private String passwordCheck;
 
-    @Column(length = 40, nullable = false)
+    @NotNull
+    @Size(min = 2, max = 45)
     private String name;
+
+    @AssertTrue(message = "")
+    private boolean matchPassword() {
+        return password.equals(passwordCheck);
+    }
 
     @Builder
     public SignupDto(String email, String password, String passwordCheck, String name) {
