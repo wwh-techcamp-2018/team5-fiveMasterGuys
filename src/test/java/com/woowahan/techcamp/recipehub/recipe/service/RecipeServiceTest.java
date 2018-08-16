@@ -11,8 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
@@ -25,10 +24,8 @@ public class RecipeServiceTest {
 
     @Test
     public void getAllRecipes() {
-        List<Recipe> recipes = generateRecipeList(5);
-        when(recipeRepository.findAll()).thenReturn(recipes);
-
-        assertThat(recipeService.findAll()).hasSameElementsAs(recipes);
+        recipeService.findAll();
+        verify(recipeRepository).findAll();
     }
 
     private static List<Recipe> generateRecipeList(int count) {
