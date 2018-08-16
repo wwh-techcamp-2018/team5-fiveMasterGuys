@@ -17,7 +17,7 @@ public class RecipeController {
 
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {
-        model.addAttribute("recipe", recipeService.findById(id));
-        return Template.RECIPE_VIEW;
+        model.addAttribute(Template.Attribute.RECIPE, recipeService.findById(id));
+        return Template.RECIPE_COMPLETED;
     }
 }
