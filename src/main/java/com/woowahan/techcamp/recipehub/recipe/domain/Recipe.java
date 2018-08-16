@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -39,6 +40,7 @@ public class Recipe {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "recipe")
+    @OrderBy("sequence ASC")
     private List<RecipeStep> recipeSteps;
 
     @Column
@@ -54,5 +56,11 @@ public class Recipe {
         this.updatedAt = updatedAt;
         this.recipeSteps = recipeSteps;
         this.imgUrl = imgUrl;
+    }
+
+    public void removeClosedSteps() {
+        this.recipeSteps = this.recipeSteps.stream()
+                .filter(step -> !step.isClosed())
+                .collect(Collectors.toList());
     }
 }

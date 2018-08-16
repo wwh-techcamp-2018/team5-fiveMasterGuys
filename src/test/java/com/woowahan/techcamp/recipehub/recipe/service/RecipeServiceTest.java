@@ -9,10 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
@@ -23,14 +24,28 @@ public class RecipeServiceTest {
     private RecipeService recipeService;
 
     @Test
-    public void getRecipe() {
+    public void getCompletedRecipe() {
         long recipeId = 1L;
-        Recipe recipe = new Recipe();
+        Recipe recipe = spy(Recipe.builder().recipeSteps(new ArrayList<>()).completed(true).build());
         when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
 
         Recipe result = recipeService.findById(recipeId);
 
         assertThat(result).isEqualTo(recipe);
+        verify(recipe).removeClosedSteps();
+    }
+
+
+    @Test
+    public void getIncompletedRecipe() {
+        long recipeId = 1L;
+        Recipe recipe = spy(Recipe.builder().recipeSteps(new ArrayList<>()).completed(false).build());
+        when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
+
+        Recipe result = recipeService.findById(recipeId);
+
+        assertThat(result).isEqualTo(recipe);
+        verify(recipe, never()).removeClosedSteps();
     }
 
 

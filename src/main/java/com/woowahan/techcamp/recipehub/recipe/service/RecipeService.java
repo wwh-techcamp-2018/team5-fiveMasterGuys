@@ -21,6 +21,9 @@ public class RecipeService {
 
     public Recipe findById(Long recipeId) {
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
+        if (recipe.isCompleted()) {
+            recipe.removeClosedSteps();
+        }
         return recipe;
     }
 }
