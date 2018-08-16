@@ -1,4 +1,4 @@
-package com.woowahan.techcamp.recipehub.recipe.domain;
+package com.woowahan.techcamp.recipehub.recipestep.domain;
 
 public enum RequestType {
     APPEND,

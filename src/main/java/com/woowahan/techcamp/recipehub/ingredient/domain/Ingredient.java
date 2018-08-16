@@ -1,4 +1,4 @@
-package com.woowahan.techcamp.recipehub.recipe.domain;
+package com.woowahan.techcamp.recipehub.ingredient.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
