@@ -1,9 +1,8 @@
-package com.woowahan.techcamp.recipehub.recipe.domain;
+package com.woowahan.techcamp.recipehub.recipestep.domain;
 
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
 
 @Entity(name = "RecipeStepRequest")
 @DiscriminatorValue("Request")
