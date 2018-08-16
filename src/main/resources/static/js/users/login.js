@@ -57,7 +57,7 @@ class Login {
     }
 
     validatePasswordValue() {
-        if(!validate('^.*(?=^.{8,16}$)(?=.*\d)(?=.*[a-zA-Z]).*$', this.passwordField.value)) {
+        if(!validate('^.*(?=^.{8,16}$)(?=.*[0-9])(?=.*[a-zA-Z]).*$', this.passwordField.value)) {
             alert('비밀번호 형식을 확인하세요');
             return false;
         }
