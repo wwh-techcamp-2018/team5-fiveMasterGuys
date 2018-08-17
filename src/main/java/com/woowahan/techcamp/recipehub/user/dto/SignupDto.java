@@ -30,7 +30,7 @@ public class SignupDto {
     @Size(min = 2, max = 40)
     private String name;
 
-    @AssertTrue(message = "")
+    @AssertTrue
     private boolean matchPassword() {
         return password.equals(passwordCheck);
     }

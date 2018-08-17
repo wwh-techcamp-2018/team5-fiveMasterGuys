@@ -20,8 +20,6 @@ class Signup {
             const passwordCheck = this.passwordCheckField.value;
             const name = this.nameField.value;
 
-            console.log(name);
-
             fetchManager({
                 url: '/api/users/signup',
                 method: 'POST',

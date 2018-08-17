@@ -1,14 +1,13 @@
 package com.woowahan.techcamp.recipehub.user.service;
 
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
-import org.junit.Test;
 import com.woowahan.techcamp.recipehub.exception.ConflictException;
-import com.woowahan.techcamp.recipehub.user.service.UserService;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.domain.UserRepository;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
 import com.woowahan.techcamp.recipehub.user.dto.SignupDto;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -54,14 +53,14 @@ public class UserServiceTest {
         User user = signupDto.toEntity(passwordEncoder);
 
         when(userRepository.save(user)).thenReturn(user);
-        assertThat(userService.add(signupDto)).isEqualTo(user);
+        assertThat(userService.create(signupDto)).isEqualTo(user);
     }
 
     @Test(expected = ConflictException.class)
     public void duplicatedEmail() {
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         signupDto.setEmail("ming@woowahan.com");
-        userService.add(signupDto);
+        userService.create(signupDto);
     }
 
     @Test

@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User add(SignupDto dto) {
+    public User create(SignupDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new ConflictException();
         }

@@ -21,7 +21,7 @@ public class UserRestController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signup(@Valid @RequestBody SignupDto dto) {
-        userService.add(dto);
+        userService.create(dto);
     }
 
     @PostMapping("/login")
