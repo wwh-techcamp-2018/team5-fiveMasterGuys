@@ -21,4 +21,5 @@ public class RecipeTest {
         assertThat(recipe.getOwner()).isEqualTo(owner);
         assertThat(recipe.getOwner()).isNotEqualTo(other);
     }
+
 }

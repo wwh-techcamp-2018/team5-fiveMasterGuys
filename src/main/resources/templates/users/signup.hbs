@@ -3,8 +3,8 @@
     <div class="hero-body">
         <div class="container has-text-centered">
             <div class="column is-4 is-offset-4">
-                <h3 class="title has-text-grey">Login</h3>
-                <p class="subtitle has-text-grey">Please login to proceed.</p>
+                <h3 class="title has-text-grey">Sign up</h3>
+                <p class="subtitle has-text-grey">Please sign up.</p>
                 <div class="box">
                     <div class="field">
                         <div class="control">
@@ -19,24 +19,31 @@
                                    placeholder="Your Password">
                         </div>
                     </div>
+
                     <div class="field">
-                        <label class="checkbox">
-                            <input type="checkbox">
-                            Remember me
-                        </label>
+                        <div class="control">
+                            <input class="input is-large" id="password-check-field" , type="password"
+                                   placeholder="Your Password again">
+                        </div>
                     </div>
-                    <button id="login-btn" class="button is-block is-info is-large is-fullwidth">Login</button>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="input is-large" id="name-field" , type="text"
+                                   placeholder="Your name">
+                        </div>
+                    </div>
+                    <button id="signup-btn" class="button is-block is-info is-large is-fullwidth">Sign up</button>
                 </div>
                 <p class="has-text-grey">
-                    <a href="/users/signup">Sign Up</a> &nbsp;·&nbsp;
-                    <a href="../">Forgot Password</a> &nbsp;·&nbsp;
                     <a href="../">Need Help?</a>
                 </p>
             </div>
         </div>
     </div>
 </section>
-<script src="/js/users/login.js"></script>
+<script src="/js/users/signup.js"></script>
 {{/partial}}
 
 {{>base}}
+

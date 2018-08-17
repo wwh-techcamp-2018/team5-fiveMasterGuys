@@ -1,0 +1,33 @@
+{{#partial "head"}}
+<link href="/css/recipe-detail.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "contents"}}
+{{#recipe}}
+<div class="section">
+    <div class="container">
+        <div class="title is-1 has-text-centered">{{name}}</div>
+        <div>{{content}}</div>
+        {{#recipeSteps}}
+        <h1 class="step-title is-size-3 has-text-weight-bold">Step {{@index_1}}</h1>
+        <article class="box">
+            <div class="columns">
+                <img src="{{imgUrl}}" alt="{{name}}" class="column is-one-third">
+                <div class="column">
+                    <div class="subtitle">{{name}}</div>
+                    <div>{{content}}</div>
+                </div>
+            </div>
+            <div>
+                <div class="speech-bubble-triangle"></div>
+                <div></div>
+                <span>{{writer.name}}</span>
+            </div>
+        </article>
+        {{/recipeSteps}}
+    </div>
+</div>
+{{/recipe}}
+{{/partial}}
+
+{{> base}}

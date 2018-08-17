@@ -8,11 +8,11 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class RecipeDTOTest extends ValidationTest {
+public class RecipeCreationDTOTest extends ValidationTest {
 
     @Test
     public void basic() {
-        RecipeDTO dto = RecipeDTO.builder()
+        RecipeCreationDTO dto = RecipeCreationDTO.builder()
                 .category(new Category())
                 .name("초코치킨").build();
 
@@ -21,40 +21,40 @@ public class RecipeDTOTest extends ValidationTest {
 
     @Test
     public void withoutData() {
-        RecipeDTO dto = RecipeDTO.builder().build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().build();
         assertConstraintViolations(dto, 3);
     }
 
     @Test
     public void withoutCategory() {
-        RecipeDTO dto = RecipeDTO.builder().name("초코치킨").build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("초코치킨").build();
         assertConstraintViolations(dto, 1);
     }
 
     @Test
     public void withNullCategory() {
-        RecipeDTO dto = RecipeDTO.builder().name("초코치킨").category(null).build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("초코치킨").category(null).build();
         assertConstraintViolations(dto, 1);
     }
 
     @Test
     public void withBlankName() {
-        RecipeDTO dto = RecipeDTO.builder().name("").build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("").build();
         assertConstraintViolations(dto, 2);
 
-        dto = RecipeDTO.builder().name(" ").build();
+        dto = RecipeCreationDTO.builder().name(" ").build();
         assertConstraintViolations(dto, 2);
     }
 
     @Test
     public void withoutImage() {
-        RecipeDTO dto = RecipeDTO.builder().name("초코치킨").category(new Category()).build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("초코치킨").category(new Category()).build();
         assertConstraintViolations(dto, 0);
     }
 
     @Test
     public void withNullImage() {
-        RecipeDTO dto = RecipeDTO.builder().name("초코치킨").category(new Category()).imgUrl(null).build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("초코치킨").category(new Category()).imgUrl(null).build();
         assertConstraintViolations(dto, 0);
     }
 
@@ -62,7 +62,7 @@ public class RecipeDTOTest extends ValidationTest {
     public void toEntity() {
         String name = "양념치킨";
         Category category = new Category();
-        RecipeDTO dto = RecipeDTO.builder().name(name).category(category).build();
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name(name).category(category).build();
         Recipe entity = dto.toEntity();
         assertThat(entity.getName()).isEqualTo(name);
         assertThat(entity.getCategory()).isEqualTo(category);

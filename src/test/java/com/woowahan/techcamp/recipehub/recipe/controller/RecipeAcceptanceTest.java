@@ -12,7 +12,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void create() throws Exception {
-        mvc.perform(post("/api/recipe")).andExpect(status().isCreated());
+        mvc.perform(post("/api/recipes")).andExpect(status().isCreated());
     }
 
     @Test
