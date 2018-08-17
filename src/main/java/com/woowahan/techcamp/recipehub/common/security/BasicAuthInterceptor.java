@@ -40,6 +40,7 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         try {
             User user = userService.login(new LoginDto(values[0], values[1]));
             log.debug("Login Succeed with name  : ", user.getName());
+            SessionUtils.addUserToSession(request.getSession(), user);
         } catch (UnauthorizedException unauthorizedException) {
             log.debug("Login Failed");
         } finally {
