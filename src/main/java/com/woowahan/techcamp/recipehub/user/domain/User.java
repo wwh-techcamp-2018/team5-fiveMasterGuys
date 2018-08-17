@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor
 public class User {
 
