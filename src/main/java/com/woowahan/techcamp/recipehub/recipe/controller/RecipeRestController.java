@@ -1,7 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class RecipeRestController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Recipe create(User user, RecipeDTO dto) {
+    public Recipe create(User user, RecipeCreationDTO dto) {
         return recipeService.create(user, dto);
     }
 }

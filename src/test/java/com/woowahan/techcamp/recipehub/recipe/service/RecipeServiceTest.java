@@ -11,10 +11,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
@@ -44,31 +42,13 @@ public class RecipeServiceTest {
 
     public void getCompletedRecipe() {
         long recipeId = 1L;
-        Recipe recipe = spy(Recipe.builder().recipeSteps(new ArrayList<>()).completed(true).build());
-        when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
-
-        Recipe result = recipeService.findById(recipeId);
-
-        assertThat(result).isEqualTo(recipe);
-        verify(recipe).removeClosedSteps();
+        recipeService.findById(recipeId);
+        verify(recipeRepository).findById(recipeId);
     }
-
-
-    @Test
-    public void getIncompletedRecipe() {
-        long recipeId = 1L;
-        Recipe recipe = spy(Recipe.builder().recipeSteps(new ArrayList<>()).completed(false).build());
-        when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
-
-        Recipe result = recipeService.findById(recipeId);
-
-        assertThat(result).isEqualTo(recipe);
-        verify(recipe, never()).removeClosedSteps();
-    }
-
 
     @Test(expected = EntityNotFoundException.class)
     public void getNotExistRecipe() {
         recipeService.findById(1L);
     }
+
 }

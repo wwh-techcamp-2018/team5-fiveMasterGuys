@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "RecipeStep")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="type")
+@DiscriminatorColumn(name = "type")
 @Getter
 @NoArgsConstructor
 public abstract class AbstractRecipeStep {

@@ -1,7 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.service;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,13 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    public Recipe create(User user, RecipeDTO dto) {
+    public Recipe create(User user, RecipeCreationDTO dto) {
         Recipe recipe = dto.toEntity();
         return recipe;
     }
 
     public Recipe findById(Long recipeId) {
-        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
-        if (recipe.isCompleted()) {
-            recipe.removeClosedSteps();
-        }
-        return recipe;
+        return recipeRepository.findById(recipeId).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Recipe> findAll() {
