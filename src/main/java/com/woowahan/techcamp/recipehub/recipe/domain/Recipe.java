@@ -39,6 +39,7 @@ public class Recipe {
     private Date updatedAt;
 
     @OneToMany(mappedBy = "recipe")
+    @OrderBy("sequence ASC")
     private List<RecipeStep> recipeSteps;
 
     @Column

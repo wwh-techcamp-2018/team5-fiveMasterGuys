@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class RecipeDTO {
+public class RecipeCreationDTO {
 
     @NotNull
     private Category category;
@@ -24,7 +24,7 @@ public class RecipeDTO {
     private String imgUrl;
 
     @Builder
-    public RecipeDTO(@NotNull Category category, @NotEmpty @NotNull String name, String imgUrl) {
+    public RecipeCreationDTO(@NotNull Category category, @NotEmpty @NotNull String name, String imgUrl) {
         this.category = category;
         this.name = name;
         this.imgUrl = imgUrl;

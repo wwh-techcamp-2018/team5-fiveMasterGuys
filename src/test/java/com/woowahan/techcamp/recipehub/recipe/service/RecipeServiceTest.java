@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,6 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
-
     @Mock
     private RecipeRepository recipeRepository;
 
@@ -39,4 +39,16 @@ public class RecipeServiceTest {
 
         return result;
     }
+
+    public void getCompletedRecipe() {
+        long recipeId = 1L;
+        recipeService.findById(recipeId);
+        verify(recipeRepository).findById(recipeId);
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void getNotExistRecipe() {
+        recipeService.findById(1L);
+    }
+
 }

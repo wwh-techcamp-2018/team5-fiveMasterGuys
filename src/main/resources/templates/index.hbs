@@ -1,10 +1,11 @@
 {{#partial "contents"}}
 <body>
-    <section class="section">
-        <div class="container">
-            <div class="columns is-multiline">
-                {{#recipes}}
-                <div class="column is-one-third">
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            {{#recipes}}
+            <div class="column is-one-third">
+                <a href="/recipes/{{id}}">
                     <div class="card">
                         <div class="card-image">
                             <figure class="image is-4by3">
@@ -16,29 +17,30 @@
                             <p class="subtitle is-6">{{owner.name}}</p>
                         </div>
                     </div>
-                </div>
-                {{/recipes}}
+                </a>
             </div>
-            <nav class="pagination" role="navigation" aria-label="pagination">
-                <a class="pagination-previous">Previous</a>
-                <a class="pagination-next">Next page</a>
-                <ul class="pagination-list">
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page 1">1</a>
-                    </li>
-                    <li>
-                        <span class="pagination-ellipsis">&hellip;</span>
-                    </li>
-                    <li>
-                        <a class="pagination-link" aria-label="Goto page 45">45</a>
-                    </li>
-                    <li>
-                        <a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a>
-                    </li>
-                </ul>
-            </nav>
+            {{/recipes}}
         </div>
-    </section>
+        <nav class="pagination" role="navigation" aria-label="pagination">
+            <a class="pagination-previous">Previous</a>
+            <a class="pagination-next">Next page</a>
+            <ul class="pagination-list">
+                <li>
+                    <a class="pagination-link" aria-label="Goto page 1">1</a>
+                </li>
+                <li>
+                    <span class="pagination-ellipsis">&hellip;</span>
+                </li>
+                <li>
+                    <a class="pagination-link" aria-label="Goto page 45">45</a>
+                </li>
+                <li>
+                    <a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
 </body>
 {{/partial}}
 
