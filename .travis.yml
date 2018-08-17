@@ -18,6 +18,9 @@ script: "./gradlew clean build"
 notifications:
     slack: woowahan-techcamp:DUmMgWkADZU9aC7hhTK2HPZc
 
+after_success:
+- ./gradlew jacocoTestReport coveralls
+
 before_deploy:
 - zip -r recipehub-develop *
 - mkdir -p deploy
