@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/recipe")
+@RequestMapping("/recipes")
 public class RecipeController {
     private static final String RECIPE_COMPLETED = "/recipe-completed";
     private static final String RECIPE_INCOMPLETED = "/recipe-incompleted";

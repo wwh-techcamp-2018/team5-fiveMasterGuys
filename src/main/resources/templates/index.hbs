@@ -5,17 +5,19 @@
         <div class="columns is-multiline">
             {{#recipes}}
             <div class="column is-one-third">
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="{{imgUrl}}" alt="Placeholder image">
-                        </figure>
+                <a href="/recipes/{{id}}">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <img src="{{imgUrl}}" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <p class="title is-4">{{name}}</p>
+                            <p class="subtitle is-6">{{owner.name}}</p>
+                        </div>
                     </div>
-                    <div class="card-content">
-                        <p class="title is-4">{{name}}</p>
-                        <p class="subtitle is-6">{{owner.name}}</p>
-                    </div>
-                </div>
+                </a>
             </div>
             {{/recipes}}
         </div>
