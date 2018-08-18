@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RecipeDetailDTO {
+public class RecipeResponseDTO {
 
     private Category category;
 
@@ -29,7 +29,7 @@ public class RecipeDetailDTO {
 
 
     @Builder
-    public RecipeDetailDTO(Category category, String name, String imgUrl, List<RecipeStep> recipeSteps, User owner) {
+    public RecipeResponseDTO(Category category, String name, String imgUrl, List<RecipeStep> recipeSteps, User owner) {
         this.category = category;
         this.name = name;
         this.imgUrl = imgUrl;
@@ -38,8 +38,8 @@ public class RecipeDetailDTO {
     }
 
 
-    public static RecipeDetailDTO from(Recipe recipe) {
-        RecipeDetailDTOBuilder builder = RecipeDetailDTO.builder()
+    public static RecipeResponseDTO from(Recipe recipe) {
+        RecipeResponseDTOBuilder builder = RecipeResponseDTO.builder()
                 .name(recipe.getName())
                 .category(recipe.getCategory())
                 .imgUrl(recipe.getImgUrl())

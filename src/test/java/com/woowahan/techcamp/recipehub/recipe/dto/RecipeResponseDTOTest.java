@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RecipeDetailDTOTest {
+public class RecipeResponseDTOTest {
 
     private RecipeStep openedStep;
     private RecipeStep closedStep;
@@ -32,7 +32,7 @@ public class RecipeDetailDTOTest {
     @Test
     public void fromCompletedRecipe() {
         Recipe completedRecipe = Recipe.builder().completed(true).recipeSteps(stepList).build();
-        RecipeDetailDTO detailDTO = RecipeDetailDTO.from(completedRecipe);
+        RecipeResponseDTO detailDTO = RecipeResponseDTO.from(completedRecipe);
 
         assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep);
     }
@@ -41,7 +41,7 @@ public class RecipeDetailDTOTest {
     @Test
     public void fromIncompletedRecipe() {
         Recipe incompletedRecipe = Recipe.builder().completed(false).recipeSteps(stepList).build();
-        RecipeDetailDTO detailDTO = RecipeDetailDTO.from(incompletedRecipe);
+        RecipeResponseDTO detailDTO = RecipeResponseDTO.from(incompletedRecipe);
 
         assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep, closedStep);
     }

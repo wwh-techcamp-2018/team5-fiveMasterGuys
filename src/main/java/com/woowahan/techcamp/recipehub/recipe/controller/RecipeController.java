@@ -1,7 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDetailDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class RecipeController {
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
-        model.addAttribute(RECIPE_KEY, RecipeDetailDTO.from(recipe));
+        model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
         if (recipe.isCompleted()) {
             return RECIPE_COMPLETED;
         }
