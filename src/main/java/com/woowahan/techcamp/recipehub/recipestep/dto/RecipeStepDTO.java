@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -58,10 +59,36 @@ public class RecipeStepDTO {
     }
 
     private static List<String> convertStringToJsonArray(String content) {
+        if (content == null) {
+            return null;
+        }
+
         try {
             return new ObjectMapper().readValue(content, List.class);
         } catch (IOException e) {
             throw new RuntimeException("JSON parse error");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RecipeStepDTO that = (RecipeStepDTO) o;
+        return closed == that.closed &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(recipe, that.recipe) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(writer, that.writer) &&
+                Objects.equals(imgUrl, that.imgUrl) &&
+                Objects.equals(ingredients, that.ingredients) &&
+                Objects.equals(sequence, that.sequence);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, recipe, name, content, writer, imgUrl, ingredients, sequence, closed);
     }
 }

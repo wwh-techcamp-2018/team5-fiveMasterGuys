@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepDTO;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @NoArgsConstructor
@@ -23,13 +25,13 @@ public class RecipeResponseDTO {
 
     private String imgUrl;
 
-    private List<RecipeStep> recipeSteps;
+    private List<RecipeStepDTO> recipeSteps;
 
     private User owner;
 
 
     @Builder
-    public RecipeResponseDTO(Category category, String name, String imgUrl, List<RecipeStep> recipeSteps, User owner) {
+    public RecipeResponseDTO(Category category, String name, String imgUrl, List<RecipeStepDTO> recipeSteps, User owner) {
         this.category = category;
         this.name = name;
         this.imgUrl = imgUrl;
@@ -39,18 +41,17 @@ public class RecipeResponseDTO {
 
 
     public static RecipeResponseDTO from(Recipe recipe) {
-        RecipeResponseDTOBuilder builder = RecipeResponseDTO.builder()
+        Stream<RecipeStep> stepStream = recipe.getRecipeSteps().stream();
+
+        if (recipe.isCompleted()) {
+            stepStream = stepStream.filter(step -> !step.isClosed());
+        }
+
+        return RecipeResponseDTO.builder()
                 .name(recipe.getName())
                 .category(recipe.getCategory())
                 .imgUrl(recipe.getImgUrl())
-                .recipeSteps(recipe.getRecipeSteps());
-
-        if (recipe.isCompleted()) {
-            builder.recipeSteps(recipe.getRecipeSteps().stream()
-                    .filter(step -> !step.isClosed())
-                    .collect(Collectors.toList()));
-        }
-
-        return builder.build();
+                .recipeSteps(stepStream.map(RecipeStepDTO::from).collect(Collectors.toList()))
+                .build();
     }
 }

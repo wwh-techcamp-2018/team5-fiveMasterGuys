@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.recipe.dto;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepDTO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +35,7 @@ public class RecipeResponseDTOTest {
         Recipe completedRecipe = Recipe.builder().completed(true).recipeSteps(stepList).build();
         RecipeResponseDTO detailDTO = RecipeResponseDTO.from(completedRecipe);
 
-        assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep);
+        assertThat(detailDTO.getRecipeSteps()).containsExactly(RecipeStepDTO.from(openedStep));
     }
 
 
@@ -43,6 +44,8 @@ public class RecipeResponseDTOTest {
         Recipe incompletedRecipe = Recipe.builder().completed(false).recipeSteps(stepList).build();
         RecipeResponseDTO detailDTO = RecipeResponseDTO.from(incompletedRecipe);
 
-        assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep, closedStep);
+        assertThat(detailDTO.getRecipeSteps()).containsExactly(
+                RecipeStepDTO.from(openedStep), RecipeStepDTO.from(closedStep)
+        );
     }
 }
