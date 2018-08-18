@@ -1,15 +1,14 @@
 package com.woowahan.techcamp.recipehub.recipestep.dto;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,30 +43,18 @@ public class RecipeStepDTO {
         this.closed = closed;
     }
 
-    public static RecipeStepDTO from(RecipeStep recipeStep) {
+    public static RecipeStepDTO from(RecipeStep recipeStep, RecipeStepContentConverter converter) {
         return RecipeStepDTO.builder()
                 .id(recipeStep.getId())
                 .name(recipeStep.getName())
                 .closed(recipeStep.isClosed())
-                .content(convertStringToJsonArray(recipeStep.getContent()))
+                .content(converter.toList(recipeStep.getContent()))
                 .imgUrl(recipeStep.getImgUrl())
                 .ingredients(recipeStep.getIngredients())
                 .sequence(recipeStep.getSequence())
                 .writer(recipeStep.getWriter())
                 .recipe(recipeStep.getRecipe())
                 .build();
-    }
-
-    private static List<String> convertStringToJsonArray(String content) {
-        if (content == null) {
-            return null;
-        }
-
-        try {
-            return new ObjectMapper().readValue(content, List.class);
-        } catch (IOException e) {
-            throw new RuntimeException("JSON parse error");
-        }
     }
 
     @Override

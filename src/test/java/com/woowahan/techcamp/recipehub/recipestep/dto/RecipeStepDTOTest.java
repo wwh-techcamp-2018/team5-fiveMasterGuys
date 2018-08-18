@@ -1,14 +1,13 @@
 package com.woowahan.techcamp.recipehub.recipestep.dto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentJsonConverter;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +18,7 @@ public class RecipeStepDTOTest {
 
     private RecipeStep.RecipeStepBuilder recipeStepBuilder;
     private List<String> expectedStepContents;
+    private RecipeStepContentConverter converter = new RecipeStepContentJsonConverter();
 
     @Before
     public void setUp() throws Exception {
@@ -27,7 +27,7 @@ public class RecipeStepDTOTest {
                 .id(1L)
                 .name("잼을 바른 토스트")
                 .closed(false)
-                .content(toJsonArrayString(expectedStepContents))
+                .content(converter.toContentString(expectedStepContents))
                 .imgUrl("http://imgurl.com/static/img/image.jpg")
                 .ingredients(new ArrayList<>())
                 .sequence(1L)
@@ -38,7 +38,7 @@ public class RecipeStepDTOTest {
     @Test
     public void from() {
         RecipeStep recipeStep = recipeStepBuilder.build();
-        RecipeStepDTO recipeStepDTO = RecipeStepDTO.from(recipeStep);
+        RecipeStepDTO recipeStepDTO = RecipeStepDTO.from(recipeStep, converter);
 
         assertRecipeStepDtoEqualToRecipe(recipeStepDTO, recipeStep);
     }
@@ -46,21 +46,10 @@ public class RecipeStepDTOTest {
     @Test
     public void fromEmptyContents() {
         expectedStepContents = new ArrayList<>();
-        RecipeStep recipeStep = recipeStepBuilder.content(toJsonArrayString(expectedStepContents)).build();
-        RecipeStepDTO recipeStepDTO = RecipeStepDTO.from(recipeStep);
+        RecipeStep recipeStep = recipeStepBuilder.content(converter.toContentString(expectedStepContents)).build();
+        RecipeStepDTO recipeStepDTO = RecipeStepDTO.from(recipeStep, converter);
 
         assertRecipeStepDtoEqualToRecipe(recipeStepDTO, recipeStep);
-    }
-
-    @Test
-    public void toJsonArrayStringTest() {
-        assertThat(toJsonArrayString(expectedStepContents)).isEqualTo("[\"식빵을 토스터기에 굽는다\",\"잼을 바른다\"]");
-    }
-
-    @Test
-    public void readValueTest() throws IOException {
-        assertThat(new ObjectMapper().readValue("[\"식빵을 토스터기에 굽는다\",\"잼을 바른다\"]", List.class))
-                .isEqualTo(expectedStepContents);
     }
 
     private void assertRecipeStepDtoEqualToRecipe(RecipeStepDTO recipeStepDTO, RecipeStep recipeStep) {
@@ -73,13 +62,5 @@ public class RecipeStepDTOTest {
         assertThat(recipeStepDTO.getSequence()).isEqualTo(recipeStep.getSequence());
         assertThat(recipeStepDTO.getWriter()).isEqualTo(recipeStep.getWriter());
         assertThat(recipeStepDTO.getRecipe()).isEqualTo(recipeStep.getRecipe());
-    }
-
-    private String toJsonArrayString(List<String> stringList) {
-        try {
-            return new ObjectMapper().writeValueAsString(stringList);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Json parse error");
-        }
     }
 }

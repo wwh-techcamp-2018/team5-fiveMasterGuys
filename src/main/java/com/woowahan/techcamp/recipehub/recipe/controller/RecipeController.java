@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.controller;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +21,13 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
+    @Autowired
+    private RecipeStepContentConverter converter;
+
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
-        model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
+        model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe, converter));
         if (recipe.isCompleted()) {
             return RECIPE_COMPLETED;
         }

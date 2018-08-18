@@ -3,6 +3,8 @@ package com.woowahan.techcamp.recipehub;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequiredArgumentResolver;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequiredInterceptor;
 import com.woowahan.techcamp.recipehub.common.security.BasicAuthInterceptor;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
+import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentJsonConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -22,6 +24,11 @@ public abstract class RecipehubConfig implements WebMvcConfigurer {
     @Bean
     public AuthRequiredArgumentResolver authRequiredArgumentResolver() {
         return new AuthRequiredArgumentResolver();
+    }
+
+    @Bean
+    public RecipeStepContentConverter recipeStepContentConverter() {
+        return new RecipeStepContentJsonConverter();
     }
 
     @Override
