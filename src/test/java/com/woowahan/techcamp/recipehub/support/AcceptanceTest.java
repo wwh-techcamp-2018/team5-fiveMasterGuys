@@ -79,8 +79,8 @@ public abstract class AcceptanceTest {
         return request(path, method, null, null, typeRef);
     }
 
-    protected <T, R> ResponseEntity<RestResponse<List<R>>> requestList(String path, HttpMethod method, T dto, User user, ParameterizedTypeReference<RestResponse<List<R>>> typeref) {
-        return template(user).exchange(path, method, new HttpEntity<>(dto, getHeaders()), typeref);
+    protected <T, R> ResponseEntity<RestResponse<List<R>>> requestList(String path, HttpMethod method, T dto, User user, ParameterizedTypeReference<RestResponse<List<R>>> typeRef) {
+        return template(user).exchange(path, method, new HttpEntity<>(dto, getHeaders()), typeRef);
     }
 
     protected <T, R> ResponseEntity<RestResponse<List<R>>> requestList(String path, HttpMethod method, T dto, ParameterizedTypeReference<RestResponse<List<R>>> typeRef) {
