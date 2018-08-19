@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.common.support;
 
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class WebControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView handleBadRequest(BadRequestException exception) {
         return new ModelAndView("redirect:/");
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
+    public ModelAndView handleUnAuthorization(UnauthorizedException exception) {
+        return new ModelAndView("redirect:/users/login");
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
