@@ -5,6 +5,8 @@ import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -26,5 +28,9 @@ public class RecipeService {
 
     public List<Recipe> findAll() {
         return recipeRepository.findAll();
+    }
+
+    public Page<Recipe> findAllByPagable(Pageable pageable) {
+        return recipeRepository.findAll(pageable);
     }
 }
