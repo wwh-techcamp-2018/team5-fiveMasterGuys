@@ -21,4 +21,14 @@ public class SessionUtils {
     public static Optional<User> getUserFromSession(NativeWebRequest webRequest) {
         return Optional.ofNullable((User) webRequest.getAttribute(USER_SESSION_KEY, WebRequest.SCOPE_SESSION));
     }
+
+    public static Optional<User> getUserFromSession(HttpSession session) {
+        return Optional.ofNullable((User) session.getAttribute(USER_SESSION_KEY));
+    }
+
+    public static User removeUser(HttpSession session) {
+        User user = getUserFromSession(session).get();
+        session.removeAttribute(USER_SESSION_KEY);
+        return user;
+    }
 }
