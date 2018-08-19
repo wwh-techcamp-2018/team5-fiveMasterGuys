@@ -17,12 +17,19 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/recipes")
 public class RecipeController {
+    private static final String RECIPE_CREATE = "/recipe-create";
     private static final String RECIPE_COMPLETED = "/recipe-completed";
     private static final String RECIPE_INCOMPLETED = "/recipe-incompleted";
     private static final String RECIPE_KEY = "recipe";
 
     @Autowired
     private RecipeService recipeService;
+
+    @GetMapping("/create")
+    @AuthRequired
+    public String get(Model model) {
+        return RECIPE_CREATE;
+    }
 
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {

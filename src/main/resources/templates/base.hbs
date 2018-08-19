@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>RecipeHub</title>
     <link href="/css/bulma.min.css" rel="stylesheet">
+    <link href="/css/common.css" rel="stylesheet">
     <script src="/js/common.js"></script>
     {{#block "head"}}
     {{/block}}
@@ -16,13 +17,20 @@
 <div class="navbar is-transparent" role="navigation">
     <div class="container">
         <div class="navbar-brand">
-            <p class="title">RecipeHub</p>
+            <a href="/">
+                <p class="title navbar-item">RecipeHub</p>
+            </a>
         </div>
         <div class="navbar-menu">
             <div class="navbar-end">
                 {{#if user}}
                     <div class="navbar-item">
                         {{user.name}}님 환영!
+                    </div>
+                    <div class="navbar-item">
+                        <a class="button input is-primary" href="/recipes/create">
+                            레시피 만들기
+                        </a>
                     </div>
                     <div class="navbar-item">
                         <a class="button" href="/users/logout">Logout</a>

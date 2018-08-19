@@ -1,0 +1,19 @@
+#glass {
+    position: absolute;
+    height: 100%;
+    width: inherit;
+    opacity: 0.2;
+    background: #444;
+}
+
+.hero {
+    position: fixed;
+    width: 100%;
+    background-size: cover;
+    background-image: url("/img/hero-create.jpg");
+}
+
+#input-box {
+    box-shadow: 0px 0px 40px #444;
+    border-radius: 60px;
+}
