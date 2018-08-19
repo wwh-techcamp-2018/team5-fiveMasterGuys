@@ -78,7 +78,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     public void createNotLogin() {
         RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(category.getId()).name("초코치킨").build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, null);
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.PERMANENT_REDIRECT);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Override

@@ -28,15 +28,13 @@ public class UserAcceptanceTest extends AcceptanceTest {
     @Test
     public void loginWithInvalidEmail() throws Exception {
         buildLoginRequest(DEFAULT_USER_EMAIL + "A", DEFAULT_USER_PASSWORD)
-                .andExpect(status().isPermanentRedirect());
-        //TODO: Move to UnAuthorization
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void loginWithInvalidPassword() throws Exception {
         buildLoginRequest(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD + "A")
-                .andExpect(status().isPermanentRedirect());
-        //TODO: Move to UnAuthorization
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
