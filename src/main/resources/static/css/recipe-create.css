@@ -17,3 +17,14 @@
     box-shadow: 0px 0px 40px #444;
     border-radius: 60px;
 }
+
+.is-btn-inactive {
+    background-color: #EEE;
+    border-color: transparent;
+    color: #CCC;
+    cursor: default;
+}
+
+.is-btn-active {
+    cursor: pointer;
+}

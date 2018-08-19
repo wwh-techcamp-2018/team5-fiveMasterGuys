@@ -9,29 +9,33 @@
         <div id="glass"></div>
         <div class="hero-body">
             <div class="container">
-                <div id="input-box" class="field has-addons has-addons-centered">
-                    <p class="control">
-                    <span class="is-rounded title is-1 has-text-centered select">
-                      <select>
-                        <option>치킨</option>
-                        <option>양식</option>
-                        <option>한식</option>
-                      </select>
-                    </span>
-                    </p>
-                    <p class="control is-expanded">
-                        <input id="hello" class="box is-rounded input title is-1 has-text-centered" type="text"
-                               placeholder="무슨 음식을 만들거예요?">
-                    </p>
-                    <p class="control">
-                        <a class="button is-rounded input title is-1 is-primary">
-                            만들기!
-                        </a>
-                    </p>
-                </div>
+                <form id="create-form" action="/recipes" method="post">
+                    <div id="input-box" class="field has-addons has-addons-centered">
+                        <p class="control">
+                        <span class="is-rounded title is-1 has-text-centered select">
+                          <select name="categoryId">
+                              {{#categories}}
+                                  <option value="{{id}}">{{title}}</option>
+                              {{/categories}}
+                          </select>
+                        </span>
+                        </p>
+                        <p class="control is-expanded">
+                            <input name="name" class="box is-rounded input title is-1 has-text-centered" type="text"
+                                   placeholder="무슨 음식을 만들거예요?">
+                        </p>
+                        <p class="control">
+                            <a id="submit" class="button is-rounded input title is-1 is-btn-inactive">
+                                만들기!
+                            </a>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
+
+    <script src="/js/recipes/create.js"></script>
 {{/partial}}
 
 {{> base}}
