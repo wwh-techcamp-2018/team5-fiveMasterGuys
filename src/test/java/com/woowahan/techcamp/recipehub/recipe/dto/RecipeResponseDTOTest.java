@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.recipe.dto;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepDTO;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RecipeDetailDTOTest {
+public class RecipeResponseDTOTest {
 
     private RecipeStep openedStep;
     private RecipeStep closedStep;
@@ -32,17 +33,19 @@ public class RecipeDetailDTOTest {
     @Test
     public void fromCompletedRecipe() {
         Recipe completedRecipe = Recipe.builder().completed(true).recipeSteps(stepList).build();
-        RecipeDetailDTO detailDTO = RecipeDetailDTO.from(completedRecipe);
+        RecipeResponseDTO detailDTO = RecipeResponseDTO.from(completedRecipe);
 
-        assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep);
+        assertThat(detailDTO.getRecipeSteps()).containsExactly(RecipeStepDTO.from(openedStep));
     }
 
 
     @Test
     public void fromIncompletedRecipe() {
         Recipe incompletedRecipe = Recipe.builder().completed(false).recipeSteps(stepList).build();
-        RecipeDetailDTO detailDTO = RecipeDetailDTO.from(incompletedRecipe);
+        RecipeResponseDTO detailDTO = RecipeResponseDTO.from(incompletedRecipe);
 
-        assertThat(detailDTO.getRecipeSteps()).containsExactly(openedStep, closedStep);
+        assertThat(detailDTO.getRecipeSteps()).containsExactly(
+                RecipeStepDTO.from(openedStep), RecipeStepDTO.from(closedStep)
+        );
     }
 }

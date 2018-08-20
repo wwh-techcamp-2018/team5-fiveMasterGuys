@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.recipestep.domain;
 
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
+import com.woowahan.techcamp.recipehub.recipestep.converter.RecipeStepContentConverter;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,9 @@ public abstract class AbstractRecipeStep {
     @ManyToOne
     private Recipe recipe;
     private String name;
-    private String content;
+
+    @Convert(converter = RecipeStepContentConverter.class)
+    private List<String> content;
 
     @ManyToOne
     private User writer;
@@ -33,7 +36,7 @@ public abstract class AbstractRecipeStep {
     @ManyToMany
     private List<Ingredient> ingredients;
 
-    public AbstractRecipeStep(Long id, Recipe recipe, String name, String content, User writer, String imgUrl, List<Ingredient> ingredients) {
+    public AbstractRecipeStep(Long id, Recipe recipe, String name, List<String> content, User writer, String imgUrl, List<Ingredient> ingredients) {
         this.id = id;
         this.recipe = recipe;
         this.name = name;

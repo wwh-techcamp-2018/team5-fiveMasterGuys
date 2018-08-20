@@ -24,6 +24,7 @@ public abstract class RecipehubConfig implements WebMvcConfigurer {
         return new AuthRequiredArgumentResolver();
     }
 
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authRequiredInterceptor());
