@@ -20,7 +20,7 @@ public class RecipeStep extends AbstractRecipeStep {
     private boolean closed;
 
     @Builder
-    public RecipeStep(Long id, Recipe recipe, String name, String content, User writer, String imgUrl, List<Ingredient> ingredients, Long sequence, boolean closed) {
+    public RecipeStep(Long id, Recipe recipe, String name, List<String> content, User writer, String imgUrl, List<Ingredient> ingredients, Long sequence, boolean closed) {
         super(id, recipe, name, content, writer, imgUrl, ingredients);
         this.sequence = sequence;
         this.closed = closed;

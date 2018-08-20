@@ -15,7 +15,13 @@
                 <img src="{{imgUrl}}" alt="{{name}}" class="column is-one-third">
                 <div class="column">
                     <div class="subtitle">{{name}}</div>
-                    <div>{{content}}</div>
+                    <div>
+                        <ol class="step-contents">
+                        {{#content}}
+                            <li>{{.}}</li>
+                        {{/content}}
+                        </ol>
+                    </div>
                 </div>
             </div>
             <div>

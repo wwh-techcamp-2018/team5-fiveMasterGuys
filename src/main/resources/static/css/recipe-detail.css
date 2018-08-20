@@ -1,3 +1,7 @@
 .step-title {
     margin-bottom: 10px;
 }
+
+.step-contents {
+    list-style-position: inside;
+}
