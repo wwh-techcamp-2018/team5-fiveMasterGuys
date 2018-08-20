@@ -1,0 +1,41 @@
+{{#partial "head"}}
+    <link href="/css/recipe-create.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "contents"}}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
+          integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <section class="hero is-fullheight">
+        <div id="glass"></div>
+        <div class="hero-body">
+            <div class="container">
+                <form id="create-form" action="/recipes" method="post">
+                    <div id="input-box" class="field has-addons has-addons-centered">
+                        <p class="control">
+                        <span class="is-rounded title is-1 has-text-centered select">
+                          <select name="categoryId">
+                              {{#categories}}
+                                  <option value="{{id}}">{{title}}</option>
+                              {{/categories}}
+                          </select>
+                        </span>
+                        </p>
+                        <p class="control is-expanded">
+                            <input name="name" class="box is-rounded input title is-1 has-text-centered" type="text"
+                                   placeholder="무슨 음식을 만들거예요?">
+                        </p>
+                        <p class="control">
+                            <a id="submit" class="button is-rounded input title is-1 is-btn-inactive">
+                                만들기!
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/recipes/create.js"></script>
+{{/partial}}
+
+{{> base}}

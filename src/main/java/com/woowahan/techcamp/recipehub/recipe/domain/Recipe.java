@@ -6,11 +6,12 @@ import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -33,9 +34,11 @@ public class Recipe {
     @Column(nullable = false)
     private boolean completed;
 
+    @CreationTimestamp
     @Column(nullable = false)
     private Date createdAt;
 
+    @UpdateTimestamp
     @Column(nullable = false)
     private Date updatedAt;
 
@@ -62,12 +65,14 @@ public class Recipe {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Recipe recipe = (Recipe) o;
-        return Objects.equals(id, recipe.id);
+
+        return id != null ? id.equals(recipe.id) : recipe.id == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return id != null ? id.hashCode() : 0;
     }
 }
