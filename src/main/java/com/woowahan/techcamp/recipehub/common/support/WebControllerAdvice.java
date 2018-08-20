@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.common.support;
 
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,19 +19,26 @@ public class WebControllerAdvice {
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleError(BindException exception) {
-        return new ModelAndView("redirect:/");
+    public String handleError(BindException exception) {
+        return "/support/badrequest";
     }
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleBadRequest(BadRequestException exception) {
-        return new ModelAndView("redirect:/");
+    public String handleBadRequest(BadRequestException exception) {
+        return "/support/badrequest";
+    }
+
+    // TODO: Web/JSON 둘 다 한꺼번에 잡아서 이슈 발생
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ModelAndView handleUnAuthorization(UnauthorizedException exception) {
+        return new ModelAndView("redirect:/users/login");
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(EntityNotFoundException exception) {
-        return "/notfound";
+        return "/support/notfound";
     }
 }
