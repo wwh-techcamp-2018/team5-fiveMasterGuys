@@ -46,6 +46,9 @@ dependencies {
 	runtime('mysql:mysql-connector-java:8.0.12')
 	runtime('com.h2database:h2')
 	compileOnly('org.projectlombok:lombok')
+
+	// Refer: https://github.com/spring-projects/spring-security-oauth/issues/441#issuecomment-345188476
+	testCompile('org.apache.httpcomponents:httpclient')
 	testCompile('org.assertj:assertj-core:3.10.0')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
