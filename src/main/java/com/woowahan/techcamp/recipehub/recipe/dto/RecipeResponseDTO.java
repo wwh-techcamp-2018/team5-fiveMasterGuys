@@ -5,7 +5,6 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
 import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepDTO;
-import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +40,7 @@ public class RecipeResponseDTO {
     }
 
 
-    public static RecipeResponseDTO from(Recipe recipe, RecipeStepContentConverter converter) {
+    public static RecipeResponseDTO from(Recipe recipe) {
         Stream<RecipeStep> stepStream = recipe.getRecipeSteps().stream();
 
         if (recipe.isCompleted()) {
@@ -53,7 +52,7 @@ public class RecipeResponseDTO {
                 .category(recipe.getCategory())
                 .imgUrl(recipe.getImgUrl())
                 .recipeSteps(
-                        stepStream.map(step -> RecipeStepDTO.from(step, converter)).collect(Collectors.toList())
+                        stepStream.map(RecipeStepDTO::from).collect(Collectors.toList())
                 )
                 .build();
     }

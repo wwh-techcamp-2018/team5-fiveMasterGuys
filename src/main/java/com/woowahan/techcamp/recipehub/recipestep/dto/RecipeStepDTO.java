@@ -3,7 +3,6 @@ package com.woowahan.techcamp.recipehub.recipestep.dto;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
-import com.woowahan.techcamp.recipehub.recipestep.util.RecipeStepContentConverter;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,12 +42,12 @@ public class RecipeStepDTO {
         this.closed = closed;
     }
 
-    public static RecipeStepDTO from(RecipeStep recipeStep, RecipeStepContentConverter converter) {
+    public static RecipeStepDTO from(RecipeStep recipeStep) {
         return RecipeStepDTO.builder()
                 .id(recipeStep.getId())
                 .name(recipeStep.getName())
                 .closed(recipeStep.isClosed())
-                .content(converter.toList(recipeStep.getContent()))
+                .content(recipeStep.getContent())
                 .imgUrl(recipeStep.getImgUrl())
                 .ingredients(recipeStep.getIngredients())
                 .sequence(recipeStep.getSequence())
