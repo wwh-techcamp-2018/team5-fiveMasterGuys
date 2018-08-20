@@ -61,6 +61,11 @@ public class Recipe {
         this.imgUrl = imgUrl;
     }
 
+
+    public boolean isOwner(User user) {
+        return user.equals(this.owner);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
