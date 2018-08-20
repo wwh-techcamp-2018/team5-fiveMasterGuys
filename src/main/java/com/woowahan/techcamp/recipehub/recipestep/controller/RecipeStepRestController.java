@@ -9,25 +9,26 @@ import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepCreationDTO;
 import com.woowahan.techcamp.recipehub.recipestep.service.RecipeStepServiceProvider;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/recipes/{recipeId}/steps")
-public class RecipeStepController {
+public class RecipeStepRestController {
     @Autowired
-    private RecipeStepServiceProvider recipeStepServiceProvider;
+    private RecipeStepServiceProvider provider;
 
     @Autowired
     private RecipeService recipeService;
 
     @AuthRequired
     @PostMapping("")
-    public RestResponse<AbstractRecipeStep> create(User user, RecipeStepCreationDTO dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public RestResponse<AbstractRecipeStep> create(User user, @Valid @RequestBody RecipeStepCreationDTO dto) {
         Recipe recipe = recipeService.findById(dto.getRecipeId());
-        return RestResponse.success(
-                recipeStepServiceProvider.getService(recipe, user).create(user, dto, recipe)
-        );
+        AbstractRecipeStep data = provider.getService(recipe, user).create(user, dto, recipe);
+        return RestResponse.success(data);
     }
 }
