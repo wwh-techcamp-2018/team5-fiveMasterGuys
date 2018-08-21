@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
