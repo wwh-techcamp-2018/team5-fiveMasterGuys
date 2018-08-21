@@ -1,6 +1,5 @@
-package com.woowahan.techcamp.recipehub.recipestep.service;
+package com.woowahan.techcamp.recipehub.recipestep.domain;
 
-import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipeStepRequestRepository extends JpaRepository<RecipeStepRequest, Long> {

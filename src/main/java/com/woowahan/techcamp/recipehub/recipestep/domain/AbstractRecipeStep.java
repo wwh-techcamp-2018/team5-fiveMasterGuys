@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipestep.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.converter.RecipeStepContentConverter;
@@ -23,7 +25,14 @@ public abstract class AbstractRecipeStep {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private Recipe recipe;
+
+    @JsonGetter("recipeId")
+    public Long getRecipeId() {
+        return recipe.getId();
+    }
+
     private String name;
 
     @Convert(converter = RecipeStepContentConverter.class)

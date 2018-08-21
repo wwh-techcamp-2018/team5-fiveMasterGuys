@@ -1,4 +1,4 @@
-package com.woowahan.techcamp.recipehub.recipe.controller;
+package com.woowahan.techcamp.recipehub.category.service;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
