@@ -1,13 +1,15 @@
 {{#partial "head"}}
 <link href="/css/recipe-detail.css" rel="stylesheet">
+<script src="/js/steps/step.js"></script>
 {{/partial}}
 
 {{#partial "contents"}}
 {{#recipe}}
-<div class="section">
+<div class="section recipe" data-recipe-id="{{id}}">
     <div class="container">
         <div class="title is-1 has-text-centered">{{name}}</div>
         <div>{{content}}</div>
+        <button class="btn-step-add" data-step-id="null"></button>
         {{#recipeSteps}}
         <h1 class="step-title is-size-3 has-text-weight-bold">Step {{@index_1}}</h1>
         <article class="box">
@@ -30,7 +32,7 @@
                 <span>{{writer.name}}</span>
             </div>
         </article>
-        <button class="btn-step-add"></button>
+        <button class="btn-step-add" data-step-id={{id}}></button>
         {{/recipeSteps}}
     </div>
 </div>

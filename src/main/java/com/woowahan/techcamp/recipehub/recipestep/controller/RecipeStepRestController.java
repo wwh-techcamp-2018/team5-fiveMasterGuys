@@ -23,12 +23,15 @@ public class RecipeStepRestController {
     @Autowired
     private RecipeService recipeService;
 
+
     @AuthRequired
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestResponse<AbstractRecipeStep> create(User user, @Valid @RequestBody RecipeStepCreationDTO dto) {
-        Recipe recipe = recipeService.findById(dto.getRecipeId());
-        AbstractRecipeStep data = provider.getService(recipe, user).create(user, dto, recipe);
-        return RestResponse.success(data);
+    public RestResponse<AbstractRecipeStep> create(@PathVariable("recipeId") long recipeId, User user, @Valid @RequestBody RecipeStepCreationDTO dto) {
+        Recipe recipe = recipeService.findById(recipeId);
+        return RestResponse.success(
+                provider.getService(recipe, user).create(user, dto, recipe)
+        );
     }
+
 }

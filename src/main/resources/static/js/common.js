@@ -24,3 +24,11 @@ function fetchManager({url, method, body, headers, onSuccess, onFailed, onError}
 function validate(regex, value) {
     return RegExp(regex).test(value);
 }
+
+function toggleHidden(target) {
+    target.classList.toggle('hidden');
+}
+
+function removeElement(element) {
+    element.parentNode.removeChild(element);
+}
