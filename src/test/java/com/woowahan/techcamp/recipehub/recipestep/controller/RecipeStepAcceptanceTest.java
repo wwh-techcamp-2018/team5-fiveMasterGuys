@@ -6,8 +6,8 @@ import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequest;
 import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepCreationDTO;
-import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepRequestDTO;
 import com.woowahan.techcamp.recipehub.recipestep.service.RecipeStepRepository;
 import com.woowahan.techcamp.recipehub.recipestep.service.RecipeStepRequestRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
@@ -85,12 +85,22 @@ public class RecipeStepAcceptanceTest extends AcceptanceTest {
         RecipeStepCreationDTO dto = RecipeStepCreationDTO.builder().name("Put tomato paste")
                 .ingredients(null).previousStepId(step.getId()).content(content).recipeId(recipe.getId()).build();
 
-        ResponseEntity<RestResponse<RecipeStepRequestDTO>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
+        ResponseEntity<RestResponse<RecipeStepRequest>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    private ParameterizedTypeReference<RestResponse<RecipeStepRequestDTO>> getRecipeStepRequestTypeRef() {
-        return new ParameterizedTypeReference<RestResponse<RecipeStepRequestDTO>>() {
+    @Test
+    public void createWithNullDTO() {
+        List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
+        RecipeStepCreationDTO dto = RecipeStepCreationDTO.builder().name("Put tomato paste")
+                .ingredients(null).previousStepId(null).content(content).recipeId(recipe.getId()).build();
+
+        ResponseEntity<RestResponse<RecipeStepRequest>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
+        assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    private ParameterizedTypeReference<RestResponse<RecipeStepRequest>> getRecipeStepRequestTypeRef() {
+        return new ParameterizedTypeReference<RestResponse<RecipeStepRequest>>() {
         };
     }
 
