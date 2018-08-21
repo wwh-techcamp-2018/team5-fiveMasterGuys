@@ -13,7 +13,7 @@ public class RecipeStepCreationDTOTest extends ValidationTest {
     public void setUp() throws Exception {
         super.setUp();
         pizzaBuilder = RecipeStepCreationDTO.builder()
-                .recipeId(1L).name("Pizza");
+                .name("Pizza");
     }
 
     @Test
@@ -41,14 +41,8 @@ public class RecipeStepCreationDTOTest extends ValidationTest {
     }
 
     @Test
-    public void recipeIdIsNull() {
-        RecipeStepCreationDTO dto = pizzaBuilder.recipeId(null).build();
-        assertConstraintViolations(dto, 1);
-    }
-
-    @Test
     public void allConstraintViolations() {
         RecipeStepCreationDTO dto = RecipeStepCreationDTO.builder().build();
-        assertConstraintViolations(dto, 2);
+        assertConstraintViolations(dto, 1);
     }
 }

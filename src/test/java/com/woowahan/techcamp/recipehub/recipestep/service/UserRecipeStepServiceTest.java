@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.recipestep.service;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequest;
+import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequestRepository;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RequestType;
 import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepCreationDTO;
 import com.woowahan.techcamp.recipehub.user.domain.User;
@@ -58,11 +59,10 @@ public class UserRecipeStepServiceTest {
     public void create() {
         // given
         String name = "핏짜";
-        Long recipeId = 33L;
 
         RecipeStep targetStep = RecipeStep.builder().build();
         RecipeStepCreationDTO dto = RecipeStepCreationDTO.builder()
-                .name(name).recipeId(recipeId).build();
+                .name(name).build();
 
         RecipeStepRequest saved = RecipeStepRequest.from(user, dto, recipe, targetStep, RequestType.APPEND);
         when(recipeStepRequestRepository.save(saved)).thenReturn(saved);

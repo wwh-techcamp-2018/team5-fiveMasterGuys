@@ -6,11 +6,10 @@ import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
-import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequest;
-import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepCreationDTO;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRepository;
+import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequest;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStepRequestRepository;
-
+import com.woowahan.techcamp.recipehub.recipestep.dto.RecipeStepCreationDTO;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.domain.UserRepository;
@@ -94,7 +93,7 @@ public class RecipeStepAcceptanceTest extends AcceptanceTest {
     public void createWithNullDTO() {
         List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
         RecipeStepCreationDTO dto = RecipeStepCreationDTO.builder().name("Put tomato paste")
-                .ingredients(null).previousStepId(null).content(content).recipeId(recipe.getId()).build();
+                .ingredients(null).previousStepId(null).content(content).build();
 
         ResponseEntity<RestResponse<RecipeStepRequest>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);
