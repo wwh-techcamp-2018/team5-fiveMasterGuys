@@ -36,7 +36,7 @@ public class AuthRequiredInterceptorTest {
 
     @Test
     public void notAHandlerMethod() throws Exception {
-        assertTrue(authRequiredInterceptor.preHandle(null, null, mock(ResourceHttpRequestHandler.class)));
+        assertTrue(authRequiredInterceptor.preHandle(mockHttpServletRequest, null, mock(ResourceHttpRequestHandler.class)));
     }
 
     @Test
