@@ -43,7 +43,7 @@ public class RecipeStepRequest extends AbstractRecipeStep {
                 .content(dto.getContent())
                 .imgUrl(dto.getImgUrl())
                 .recipe(step.getRecipe())
-                .ingredients(dto.getIngredients())
+                .ingredients(null)
                 .target(step)
                 .requestType(type)
                 .build();

@@ -4,6 +4,8 @@ INSERT INTO user (email, password, name) VALUES ('test@er.com', '$2a$10$6dbJkT99
 INSERT INTO user (email, password, name) VALUES ('test1@er.com', '$2a$10$6dbJkT999eWA/pALX9pVFO30j/cnMcG61NUcdyvEXp/Va3fJhnlRO', 'contributor1');
 INSERT INTO user (email, password, name) VALUES ('test2@er.com', '$2a$10$6dbJkT999eWA/pALX9pVFO30j/cnMcG61NUcdyvEXp/Va3fJhnlRO', 'contributor2');
 
+INSERT INTO category(title) VALUES('a');
+
 -- Completed recipe
 INSERT INTO recipe (owner_id, name, completed, img_url, created_at, updated_at) VALUES (1, '로즈마리 후추 버거', true, 'https://cdn.bmf.kr/_data/product/I21A3/a5ae10184ec276667e0a35e6f3012f20.jpg', now(), now());
 INSERT INTO recipe_step (type, name, content, sequence, closed, rejected, recipe_id, writer_id, img_url) VALUES ('Step', '버거 모양 만들기1', '["빵을 얹는다", "고기를 올린다"]', 1, false, false, 1, 1, 'https://cdn.bmf.kr/_data/product/IF088/2dee3415155804a5e9dc7c24fd21d96c.jpg');
