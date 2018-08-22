@@ -71,6 +71,10 @@ public abstract class AcceptanceTest {
         return (user == null) ? template : template.withBasicAuth(user.getEmail(), user.getPassword());
     }
 
+    public TestRestTemplate template() {
+        return template(null);
+    }
+
     private HttpHeaders getJsonHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
