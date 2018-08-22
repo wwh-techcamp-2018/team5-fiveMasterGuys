@@ -1,21 +1,19 @@
 package com.woowahan.techcamp.recipehub.user.domain;
 
+import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends AbstractEntity {
 
     @Column(length = 100, nullable = false, unique = true)
     private String email;
