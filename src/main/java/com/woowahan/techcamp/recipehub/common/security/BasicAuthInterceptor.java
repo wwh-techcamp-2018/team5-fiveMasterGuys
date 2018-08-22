@@ -2,7 +2,7 @@ package com.woowahan.techcamp.recipehub.common.security;
 
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import com.woowahan.techcamp.recipehub.user.domain.User;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
 import com.woowahan.techcamp.recipehub.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class BasicAuthInterceptor extends HandlerInterceptorAdapter {
         log.debug("Password : {}", values[1]);
 
         try {
-            User user = userService.login(new LoginDto(values[0], values[1]));
+            User user = userService.login(new LoginDTO(values[0], values[1]));
             log.debug("Login Succeed with name  : ", user.getName());
             SessionUtils.addUserToSession(request.getSession(), user);
         } catch (UnauthorizedException unauthorizedException) {
