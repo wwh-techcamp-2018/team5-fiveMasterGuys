@@ -21,8 +21,12 @@ public class UserRecipeStepService implements RecipeStepService {
 
     @Override
     public RecipeStepRequest create(User user, RecipeStepCreationDTO dto, Recipe recipe) {
-        RecipeStep step = recipeStepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
+        RecipeStep step = null;
 
-        return recipeStepRequestRepository.save(RecipeStepRequest.from(user, dto, step, RequestType.APPEND));
+        if (dto.getPreviousStepId() != null) {
+            step = recipeStepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
+        }
+
+        return recipeStepRequestRepository.save(RecipeStepRequest.from(user, dto, recipe, step, RequestType.APPEND));
     }
 }

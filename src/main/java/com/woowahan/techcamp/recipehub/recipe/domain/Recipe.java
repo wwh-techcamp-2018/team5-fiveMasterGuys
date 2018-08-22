@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.recipe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.recipestep.domain.AbstractRecipeStep;
 import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
@@ -43,7 +44,7 @@ public class Recipe {
     @Column(nullable = false)
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", targetEntity = AbstractRecipeStep.class)
     @OrderBy("sequence ASC")
     @JsonIgnore
     private List<RecipeStep> recipeSteps;

@@ -19,7 +19,7 @@ import java.util.List;
 public class RecipeStepRequest extends AbstractRecipeStep {
 
     @ManyToOne
-    private RecipeStep target; // nullable (null이면 제일 앞에)
+    private RecipeStep target;
 
     @Enumerated(value = EnumType.STRING)
     private RequestType requestType;
@@ -36,15 +36,15 @@ public class RecipeStepRequest extends AbstractRecipeStep {
         this.rejected = rejected;
     }
 
-    public static RecipeStepRequest from(User user, RecipeStepCreationDTO dto, RecipeStep step, RequestType type) {
+    public static RecipeStepRequest from(User user, RecipeStepCreationDTO dto, Recipe recipe, RecipeStep target, RequestType type) {
         return RecipeStepRequest.builder()
                 .writer(user)
                 .name(dto.getName())
                 .content(dto.getContent())
                 .imgUrl(dto.getImgUrl())
-                .recipe(step.getRecipe())
+                .recipe(recipe)
+                .target(target)
                 .ingredients(null)
-                .target(step)
                 .requestType(type)
                 .build();
     }

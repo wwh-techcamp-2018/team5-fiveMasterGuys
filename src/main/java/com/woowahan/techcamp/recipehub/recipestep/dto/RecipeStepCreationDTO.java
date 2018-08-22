@@ -4,11 +4,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class RecipeStepCreationDTO {
+
+    @NotBlank
     private String name;
     private List<String> content;
     private List<Long> ingredients;
@@ -16,7 +20,7 @@ public class RecipeStepCreationDTO {
     private Long previousStepId;
 
     @Builder
-    public RecipeStepCreationDTO(String name, List<String> content, List<Long> ingredients, String imgUrl, Long previousStepId) {
+    public RecipeStepCreationDTO(@NotBlank @NotNull String name, List<String> content, List<Long> ingredients, String imgUrl, Long previousStepId) {
         this.name = name;
         this.content = content;
         this.ingredients = ingredients;
