@@ -1,14 +1,15 @@
 class StepManager {
     constructor() {
-        this.recipe = $('.recipe');  
+        this.recipe = $('.recipe');
+
         this.delegateMapping = {
             'btn-step-add': this.showAddStepForm,
             'btn-plus': this.appendStepItem,
             'btn-minus': this.removeStepItem,
             'btn-confirm': this.handleConfirmButtonClick,
-            'btn-cancel': this.handleCancelButtonClick
-        }
-
+            'btn-cancel': this.handleCancelButtonClick,
+            'step-offer-title-bar': this.toggleStepOfferContent,
+        };
         this.registerEvents();    
     }
 
@@ -42,21 +43,24 @@ class StepManager {
         removeElement(target.closest('.step-item'));
     }
 
-    handleClickEvent({target}) {
-        const handlerName = [...target.classList].find((cls) => this.delegateMapping.hasOwnProperty(cls));
-        if (!handlerName) {
-            return;
-        }
-        this.delegateMapping[handlerName].call(this, target);
+    handleClickEvent(e) {
+        e.path.forEach(dom => {
+            if (dom.classList) {
+                const handlerName = [...dom.classList].find((cls) => this.delegateMapping.hasOwnProperty(cls));
+                if (handlerName) {
+                    return (this.delegateMapping[handlerName]).call(this, dom);
+                }
+            }
+        });
     }
 
     handleConfirmButtonClick(target) {
-        const stepContents = target.closest('.box');
-        const requestBody = this.makeRequestBody(stepContents);
+        const step = target.closest('.box');
+        const requestBody = this.makeRequestBody(step);
         this.requestStepAddition(requestBody)
             .then((data) => {
-                this.addStep(data, stepContents);
-                this.closeAddForm(stepContents);
+                this.addStep(data, step);
+                this.closeAddForm(step);
             }).catch((status) => {
                 if (typeof status  === 'undefined') {
                     alert('네트워크 오류 발생함');
@@ -71,10 +75,13 @@ class StepManager {
     }
 
     handleCancelButtonClick(target) {
-        const stepContents = target.closest('.box');
-        this.closeAddForm(stepContents);
+        const step = target.closest('.box');
+        this.closeAddForm(step);
     }
 
+    toggleStepOfferContent(target) {
+        toggleHidden(target.nextElementSibling);
+    }
 
     requestStepAddition(requestBody) {
         return new Promise((resolve, reject) => {
@@ -96,33 +103,31 @@ class StepManager {
         });
     }
 
-    addStep(data, stepContents) {
-        stepContents.insertAdjacentHTML('afterend', this.templateStep(data));
+    addStep(data, targetStep) {
+        targetStep.insertAdjacentHTML('afterend', this.templateStep(data));
     }
 
-    closeAddForm(stepContents) {
-        toggleHidden(this.findStepAddBtn(stepContents.getAttribute('data-target-step-id')));
-        removeElement(stepContents);
+    closeAddForm(targetStep) {
+        toggleHidden(this.findStepAddBtn(targetStep.getAttribute('data-target-step-id')));
+        removeElement(targetStep);
     }
 
     findStepAddBtn(stepId) {
         return $(`button[data-step-id="${stepId}"]`)
     }
 
-    makeRequestBody(stepContents) {
-        const stepId = stepContents.getAttribute('data-target-step-id') !== "null" ? stepContents.getAttribute('data-target-step-id') : null;
+    makeRequestBody(stepForm) {
+        const stepId = stepForm.getAttribute('data-target-step-id') !== "null" ? stepForm.getAttribute('data-target-step-id') : null;
         return {
-            name: stepContents.querySelector('.subtitle').value,
-            content: this.getStepItemTexts(stepContents),
+            name: stepForm.querySelector('.subtitle').value,
+            content: this.getStepItemTexts(stepForm),
             previousStepId: stepId
         }
     }
 
-    getStepItemTexts(stepContents) {
-        return [...stepContents.querySelectorAll('.step-item-contents')].map(contentElement => contentElement.innerText);
+    getStepItemTexts(steps) {
+        return [...steps.querySelectorAll('.step-item-contents')].map(contentElement => contentElement.innerText);
     }
-
-
 
     templateStep(data) {
         return `
