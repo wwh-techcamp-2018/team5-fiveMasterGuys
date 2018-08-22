@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.image.service;
 
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,28 +22,37 @@ public class ImageStorageService {
 
     private String bucketName;
 
-    public String store(MultipartFile file) throws IOException {
+    public String store(MultipartFile file) {
         if (isInvalidImage(file)) {
             throw new BadRequestException();
         }
 
         String fileName = generateRandomFileName(file);
-        File convertedFile = convertToFile(file).orElseThrow(IOException::new);
-        String resultUrl = fileUploadService.putObject(bucketName, fileName, convertedFile);
-        convertedFile.delete();
-        return resultUrl;
+        File convertedFile = null;
+
+        try {
+            convertedFile = convertToFile(file).orElseThrow(FileUploadException::new);
+            return fileUploadService.putObject(bucketName, fileName, convertedFile);
+        } catch (IOException e) {
+            throw new FileUploadException();
+        } finally {
+            convertedFile.delete();
+        }
     }
 
     private Optional<File> convertToFile(MultipartFile file) throws IOException {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         File convertFile = new File(filename);
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(file.getBytes());
-            }
-            return Optional.of(convertFile);
-        }
+        return writeToFile(convertFile, file);
+    }
 
+    private Optional<File> writeToFile(File targetFile, MultipartFile file) throws IOException {
+        if (targetFile.createNewFile()) {
+            FileOutputStream fos = new FileOutputStream(targetFile);
+            fos.write(file.getBytes());
+            fos.close();
+            return Optional.of(targetFile);
+        }
         return Optional.empty();
     }
 
