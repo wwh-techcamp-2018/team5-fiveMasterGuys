@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.step.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.user.domain.User;
@@ -21,6 +22,7 @@ public class Step extends AbstractStep {
     private boolean closed;
 
     @OneToMany(mappedBy = "target")
+    @JsonBackReference
     private List<StepOffer> offers;
 
     @Builder

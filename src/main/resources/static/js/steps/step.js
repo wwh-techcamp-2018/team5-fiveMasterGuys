@@ -10,12 +10,16 @@ class StepManager {
             'btn-cancel': this.handleCancelButtonClick,
             'step-offer-title-bar': this.toggleStepOfferContent,
         };
-        this.registerEvents();    
+        this.registerEvents();
     }
 
     registerEvents() {
-        this.recipe.addEventListener('click', (e) => { this.handleClickEvent(e) });
-        this.recipe.addEventListener('keyup', (e) => { this.handleKeyUpEvent(e) });
+        this.recipe.addEventListener('click', (e) => {
+            this.handleClickEvent(e)
+        });
+        this.recipe.addEventListener('keyup', (e) => {
+            this.handleKeyUpEvent(e)
+        });
     }
 
     handleKeyUpEvent(e) {
@@ -24,7 +28,7 @@ class StepManager {
             return;
         }
     }
-    
+
     showAddStepForm(target) {
         target.insertAdjacentHTML('afterend', this.templateStepForm(target.getAttribute('data-step-id')));
         toggleHidden(target);
@@ -55,28 +59,28 @@ class StepManager {
     }
 
     handleConfirmButtonClick(target) {
-        const step = target.closest('.box');
-        const requestBody = this.makeRequestBody(step);
+        const stepForm = target.closest('.box');
+        const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
             .then((data) => {
-                this.addStep(data, step);
-                this.closeAddForm(step);
+                this.addStep(stepForm, data);
+                this.closeAddForm(stepForm);
             }).catch((status) => {
-                if (typeof status  === 'undefined') {
-                    alert('네트워크 오류 발생함');
-                    return;
-                }
-                if (status === 401) {
-                    location.href = '/users/login';
-                    return;
-                }
-                alert('똑바로 하그라');
-            })
+            if (typeof status === 'undefined') {
+                alert('네트워크 오류 발생함');
+                return;
+            }
+            if (status === 401) {
+                location.href = '/users/login';
+                return;
+            }
+            console.error(status);
+        })
     }
 
     handleCancelButtonClick(target) {
-        const step = target.closest('.box');
-        this.closeAddForm(step);
+        const stepForm = target.closest('.box');
+        this.closeAddForm(stepForm);
     }
 
     toggleStepOfferContent(target) {
@@ -103,13 +107,46 @@ class StepManager {
         });
     }
 
-    addStep(data, targetStep) {
-        targetStep.insertAdjacentHTML('afterend', this.templateStep(data));
+    templateStepOfferContainer(data) {
+        const stepId = data.target && data.target.id;
+        return`
+        <div class="step-offers" data-step-id="${stepId}">
+            <div class="title is-info">추가 제안</div>
+        </div>
+               
+        `
     }
 
-    closeAddForm(targetStep) {
-        toggleHidden(this.findStepAddBtn(targetStep.getAttribute('data-target-step-id')));
-        removeElement(targetStep);
+    addStep(stepForm, data) {
+        if (data.offerType === 'APPEND') {
+            const targetStepId = stepForm.getAttribute('data-step-id');
+            this.createStepOfferContainer(targetStepId, data);
+            this.createStepOffer(targetStepId, data);
+        } else {
+            stepForm.insertAdjacentHTML('afterend', this.templateStep(data));
+
+        }
+    }
+
+    createStepOffer(targetStepId, data) {
+        $(`.step-offers[data-step-id="${targetStepId}"]`).insertAdjacentHTML('beforeend', this.templateStepOffer(data))
+    }
+
+    createStepOfferContainer(targetStepId, data) {
+        let stepOfferContainer = $(`.step-offers[data-step-id="${targetStepId}"]`);
+
+        if (!stepOfferContainer) {
+            const step = (targetStepId === 'null')
+                ? $(`button[data-step-id="null"]`).previousElementSibling
+                : $(`article[data-step-id="${targetStepId}"]`);
+
+            step.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
+        }
+    }
+
+    closeAddForm(stepForm) {
+        toggleHidden(this.findStepAddBtn(stepForm.getAttribute('data-step-id')));
+        removeElement(stepForm);
     }
 
     findStepAddBtn(stepId) {
@@ -117,7 +154,7 @@ class StepManager {
     }
 
     makeRequestBody(stepForm) {
-        const stepId = stepForm.getAttribute('data-target-step-id') !== "null" ? stepForm.getAttribute('data-target-step-id') : null;
+        const stepId = stepForm.getAttribute('data-step-id') !== "null" ? stepForm.getAttribute('data-step-id') : null;
         return {
             name: stepForm.querySelector('.subtitle').value,
             content: this.getStepItemTexts(stepForm),
@@ -154,9 +191,37 @@ class StepManager {
         `;
     }
 
+    templateStepOffer(data) {
+        return `
+            <a class="hero is-info step-offer-title-bar">
+                <h1 class="title">Step 추가 제안 : ${data.name}
+                    <span class="step-offer-open is-pulled-right">-</span>
+                </h1>
+            </a>
+            <article class="box step-offer-content hidden">
+                <div class="columns">
+                    <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
+                    <div class="column">
+                        <div class="subtitle">${data.name}</div>
+                        <div>
+                            <ol class="step-contents">
+                                ${data.content.map((e) => (`<li>${e}</li>`)).join('\n')}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="speech-bubble-triangle"></div>
+                    <div></div>
+                    <span>${data.writer.name}</span>
+                </div>
+            </article>
+        `;
+    }
+
     templateStepForm(targetStepId) {
         return `
-        <article class="box" data-target-step-id=${targetStepId}>
+        <article class="box" data-step-id=${targetStepId}>
             <div class="columns">
                 <div style="background-color: yellow; min-height:400px;" class="img-upload column is-one-third"></div>
                 <div class="column">

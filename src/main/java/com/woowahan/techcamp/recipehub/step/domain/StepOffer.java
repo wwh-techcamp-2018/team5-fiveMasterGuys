@@ -1,7 +1,6 @@
 package com.woowahan.techcamp.recipehub.step.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
@@ -19,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class StepOffer extends AbstractStep {
 
-    @JsonIgnore
     @ManyToOne
     private Step target;
 
