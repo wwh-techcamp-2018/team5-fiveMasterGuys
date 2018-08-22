@@ -2,7 +2,6 @@ package com.woowahan.techcamp.recipehub.recipe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.step.domain.AbstractStep;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
@@ -10,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -44,9 +44,10 @@ public class Recipe {
     @Column(nullable = false)
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "recipe", targetEntity = AbstractStep.class)
+    @OneToMany(mappedBy = "recipe")
     @OrderBy("sequence ASC")
     @JsonIgnore
+    @Where(clause = "type='Step'")
     private List<Step> recipeSteps;
 
     @Column

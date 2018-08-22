@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
@@ -13,11 +14,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "StepOffer")
-@DiscriminatorValue("Request")
+@DiscriminatorValue("StepOffer")
 @Getter
 @NoArgsConstructor
 public class StepOffer extends AbstractStep {
 
+    @JsonIgnore
     @ManyToOne
     private Step target;
 
