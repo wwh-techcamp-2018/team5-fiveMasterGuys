@@ -25,6 +25,11 @@ public class SignupDTOTest extends ValidationTest {
     }
 
     @Test
+    public void invalidAll() {
+        assertConstraintViolations(new SignupDTO(), 4);
+    }
+
+    @Test
     public void invalid_email_pattern() {
         SignupDTO dto = signupDtoBuilder
                 .email("ming_woowahan.com")

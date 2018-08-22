@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.common.security;
 
+import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
 import com.woowahan.techcamp.recipehub.user.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.Base64;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -45,4 +47,24 @@ public class BasicAuthInterceptorTest {
         //Then
         assertTrue(SessionUtils.isLoggedIn(request.getSession()));
     }
+
+    @Test
+    public void preHandle_로그인_실패() throws Exception {
+        final String email = "team5@recipehub.com";
+        final String password = "password1234!";
+
+        LoginDTO dto = new LoginDTO(email, password);
+        when(userService.login(dto)).thenThrow(new UnauthorizedException());
+
+        //When
+        String encodedBasicAuth = Base64.getEncoder()
+                .encodeToString(String.format("%s:%s", email, password).getBytes());
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Basic " + encodedBasicAuth);
+        basicAuthInterceptor.preHandle(request, null, null);
+
+        //Then
+        assertFalse(SessionUtils.isLoggedIn(request.getSession()));
+    }
+
 }
