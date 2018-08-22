@@ -1,0 +1,43 @@
+package com.woowahan.techcamp.recipehub.user.dto;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.util.Objects;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class LoginDTO {
+    @NotNull
+    @Email(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$",
+            flags = Pattern.Flag.CASE_INSENSITIVE)
+    private String email;
+
+    @NotNull
+    @Pattern(regexp = "^.*(?=^.{8,16}$)(?=.*\\d)(?=.*[a-zA-Z]).*$")
+    private String password;
+
+    public LoginDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoginDTO loginDto = (LoginDTO) o;
+        return Objects.equals(email, loginDto.email) &&
+                Objects.equals(password, loginDto.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, password);
+    }
+}

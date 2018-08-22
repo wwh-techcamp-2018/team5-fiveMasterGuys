@@ -1,7 +1,7 @@
 package com.woowahan.techcamp.recipehub.common.security;
 
 import com.woowahan.techcamp.recipehub.user.domain.User;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
 import com.woowahan.techcamp.recipehub.user.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +32,7 @@ public class BasicAuthInterceptorTest {
 
         User user = User.builder().name("Username").build();
 
-        LoginDto dto = new LoginDto(email, password);
+        LoginDTO dto = new LoginDTO(email, password);
         when(userService.login(dto)).thenReturn(user);
 
         //When

@@ -2,8 +2,8 @@ package com.woowahan.techcamp.recipehub.recipe.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.recipestep.domain.AbstractRecipeStep;
-import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.step.domain.AbstractStep;
+import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,16 +44,16 @@ public class Recipe {
     @Column(nullable = false)
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "recipe", targetEntity = AbstractRecipeStep.class)
+    @OneToMany(mappedBy = "recipe", targetEntity = AbstractStep.class)
     @OrderBy("sequence ASC")
     @JsonIgnore
-    private List<RecipeStep> recipeSteps;
+    private List<Step> recipeSteps;
 
     @Column
     private String imgUrl;
 
     @Builder
-    public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<RecipeStep> recipeSteps, String imgUrl) {
+    public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<Step> recipeSteps, String imgUrl) {
         this.category = category;
         this.owner = owner;
         this.name = name;

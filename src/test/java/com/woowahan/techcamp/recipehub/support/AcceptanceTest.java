@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.user.domain.User;
-import com.woowahan.techcamp.recipehub.user.domain.UserRepository;
+import com.woowahan.techcamp.recipehub.user.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;

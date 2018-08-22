@@ -1,11 +1,11 @@
 package com.woowahan.techcamp.recipehub.user.service;
 
+import com.woowahan.techcamp.recipehub.common.exception.ConflictException;
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
-import com.woowahan.techcamp.recipehub.exception.ConflictException;
 import com.woowahan.techcamp.recipehub.user.domain.User;
-import com.woowahan.techcamp.recipehub.user.domain.UserRepository;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
-import com.woowahan.techcamp.recipehub.user.dto.SignupDto;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
+import com.woowahan.techcamp.recipehub.user.dto.SignupDTO;
+import com.woowahan.techcamp.recipehub.user.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,11 +35,11 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    private SignupDto signupDto;
+    private SignupDTO signupDto;
 
     @Before
     public void setUp() throws Exception {
-        signupDto = SignupDto.builder()
+        signupDto = SignupDTO.builder()
                 .email("ming@woowahan.com")
                 .name("ming")
                 .password("abcdef123456")
@@ -67,19 +67,19 @@ public class UserServiceTest {
     public void loginTest() {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(new User()));
         when(passwordEncoder.matches(USER_PASSWORD, null)).thenReturn(true);
-        userService.login(new LoginDto(USER_EMAIL, USER_PASSWORD));
+        userService.login(new LoginDTO(USER_EMAIL, USER_PASSWORD));
     }
 
     @Test(expected = UnauthorizedException.class)
     public void loginWithInvalidEmail() {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
-        userService.login(new LoginDto(USER_EMAIL, USER_PASSWORD));
+        userService.login(new LoginDTO(USER_EMAIL, USER_PASSWORD));
     }
 
     @Test(expected = UnauthorizedException.class)
     public void loginWithInvalidPassword() {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(new User()));
         when(passwordEncoder.matches(USER_PASSWORD, null)).thenReturn(false);
-        userService.login(new LoginDto(USER_EMAIL, USER_PASSWORD));
+        userService.login(new LoginDTO(USER_EMAIL, USER_PASSWORD));
     }
 }
