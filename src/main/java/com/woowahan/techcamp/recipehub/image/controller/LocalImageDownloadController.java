@@ -7,12 +7,13 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-@RestController
+@Controller
 @Profile("local")
 @RequestMapping("${local.storage.imageStoragePath}/{imgName}")
 public class LocalImageDownloadController {
@@ -21,6 +22,7 @@ public class LocalImageDownloadController {
     private LocalFileUploadService localFileUploadService;
 
     @GetMapping
+    @ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable String imgName) throws FileNotFoundException {
         Resource file = localFileUploadService.loadAsResource(imgName);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
