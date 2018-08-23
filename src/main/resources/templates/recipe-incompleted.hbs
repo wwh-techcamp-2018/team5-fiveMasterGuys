@@ -1,16 +1,51 @@
 {{#partial "head"}}
 <link href="/css/recipe-detail.css" rel="stylesheet">
+<script src="/js/steps/step.js"></script>
 {{/partial}}
 
 {{#partial "contents"}}
 {{#recipe}}
-<div class="section">
+<div class="section recipe" data-recipe-id="{{id}}">
     <div class="container">
         <div class="title is-1 has-text-centered">{{name}}</div>
         <div>{{content}}</div>
+
+        {{#if firstOffers}}
+            <div class="step-offers" data-step-id="null">
+                <div class="title is-info">추가 제안</div>
+                {{#firstOffers}}
+                    <a class="hero is-info step-offer-title-bar">
+                        <h1 class="title">Step 추가 제안 : {{name}} <span
+                                class="step-offer-open is-pulled-right">-</span></h1>
+                    </a>
+                    <article class="box step-offer-content hidden">
+                        <div class="columns">
+                            <img src="{{imgUrl}}" alt="{{name}}" class="column is-one-third">
+                            <div class="column">
+                                <div class="subtitle">{{name}}</div>
+                                <div>
+                                    <ol class="step-contents">
+                                        {{#content}}
+                                            <li>{{.}}</li>
+                                        {{/content}}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="speech-bubble-triangle"></div>
+                            <div></div>
+                            <span>{{writer.name}}</span>
+                        </div>
+                    </article>
+                {{/firstOffers}}
+            </div>
+        {{/if}}
+        <button class="btn-step-add" data-step-id="null">➕</button>
+
         {{#recipeSteps}}
         <h1 class="step-title is-size-3 has-text-weight-bold">Step {{@index_1}}</h1>
-        <article class="box">
+        <article class="box" data-step-id="{{id}}">
             <div class="columns">
                 <img src="{{imgUrl}}" alt="{{name}}" class="column is-one-third">
                 <div class="column">
@@ -30,7 +65,38 @@
                 <span>{{writer.name}}</span>
             </div>
         </article>
-        <button class="btn-step-add"></button>
+        {{#if offers}}
+        <div class="step-offers" data-step-id="{{id}}">
+            <div class="title is-info">추가 제안</div>
+            {{#offers}}
+                <a class="hero is-info step-offer-title-bar">
+                    <h1 class="title">Step 추가 제안 : {{name}} <span
+                            class="step-offer-open is-pulled-right">-</span></h1>
+                </a>
+                <article class="box step-offer-content hidden">
+                    <div class="columns">
+                        <img src="{{imgUrl}}" alt="{{name}}" class="column is-one-third">
+                        <div class="column">
+                            <div class="subtitle">{{name}}</div>
+                            <div>
+                                <ol class="step-contents">
+                                    {{#content}}
+                                        <li>{{.}}</li>
+                                    {{/content}}
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="speech-bubble-triangle"></div>
+                        <div></div>
+                        <span>{{writer.name}}</span>
+                    </div>
+                </article>
+            {{/offers}}
+        </div>
+        {{/if}}
+        <button class="btn-step-add" data-step-id={{id}}>➕</button>
         {{/recipeSteps}}
     </div>
 </div>

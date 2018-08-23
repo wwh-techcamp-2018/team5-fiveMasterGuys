@@ -6,6 +6,8 @@ import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
+import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,9 @@ import java.util.List;
 public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private StepOfferRepository stepOfferRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -38,5 +43,9 @@ public class RecipeService {
 
     public Page<Recipe> findAllByPagable(Pageable pageable) {
         return recipeRepository.findAll(pageable);
+    }
+
+    public List<StepOffer> findNullTargetStepOffersByRecipe(Recipe recipe) {
+        return stepOfferRepository.findAllByRecipeAndTargetIsNull(recipe);
     }
 }

@@ -1,21 +1,17 @@
 package com.woowahan.techcamp.recipehub.category.domain;
 
+import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Category extends AbstractEntity {
+
     private String title;
 
     @Builder

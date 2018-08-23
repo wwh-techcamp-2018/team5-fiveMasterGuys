@@ -1,8 +1,8 @@
 package com.woowahan.techcamp.recipehub.user.controller;
 
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
-import com.woowahan.techcamp.recipehub.user.domain.UserRepository;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDto;
+import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
+import com.woowahan.techcamp.recipehub.user.repository.UserRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -51,6 +51,6 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
     private ResultActions buildLoginRequest(String email, String password) throws Exception {
         return mvc.perform(post(LOGIN_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonBytes(new LoginDto(email, password))));
+                .content(convertObjectToJsonBytes(new LoginDTO(email, password))));
     }
 }

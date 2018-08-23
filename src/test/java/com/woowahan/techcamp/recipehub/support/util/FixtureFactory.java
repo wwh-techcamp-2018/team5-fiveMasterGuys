@@ -16,8 +16,6 @@ public class FixtureFactory {
                     .name(String.format("recipe %d", i))
                     .completed(i % 2 == 0)
                     .imgUrl(String.format("img %d", i))
-                    .createdAt(new Date())
-                    .updatedAt(new Date())
                     .build());
         }
 

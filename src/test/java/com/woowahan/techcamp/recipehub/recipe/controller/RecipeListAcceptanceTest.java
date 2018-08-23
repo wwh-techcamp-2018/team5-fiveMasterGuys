@@ -1,6 +1,6 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
-import com.woowahan.techcamp.recipehub.common.controller.HomeController;
+import com.woowahan.techcamp.recipehub.home.controller.HomeController;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;

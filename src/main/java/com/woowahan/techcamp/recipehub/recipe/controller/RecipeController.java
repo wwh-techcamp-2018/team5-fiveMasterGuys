@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
@@ -23,6 +24,7 @@ public class RecipeController {
     private static final String RECIPE_COMPLETED = "/recipe-completed";
     private static final String RECIPE_INCOMPLETED = "/recipe-incompleted";
     private static final String RECIPE_KEY = "recipe";
+    private static final String FIRST_OFFERS = "firstOffers";
 
     @Autowired
     private RecipeService recipeService;
@@ -42,6 +44,7 @@ public class RecipeController {
     public String get(@PathVariable Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
+        model.addAttribute(FIRST_OFFERS, recipeService.findNullTargetStepOffersByRecipe(recipe));
 
         return recipe.isCompleted() ? RECIPE_COMPLETED : RECIPE_INCOMPLETED;
     }

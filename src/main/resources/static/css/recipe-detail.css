@@ -3,5 +3,20 @@
 }
 
 .step-contents {
-    list-style-position: inside;
+    margin-left: 15px;
+}
+
+.step-offer-title-bar {
+    margin-top: 10px;
+    padding: 10px 20px 10px 50px;
+    border: solid #c5c5c5 2px;
+}
+
+.step-offers {
+    padding: 30px;
+    background: #EEE;
+}
+
+.step-offer-content-hidden {
+    display: none;
 }

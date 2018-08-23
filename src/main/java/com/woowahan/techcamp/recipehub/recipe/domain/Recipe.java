@@ -1,26 +1,22 @@
 package com.woowahan.techcamp.recipehub.recipe.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.recipestep.domain.RecipeStep;
+import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
+import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Recipe {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Recipe extends AbstractEntity {
 
     @ManyToOne
     private Category category;
@@ -34,29 +30,21 @@ public class Recipe {
     @Column(nullable = false)
     private boolean completed;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private Date updatedAt;
-
     @OneToMany(mappedBy = "recipe")
     @OrderBy("sequence ASC")
-    private List<RecipeStep> recipeSteps;
+    @JsonIgnore
+    @Where(clause = "type='Step'")
+    private List<Step> recipeSteps;
 
     @Column
     private String imgUrl;
 
     @Builder
-    public Recipe(Category category, User owner, String name, boolean completed, Date createdAt, Date updatedAt, List<RecipeStep> recipeSteps, String imgUrl) {
+    public Recipe(Category category, User owner, String name, boolean completed, List<Step> recipeSteps, String imgUrl) {
         this.category = category;
         this.owner = owner;
         this.name = name;
         this.completed = completed;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.recipeSteps = recipeSteps;
         this.imgUrl = imgUrl;
     }
