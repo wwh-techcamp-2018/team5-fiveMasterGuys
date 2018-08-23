@@ -1,15 +1,11 @@
 package com.woowahan.techcamp.recipehub.ingredient.domain;
 
+import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
+
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
-public class Ingredient {
+public class Ingredient extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String name;
 }

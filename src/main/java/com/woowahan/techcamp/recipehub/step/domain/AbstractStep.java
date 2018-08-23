@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.step.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
 import com.woowahan.techcamp.recipehub.ingredient.domain.Ingredient;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.converter.StepContentConverter;
@@ -19,11 +20,7 @@ import java.util.Objects;
 @DiscriminatorColumn(name = "type")
 @Getter
 @NoArgsConstructor
-public abstract class AbstractStep {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public abstract class AbstractStep extends AbstractEntity {
 
     @ManyToOne
     @JsonIgnore
@@ -66,7 +63,6 @@ public abstract class AbstractStep {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id);
     }
 }
