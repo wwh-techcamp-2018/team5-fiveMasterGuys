@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -71,6 +72,10 @@ public abstract class AcceptanceTest {
         return (user == null) ? template : template.withBasicAuth(user.getEmail(), user.getPassword());
     }
 
+    public TestRestTemplate template() {
+        return template(null);
+    }
+
     private HttpHeaders getJsonHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -119,7 +124,6 @@ public abstract class AcceptanceTest {
     protected <T> ResponseEntity<String> requestPost(String path, T dto, User user) {
         return template(user).postForEntity(path, request(dto, null), String.class);
     }
-
     protected <T> ResponseEntity<String> requestPost(String path, T dto) {
         return requestPost(path, dto, null);
     }
@@ -140,6 +144,17 @@ public abstract class AcceptanceTest {
         return requestDelete(path, null);
     }
 
+
+    protected ResponseEntity<RestResponse<String>> requestFileUpload(User user, String key, ClassPathResource resource) {
+        HttpEntity<MultiValueMap<String, Object>> request = HtmlFormDataBuilder
+                .multipartFormData()
+                .addParameter(key, resource)
+                .build();
+        return template(user).exchange("/images", HttpMethod.POST, request, new ParameterizedTypeReference<RestResponse<String>>() {
+        });
+    }
+
+
     private <T> HttpEntity<MultiValueMap<String, Object>> request(T dto, String method) {
         MultiValueMap<String, Object> params = getBodyParams(dto);
         if (method != null) params.add("_method", method);
@@ -148,7 +163,7 @@ public abstract class AcceptanceTest {
 
     private MultiValueMap<String, Object> getBodyParams(Object dto) {
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        if(dto == null) return params;
+        if (dto == null) return params;
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.convertValue(dto, Map.class);
         map.entrySet().stream()

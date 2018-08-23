@@ -43,6 +43,7 @@ dependencies {
 	compile('pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.0')
 	compile('io.springfox:springfox-swagger2:2.6.1')
 	compile('io.springfox:springfox-swagger-ui:2.6.1')
+	compile('org.springframework.cloud:spring-cloud-starter-aws')
 	runtime('mysql:mysql-connector-java:8.0.12')
 	runtime('com.h2database:h2')
 	compileOnly('org.projectlombok:lombok')
@@ -51,4 +52,10 @@ dependencies {
 	testCompile('org.apache.httpcomponents:httpclient')
 	testCompile('org.assertj:assertj-core:3.10.0')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom 'org.springframework.cloud:spring-cloud-aws:2.0.0.RELEASE'
+	}
 }
