@@ -10,7 +10,7 @@
         <div class="title is-1 has-text-centered">{{name}}</div>
         <div>{{content}}</div>
 
-        <div class="step-container box">
+        <div class="step-container">
             {{#if firstOffers}}
                 <div class="step-offers" data-step-id="null">
                     <div class="step-offer-title is-size-2"><i class="fas fa-bong"></i> Step Offers</div>
@@ -48,8 +48,7 @@
 
         </div>
         {{#recipeSteps}}
-        <hr class="space">
-        <div class="step-container box">
+        <div class="step-container">
         <h1 class="step-title is-size-2 has-text-weight-bold"><i class="fas fa-utensils fa-2x"></i>Step {{@index_1}}</h1>
         <article class="box" data-step-id="{{id}}">
             <div class="columns">
