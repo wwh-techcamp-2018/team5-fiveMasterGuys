@@ -18,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Recipe extends AbstractEntity {
 
+    public static final String DEFAULT_RECIPE_IMAGE_URL = "/img/recipe-default.png";
+
     @ManyToOne
     private Category category;
 
@@ -36,7 +38,7 @@ public class Recipe extends AbstractEntity {
     @Where(clause = "type='Step'")
     private List<Step> recipeSteps;
 
-    @Column
+    @Column(nullable = false)
     private String imgUrl;
 
     @Builder
@@ -46,7 +48,7 @@ public class Recipe extends AbstractEntity {
         this.name = name;
         this.completed = completed;
         this.recipeSteps = recipeSteps;
-        this.imgUrl = (imgUrl == null) ? "/img/recipe-default.png" : imgUrl;
+        this.imgUrl = (imgUrl == null) ? DEFAULT_RECIPE_IMAGE_URL : imgUrl;
     }
 
 
