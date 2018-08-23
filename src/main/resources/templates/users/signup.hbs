@@ -1,3 +1,9 @@
+{{#partial "head"}}
+    <link href="/css/user.css" rel="stylesheet">
+    <script type="module" src="/js/users/utils.js"></script>
+    <script type="module" src="/js/users/signup.js"></script>
+{{/partial}}
+
 {{#partial "contents"}}
 <section class="hero is-fullheight">
     <div class="hero-body">
@@ -8,36 +14,35 @@
                 <div class="box">
                     <div class="field">
                         <div class="control">
-                            <input class="input is-large" id="email-field" type="email" placeholder="Your Email"
+                            <input class="input is-medium" id="email-field" type="email"
+                                   placeholder="Email(test@woowahan.com)"
                                    autofocus="">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="control">
-                            <input class="input is-large" id="password-field" , type="password"
-                                   placeholder="Your Password">
+                            <input class="input is-medium" id="password-field" , type="password"
+                                   placeholder="비밀번호(숫자와 문자 조합 8 ~ 16자리)">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="control">
-                            <input class="input is-large" id="password-check-field" , type="password"
-                                   placeholder="Your Password again">
+                            <input class="input is-medium" id="password-check-field" , type="password"
+                                   placeholder="비밀번호 확인(숫자와 문자 포함 8 ~ 16자리)">
                         </div>
                     </div>
 
                     <div class="field">
                         <div class="control">
-                            <input class="input is-large" id="name-field" , type="text"
-                                   placeholder="Your name">
+                            <input class="input is-medium" id="name-field" , type="text"
+                                   placeholder="이름">
                         </div>
                     </div>
-                    <button id="signup-btn" class="button is-block is-info is-large is-fullwidth">Sign up</button>
+                    <button id="signup-btn" class="button is-block is-info is-medium is-fullwidth">Sign up</button>
                 </div>
-                <p class="has-text-grey">
-                    <a href="../">Need Help?</a>
-                </p>
+                <div id="error-msg-box" class="column" class="border: none"></div>
             </div>
         </div>
     </div>
