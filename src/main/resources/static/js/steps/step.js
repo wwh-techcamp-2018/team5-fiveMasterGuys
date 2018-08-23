@@ -133,7 +133,7 @@ class StepManager {
         const stepId = data.target && data.target.id;
         return`
         <div class="step-offers" data-step-id="${stepId}">
-            <div class="title is-info">Step Offers</div>
+            <div class="step-offer-title is-size-2"><i class="fas fa-bong"></i> Step Offers</div>
         </div>
                
         `
@@ -146,6 +146,7 @@ class StepManager {
             this.createStepOffer(targetStepId, data);
         } else {
             stepForm.closest('.step-container').insertAdjacentHTML('afterend', this.templateStep(data));
+            $All('h1.step-title').forEach( (e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i+1}`);
         }
     }
 
@@ -156,12 +157,15 @@ class StepManager {
     createStepOfferContainer(targetStepId, data) {
         let stepOfferContainer = $(`.step-offers[data-step-id="${targetStepId}"]`);
 
-        if(targetStepId === 'null' && !stepOfferContainer){
-            const el = $(`button[data-step-id="null"]`).parentElement;
-            el.insertAdjacentHTML('afterbegin', this.templateStepOfferContainer(data));
-        }else{
-            const el = $(`article[data-step-id="${targetStepId}"]`);
-            el.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
+
+        if (!stepOfferContainer) {
+            if (targetStepId === 'null') {
+                const el = $(`button[data-step-id="null"]`).parentElement;
+                el.insertAdjacentHTML('afterbegin', this.templateStepOfferContainer(data));
+            } else {
+                const el = $(`article[data-step-id="${targetStepId}"]`);
+                el.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
+            }
         }
 
     }
@@ -198,26 +202,33 @@ class StepManager {
 
     templateStep(data) {
         return `
-        <h1 class="step-title is-size-3 has-text-weight-bold">Step ${data.sequence}</h1>
-        <article class="box">
-            <div class="columns">
-                <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
-                <div class="column">
-                    <div class="subtitle">${data.name}</div>
-                    <div>
-                        <ol class="step-contents">
-                            ${data.content.map((e) => (`<li>${e}</li>`)).join('\n')}
-                        </ol>
+        <div class="step-container">
+            <h1 class="step-title is-size-2 has-text-weight-bold">
+            <i class="fas fa-utensils fa-2x"></i>
+                Step ${data.sequence}
+            </h1>
+            <article class="box">
+                <div class="columns">
+                    <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
+                    <div class="column">
+                        <div class="subtitle">${data.name}</div>
+                        <div>
+                            <ol class="step-contents">
+                                ${data.content.map((e) => (`<li>${e}</li>`)).join('\n')}
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <div class="speech-bubble-triangle"></div>
-                <div></div>
-                <span>${data.writer.name}</span>
-            </div>
-        </article>
-        <button class="btn-step-add" data-step-id=${data.id}></button>
+                <div>
+                    <div class="speech-bubble-triangle"></div>
+                    <div></div>
+                    <span>${data.writer.name}</span>
+                </div>
+            </article>
+            <button class="btn-step-add" data-step-id="${data.id}">
+                <i class="fas fa-plus-circle fa-4x"> Step 추가 제안하기</i>
+            </button>
+        </div>
         `;
     }
 
@@ -225,7 +236,7 @@ class StepManager {
         return `
             <a class="hero is-info step-offer-title-bar">
                 <h1 class="title">${data.name}
-                    <span class="step-offer-open is-pulled-right">-</span>
+                    <span class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></span>
                 </h1>
             </a>
             <article class="box step-offer-content hidden">

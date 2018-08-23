@@ -1,3 +1,11 @@
+.step-container {
+    border: dashed #CCC 2px;
+    border-radius: 20px;
+    box-shadow: none;
+    padding: 30px;
+    margin-bottom: 100px;
+}
+
 .step-title {
     padding-top: 60px;
     margin-bottom: 10px;
@@ -28,13 +36,6 @@
     padding-left: 10px;
 }
 
-.box {
-    box-shadow: none;
-    border: #DDD solid 1px;
-    border-radius: unset;
-    padding: 30px;
-}
-
 .step-offer-content {
 
     border-bottom: #DDD solid 1px;
@@ -63,11 +64,6 @@ hr.space {
     margin: 50px 0;
 }
 
-.step-container {
-    border: dashed #CCC 2px;
-    border-radius: 20px;
-}
-
 .img-upload {
 	opacity: 0;
 	overflow: hidden;
@@ -92,4 +88,10 @@ hr.space {
 .img-upload:focus + label,
 .img-upload + label:hover {
     color: brown;
+}
+
+.box {
+    box-shadow: none;
+    border: #DDD solid 1px;
+    border-radius: unset;
 }
