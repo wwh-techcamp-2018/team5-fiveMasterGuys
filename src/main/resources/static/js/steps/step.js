@@ -84,7 +84,7 @@ class StepManager {
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
             .then((data) => {
-                this.addStep(stepForm, data);
+                this.renderStep(stepForm, data);
                 this.closeAddForm(stepForm);
             }).catch((status) => {
             if (typeof status === 'undefined') {
@@ -138,15 +138,19 @@ class StepManager {
         `
     }
 
-    addStep(stepForm, data) {
+    renderStep(stepForm, data) {
         if (data.offerType === 'APPEND') {
             const targetStepId = stepForm.getAttribute('data-step-id');
             this.createStepOfferContainer(targetStepId, data);
             this.createStepOffer(targetStepId, data);
         } else {
-            stepForm.closest('.step-container').insertAdjacentHTML('afterend', this.templateStep(data));
-            $All('h1.step-title').forEach( (e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i+1}`);
+            this.addStepWithOwner(stepForm, data);
         }
+    }
+
+    addStepWithOwner(stepForm, data) {
+        stepForm.closest('.step-container').insertAdjacentHTML('afterend', this.templateStep(data));
+        $All('h1.step-title').forEach((e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i + 1}`);
     }
 
     createStepOffer(targetStepId, data) {
@@ -155,18 +159,19 @@ class StepManager {
 
     createStepOfferContainer(targetStepId, data) {
         let stepOfferContainer = $(`.step-offers[data-step-id="${targetStepId}"]`);
-
-
         if (!stepOfferContainer) {
-            if (targetStepId === 'null') {
-                const el = $(`button[data-step-id="null"]`).parentElement;
-                el.insertAdjacentHTML('afterbegin', this.templateStepOfferContainer(data));
-            } else {
-                const el = $(`article[data-step-id="${targetStepId}"]`);
-                el.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
-            }
+            (targetStepId === 'null') ? this.renderNullStepOfferContainer(data) : this.renderStepOfferContainer(targetStepId, data);
         }
+    }
 
+    renderStepOfferContainer(targetStepId, data) {
+        const el = $(`article[data-step-id="${targetStepId}"]`);
+        el.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
+    }
+
+    renderNullStepOfferContainer(data) {
+        const el = $(`button[data-step-id="null"]`).parentElement;
+        el.insertAdjacentHTML('afterbegin', this.templateStepOfferContainer(data));
     }
 
     closeAddForm(stepForm) {
@@ -191,7 +196,6 @@ class StepManager {
     findImageUrl(stepId) {
         const label = $(`label[for=img-upload-${stepId}]`);
         const backgroundImageUrl = label.style.backgroundImage;
-
         return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
