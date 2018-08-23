@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -123,7 +124,6 @@ public abstract class AcceptanceTest {
     protected <T> ResponseEntity<String> requestPost(String path, T dto, User user) {
         return template(user).postForEntity(path, request(dto, null), String.class);
     }
-
     protected <T> ResponseEntity<String> requestPost(String path, T dto) {
         return requestPost(path, dto, null);
     }
@@ -143,6 +143,17 @@ public abstract class AcceptanceTest {
     protected ResponseEntity<String> requestDelete(String path) {
         return requestDelete(path, null);
     }
+
+
+    protected ResponseEntity<RestResponse<String>> requestFileUpload(User user, String key, ClassPathResource resource) {
+        HttpEntity<MultiValueMap<String, Object>> request = HtmlFormDataBuilder
+                .multipartFormData()
+                .addParameter(key, resource)
+                .build();
+        return template(user).exchange("/images", HttpMethod.POST, request, new ParameterizedTypeReference<RestResponse<String>>() {
+        });
+    }
+
 
     private <T> HttpEntity<MultiValueMap<String, Object>> request(T dto, String method) {
         MultiValueMap<String, Object> params = getBodyParams(dto);

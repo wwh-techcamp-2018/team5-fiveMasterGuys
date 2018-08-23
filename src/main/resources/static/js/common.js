@@ -32,3 +32,31 @@ function toggleHidden(target) {
 function removeElement(element) {
     element.parentNode.removeChild(element);
 }
+
+class ImageUploader {
+    constructor() {
+
+    }
+
+    upload(file) {
+
+        const data = new FormData();
+        data.append('file', file);
+        return new Promise((resolve, reject) => {
+            fetchManager({
+                url: '/images',
+                method: 'POST',
+                body: data,
+                onSuccess: ({json}) => {
+                    resolve(json.data);
+                },
+                onFailed: () => {
+                    reject();
+                },
+                onError: () => {
+                    reject();
+                }
+            }); 
+        })
+    }
+} 

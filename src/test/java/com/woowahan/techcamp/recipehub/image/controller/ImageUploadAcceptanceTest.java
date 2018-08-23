@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.image.controller;
 
+import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import com.woowahan.techcamp.recipehub.support.HtmlFormDataBuilder;
 import org.junit.Test;
@@ -14,15 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ImageUploadAcceptanceTest extends AcceptanceTest {
     @Test
     public void upload() throws Exception {
-        HttpEntity<MultiValueMap<String, Object>> request = HtmlFormDataBuilder
-                .multipartFormData()
-                .addParameter("file", new ClassPathResource("/static/img/hero-create.jpg"))
-                .build();
-
-        ResponseEntity<String> result = template(basicAuthUser).postForEntity("/images", request, String.class);
+        ResponseEntity<RestResponse<String>> result = requestFileUpload(basicAuthUser, "file", new ClassPathResource("/static/img/hero-create.jpg"));
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        assertThat(result.getBody()).startsWith("https://s3.ap-northeast-2.amazonaws.com/bucket/img/");
+        assertThat(result.getBody().getData()).startsWith("https://s3.ap-northeast-2.amazonaws.com/bucket/img/");
 
     }
 

@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.image.controller;
 
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
+import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
 import com.woowahan.techcamp.recipehub.image.service.ImageStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ImageUploadController {
     @PostMapping
     @AuthRequired
     @ResponseStatus(HttpStatus.CREATED)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) throws FileUploadException {
-        return imageStorageService.store(file);
+    public RestResponse<String> handleFileUpload(@RequestParam("file") MultipartFile file) throws FileUploadException {
+        return RestResponse.success(imageStorageService.store(file));
     }
 }
