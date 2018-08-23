@@ -51,6 +51,7 @@ public class RecipeResponseDTO {
                 .name(recipe.getName())
                 .category(recipe.getCategory())
                 .imgUrl(recipe.getImgUrl())
+                .owner(recipe.getOwner())
                 .recipeSteps(
                         stepStream.map(StepResponseDTO::from).collect(Collectors.toList())
                 )

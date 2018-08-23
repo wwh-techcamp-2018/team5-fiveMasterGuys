@@ -1,8 +1,10 @@
 package com.woowahan.techcamp.recipehub.recipe.dto;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.dto.StepResponseDTO;
+import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,13 +33,17 @@ public class RecipeResponseDTOTest {
     }
 
     @Test
+    public void basic() {
+        assertThat(new RecipeResponseDTO()).isInstanceOf(RecipeResponseDTO.class);
+    }
+
+    @Test
     public void fromCompletedRecipe() {
         Recipe completedRecipe = Recipe.builder().completed(true).recipeSteps(stepList).build();
         RecipeResponseDTO detailDTO = RecipeResponseDTO.from(completedRecipe);
 
         assertThat(detailDTO.getRecipeSteps()).containsExactly(StepResponseDTO.from(openedStep));
     }
-
 
     @Test
     public void fromIncompletedRecipe() {
@@ -47,5 +53,18 @@ public class RecipeResponseDTOTest {
         assertThat(detailDTO.getRecipeSteps()).containsExactly(
                 StepResponseDTO.from(openedStep), StepResponseDTO.from(closedStep)
         );
+    }
+
+    @Test
+    public void correctField() {
+        Recipe incompletedRecipe = Recipe.builder().completed(false)
+                .category(new Category())
+                .imgUrl("http://asd.com/test.jpg")
+                .owner(new User()).recipeSteps(stepList).build();
+        RecipeResponseDTO detailDTO = RecipeResponseDTO.from(incompletedRecipe);
+        assertThat(detailDTO.getCategory()).isEqualTo(incompletedRecipe.getCategory());
+        assertThat(detailDTO.getImgUrl()).isEqualTo(incompletedRecipe.getImgUrl());
+        assertThat(detailDTO.getName()).isEqualTo(incompletedRecipe.getName());
+        assertThat(detailDTO.getOwner()).isEqualTo(incompletedRecipe.getOwner());
     }
 }

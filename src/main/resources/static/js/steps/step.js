@@ -1,8 +1,8 @@
 class StepManager {
-    constructor() {
+    constructor(imageUploader) {
         this.recipe = $('.recipe');
-
-        this.delegateMapping = {
+        this.imageUploader = imageUploader;
+        this.clickEventDelegationMapping = {
             'btn-step-add': this.showAddStepForm,
             'btn-plus': this.appendStepItem,
             'btn-minus': this.removeStepItem,
@@ -15,11 +15,31 @@ class StepManager {
 
     registerEvents() {
         this.recipe.addEventListener('click', (e) => {
-            this.handleClickEvent(e)
+            this.handleClickEvent(e);
         });
         this.recipe.addEventListener('keyup', (e) => {
-            this.handleKeyUpEvent(e)
+            this.handleKeyUpEvent(e);
         });
+        this.recipe.addEventListener('change', (e) => {
+            this.handleChangeEvent(e);
+        })
+    }
+
+    handleChangeEvent({target}) {
+        if (target.classList.contains('img-upload')) {
+            this.imageUploader.upload(this.getFile(target))
+            .then((data) => {
+                const label = $(`label[for=${target.id}]`);
+                label.style.backgroundImage = `url(${data})`;
+                label.innerText = '';
+            })
+            .catch();
+            return;
+        }
+    }
+
+    getFile(target) {
+        return target.files[0];
     }
 
     handleKeyUpEvent(e) {
@@ -159,8 +179,16 @@ class StepManager {
         return {
             name: stepForm.querySelector('.subtitle').value,
             content: this.getStepItemTexts(stepForm),
-            previousStepId: stepId
+            previousStepId: stepId,
+            imgUrl: this.findImageUrl(stepId)
         }
+    }
+
+    findImageUrl(stepId) {
+        const label = $(`label[for=img-upload-${stepId}]`);
+        const backgroundImageUrl = label.style.backgroundImage;
+
+        return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
     getStepItemTexts(steps) {
@@ -224,7 +252,10 @@ class StepManager {
         return `
         <article class="box" data-step-id=${targetStepId}>
             <div class="columns">
-                <div style="background-color: yellow; min-height:400px;" class="img-upload column is-one-third"></div>
+                <div class="column is-one-third">
+                    <input type="file" accept="image/*" style="min-height:400px;" name="img-upload" id="img-upload-${targetStepId}" class="img-upload"></input>
+                    <label for="img-upload-${targetStepId}" class="has-text-centered">이미지를 업로드하려면 클릭하세요</label>
+                </div>
                 <div class="column">
                     <input class="input subtitle" type="text" placeholder="스텝 제목">
                     <div>
@@ -253,5 +284,5 @@ class StepManager {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new StepManager();
+    new StepManager(new ImageUploader());
 });
