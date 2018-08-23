@@ -1,3 +1,5 @@
+import { validateEmailValue, validatePasswordValue, validateNotEmptyValue } from './utils.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     new Signup();
 })
@@ -9,12 +11,24 @@ class Signup {
         this.passwordCheckField = $('#password-check-field');
         this.nameField = $('#name-field');
         this.signupBtn = $('#signup-btn');
+        this.errorBox = $('#error-msg-box');
+        this.box = $('.box');
 
         this.registerEvents();
     }
 
     registerEvents() {
-        this.signupBtn.addEventListener('click', () => {
+        this.clickHandlerEvent();
+    }
+
+    clickHandlerEvent() {
+        this.signupBtn.addEventListener('click', (e) => {
+            const target = e.target;
+
+            if (!this.isValidaSignupForm()) {
+                return;
+            }
+
             const email = this.emailField.value;
             const password = this.passwordField.value;
             const passwordCheck = this.passwordCheckField.value;
@@ -36,12 +50,19 @@ class Signup {
                     location.href = document.referrer;
                 },
                 onFailed: () => {
-                    alert('유효하지 않은 값이 입력되었습니다.')
+                    this.errorBox.innerText = '입력 값을 다시 확인해주세요.';
                 },
                 onError: () => {
-                    alert('요청중 문제가 발생하였습니다. 재접속 후 시도해주세요.')
+                    this.errorBox.innerText = '요청 중 문제가 발생하였습네다. 다시 요청해주세요.';
                 }
             })
         })
+    }
+
+    isValidaSignupForm() {
+        return validateEmailValue(this.errorBox, this.emailField.value)
+                && validatePasswordValue(this.errorBox, this.passwordField.value)
+                && validatePasswordValue(this.errorBox, this.passwordCheckField.value)
+                && validateNotEmptyValue(this.errorBox, this.nameField.value);
     }
 }
