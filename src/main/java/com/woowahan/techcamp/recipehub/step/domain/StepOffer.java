@@ -13,7 +13,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "StepOffer")
-@DiscriminatorValue("Request")
+@DiscriminatorValue("StepOffer")
 @Getter
 @NoArgsConstructor
 public class StepOffer extends AbstractStep {
