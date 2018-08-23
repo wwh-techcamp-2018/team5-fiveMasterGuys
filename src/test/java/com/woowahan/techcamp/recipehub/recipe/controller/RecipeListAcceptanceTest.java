@@ -25,12 +25,12 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
     private static final String REQUEST_PARAM_PAGE_SIZE = "size";
     private static final String REQUEST_PARAM_PAGE_SORT = "sort";
 
-    private static final int PAGE_NUMBER = 0;
-    private static final int PAGE_SIZE = HomeController.DEFAULT_PAGE_SIZE;
+    private static final int FIRST_PAGE_NUMBER = 0;
+    private static final int PAGE_SIZE = HomeController.DEFAULT_PAGE_CONTENT_SIZE;
     private static final String SORT_ASC_ORDER_BY_NAME = "name,asc";
     private static final String SORT_DESC_ORDER_BY_NAME = "name,desc";
 
-    private static final int TOTAL_PAGE = 3;
+    private static final int TOTAL_PAGE = PAGE_SIZE + 1;
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -46,18 +46,10 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
         recipeRepository.saveAll(recipeList);
     }
 
-    @Override
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
-
-        recipeRepository.deleteAll();
-    }
-
     @Test
     public void showRecipePageSortedAscendingOrderByName() throws Exception {
         String resultContent = mvc.perform(get("/")
-                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(PAGE_NUMBER))
+                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(FIRST_PAGE_NUMBER))
                 .param(REQUEST_PARAM_PAGE_SIZE, String.valueOf(PAGE_SIZE))
                 .param(REQUEST_PARAM_PAGE_SORT, SORT_ASC_ORDER_BY_NAME)
         )
@@ -68,16 +60,15 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
                 .getContentAsString();
 
         recipeList.sort(Comparator.comparing(Recipe::getName));
-        assertThat(resultContent).contains(
-                recipeList.subList(PAGE_NUMBER, PAGE_SIZE).stream()
-                        .map(Recipe::getName)
-                        .collect(Collectors.toList()));
+        assertThat(resultContent).contains(recipeList.subList(FIRST_PAGE_NUMBER, PAGE_SIZE).stream()
+                .map(Recipe::getName)
+                .collect(Collectors.toList()));
     }
 
     @Test
     public void showRecipePageSortedDescendingOrderByName() throws Exception {
         String resultContent = mvc.perform(get("/")
-                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(PAGE_NUMBER))
+                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(FIRST_PAGE_NUMBER))
                 .param(REQUEST_PARAM_PAGE_SIZE, String.valueOf(PAGE_SIZE))
                 .param(REQUEST_PARAM_PAGE_SORT, SORT_DESC_ORDER_BY_NAME)
         )
@@ -88,16 +79,15 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
                 .getContentAsString();
 
         recipeList.sort(Comparator.comparing(Recipe::getName).reversed());
-        assertThat(resultContent).contains(
-                recipeList.subList(PAGE_NUMBER, PAGE_SIZE).stream()
-                        .map(Recipe::getName)
-                        .collect(Collectors.toList()));
+        assertThat(resultContent).contains(recipeList.subList(FIRST_PAGE_NUMBER, PAGE_SIZE).stream()
+                .map(Recipe::getName)
+                .collect(Collectors.toList()));
     }
 
     @Test
     public void emptyRecipePageBecauseOfOutOfBound() throws Exception {
         String resultContent = mvc.perform(get("/")
-                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(TOTAL_PAGE))
+                .param(REQUEST_PARAM_PAGE_NUMBER, String.valueOf(TOTAL_PAGE + 1))
                 .param(REQUEST_PARAM_PAGE_SIZE, String.valueOf(PAGE_SIZE))
         )
                 .andExpect(status().isOk())
@@ -106,9 +96,16 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
                 .getResponse()
                 .getContentAsString();
 
-        assertThat(resultContent).doesNotContain(
-                recipeList.stream()
-                        .map(Recipe::getName)
-                        .collect(Collectors.toList()));
+        assertThat(resultContent).doesNotContain(recipeList.stream()
+                .map(Recipe::getName)
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+        super.tearDown();
+
+        recipeRepository.deleteAll();
     }
 }
