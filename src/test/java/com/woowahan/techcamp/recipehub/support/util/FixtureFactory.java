@@ -3,7 +3,6 @@ package com.woowahan.techcamp.recipehub.support.util;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class FixtureFactory {

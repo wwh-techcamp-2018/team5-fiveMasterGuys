@@ -33,7 +33,7 @@ class Signup {
                     name
                 }),
                 onSuccess: () => {
-                    location.href = '/';
+                    location.href = document.referrer;
                 },
                 onFailed: () => {
                     alert('유효하지 않은 값이 입력되었습니다.')

@@ -10,6 +10,7 @@
     <link href="/css/font-awesome-5.2.0.all.min.css" rel="stylesheet">
     <link href="/css/common.css" rel="stylesheet">
     <script src="/js/common.js"></script>
+    <script src="/js/users/logout.js"></script>
     {{#block "head"}}
     {{/block}}
 </head>
@@ -34,7 +35,7 @@
                         </a>
                     </div>
                     <div class="navbar-item">
-                        <a class="button" href="/users/logout">Logout</a>
+                        <button id="logout" class="button">Logout</button>
                     </div>
                 {{else}}
                     <div class="navbar-item">
