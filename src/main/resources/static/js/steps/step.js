@@ -44,7 +44,10 @@ class StepManager {
 
     handleKeyUpEvent(e) {
         if (e.target.classList.contains('step-item-input') && e.keyCode === 13) {
-            this.appendStepItem(e.target);
+            if($('.step-item-input').value !== ""){
+                this.appendStepItem(e.target);
+                $('.step-item-input').focus();
+            }
             return;
         }
     }
@@ -221,6 +224,7 @@ class StepManager {
                             </ol>
                         </div>
                     </div>
+                    <div class="column is-one-fifth ingredient"></div>
                 </div>
                 <div>
                     <div class="speech-bubble-triangle"></div>
@@ -253,6 +257,7 @@ class StepManager {
                             </ol>
                         </div>
                     </div>
+                    <div class="column is-one-fifth ingredient"></div>
                 </div>
                 <div>
                     <div class="speech-bubble-triangle"></div>
@@ -272,14 +277,14 @@ class StepManager {
                     <label for="img-upload-${targetStepId}" class="has-text-centered">이미지를 업로드하려면 클릭하세요</label>
                 </div>
                 <div class="column">
-                    <input class="input subtitle" type="text" placeholder="스텝 제목">
-                    <div>
+                    <input class="input subtitle-input" type="text" placeholder="스텝 제목">
+                    <div class="step-contents-container">
                         <ol class="step-contents">
                             ${this.templateStepContentInput()}
                         </ol>
-
                     </div>
                 </div>
+                <div class="column is-one-fifth ingredient"></div>
             </div>
             <div class="buttons is-right">
                 <button class="btn-confirm button is-primary">추가</button>
@@ -290,11 +295,11 @@ class StepManager {
     }
 
     templateStepContentListItem(content) {
-        return `<li class="step-item"><div class="columns is-vcentered"><div class="column is-11 step-item-contents">${content}</div><button class="column btn-minus button is-small"><i class="fas fa-angle-down"></i></button></div></li>`;
+        return `<li class="step-item"><div class="columns is-vcentered step-item-container"><div class="column is-11 step-item-contents">${content}</div><button class="btn-minus is-1"><i class="fas fa-minus fa-3x"></i></button></div></li>`;
     }
 
     templateStepContentInput() {
-        return `<li class="step-item"><div class="columns is-vcentered"><input type="text" class="step-item-input input column is-11" placeholder="hello"><button class="btn-plus column button is-small">+</button></div></li>`
+        return `<li class="step-item"><div class="columns is-vcentered step-item-input-container"><input type="text" class="column is-11 is-large step-item-input input" placeholder="hello"><button class="btn-plus is-2"><i class="far fa-plus-square fa-3x"></i></button></div></li>`
     }
 }
 
