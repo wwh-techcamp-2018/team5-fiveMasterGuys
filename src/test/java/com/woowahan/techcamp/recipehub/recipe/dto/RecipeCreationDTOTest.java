@@ -11,6 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecipeCreationDTOTest extends ValidationTest {
 
+    private static final String RECIPE_DEFAULT_IMAGE_PATH = "/img/recipe-default.png";
+
     @Test
     public void basic() {
         RecipeCreationDTO dto = RecipeCreationDTO.builder()
@@ -68,6 +70,6 @@ public class RecipeCreationDTOTest extends ValidationTest {
         Recipe entity = dto.toEntity(user, category);
         assertThat(entity.getName()).isEqualTo(name);
         assertThat(entity.getCategory()).isEqualTo(category);
-        assertThat(entity.getImgUrl()).isEqualTo(null);
+        assertThat(entity.getImgUrl()).isEqualTo(RECIPE_DEFAULT_IMAGE_PATH);
     }
 }

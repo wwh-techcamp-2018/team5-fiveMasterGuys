@@ -46,7 +46,7 @@ public class Recipe extends AbstractEntity {
         this.name = name;
         this.completed = completed;
         this.recipeSteps = recipeSteps;
-        this.imgUrl = imgUrl;
+        this.imgUrl = (imgUrl == null) ? "/img/recipe-default.png" : imgUrl;
     }
 
 
