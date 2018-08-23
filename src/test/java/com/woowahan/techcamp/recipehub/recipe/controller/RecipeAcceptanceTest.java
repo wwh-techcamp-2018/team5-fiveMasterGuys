@@ -81,6 +81,18 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
+    @Test
+    public void createPageNotLogin() {
+        ResponseEntity<String> resp = requestGet("/recipes/create", null);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    public void createPageWithLogin() {
+        ResponseEntity<String> resp = requestGet("/recipes/create", basicAuthUser);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
     @Override
     @After
     public void tearDown() throws Exception {

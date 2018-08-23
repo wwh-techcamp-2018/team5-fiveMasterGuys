@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.step.converter;
 
+import com.woowahan.techcamp.recipehub.step.exception.ConvertException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,4 +33,9 @@ public class StepContentConverterTest {
                 .isEqualTo(contentList);
     }
 
+    @Test(expected = ConvertException.class)
+    public void wrongToEntityAttribute() throws Exception {
+        contentConverter.convertToEntityAttribute("sdfslkdfhjsd");
+
+    }
 }
