@@ -152,7 +152,7 @@ public abstract class AcceptanceTest {
 
     private MultiValueMap<String, Object> getBodyParams(Object dto) {
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-        if(dto == null) return params;
+        if (dto == null) return params;
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.convertValue(dto, Map.class);
         map.entrySet().stream()

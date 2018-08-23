@@ -1,19 +1,14 @@
 package com.woowahan.techcamp.recipehub.image.service;
 
-import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class ImageStorageService {
@@ -22,52 +17,31 @@ public class ImageStorageService {
 
     private String bucketName;
 
-    public String store(MultipartFile file) {
+    public String store(MultipartFile file) throws FileUploadException {
         if (isInvalidImage(file)) {
-            throw new BadRequestException();
+            throw new FileUploadException();
         }
-
-        String fileName = generateRandomFileName(file);
-        File convertedFile = null;
 
         try {
-            convertedFile = convertToFile(file).orElseThrow(FileUploadException::new);
-            return fileUploadService.putObject(bucketName, fileName, convertedFile);
+            return fileUploadService.putObject(bucketName, generateRandomFileName(file), file.getInputStream());
         } catch (IOException e) {
-            throw new FileUploadException();
-        } finally {
-            convertedFile.delete();
+            throw new FileUploadException(e);
         }
     }
 
-    private Optional<File> convertToFile(MultipartFile file) throws IOException {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        File convertFile = new File(filename);
-        return writeToFile(convertFile, file);
-    }
-
-    private Optional<File> writeToFile(File targetFile, MultipartFile file) throws IOException {
-        if (targetFile.createNewFile()) {
-            FileOutputStream fos = new FileOutputStream(targetFile);
-            fos.write(file.getBytes());
-            fos.close();
-            return Optional.of(targetFile);
-        }
-        return Optional.empty();
-    }
 
     private boolean isInvalidImage(MultipartFile file) {
         return file.isEmpty() || !file.getContentType().startsWith("image/");
     }
 
-    private String generateRandomFileName(MultipartFile file) {
+    private String generateRandomFileName(MultipartFile file) throws FileUploadException {
         return String.format("%d%s.%s", new Date().getTime(), RandomStringUtils.randomAlphabetic(6, 10), extractFileExtension(file));
     }
 
-    private String extractFileExtension(MultipartFile file) {
+    private String extractFileExtension(MultipartFile file) throws FileUploadException {
         int dotIndex = file.getOriginalFilename().lastIndexOf(".");
         if (dotIndex == -1) {
-            throw new BadRequestException();
+            throw new FileUploadException();
         }
         return file.getOriginalFilename().substring(dotIndex + 1);
     }

@@ -1,7 +1,9 @@
 package com.woowahan.techcamp.recipehub.image.service;
 
-import java.io.File;
+import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
+
+import java.io.InputStream;
 
 public interface FileUploadService {
-    String putObject(String bucketName, String fileName, File file);
+    String putObject(String bucketName, String fileName, InputStream fileInputStream) throws FileUploadException;
 }

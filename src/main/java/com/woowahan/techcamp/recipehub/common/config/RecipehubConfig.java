@@ -21,11 +21,6 @@ import java.util.List;
 public abstract class RecipehubConfig implements WebMvcConfigurer {
 
     @Bean
-    public FileUploadService fileUploadService() {
-        return new S3FileUploadService();
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -72,7 +67,10 @@ public abstract class RecipehubConfig implements WebMvcConfigurer {
     @Configuration
     @Profile("production")
     static class RecipeHubProdConfig extends RecipehubConfig {
-
+        @Bean
+        public FileUploadService fileUploadService() {
+            return new S3FileUploadService();
+        }
     }
 
     @Configuration
