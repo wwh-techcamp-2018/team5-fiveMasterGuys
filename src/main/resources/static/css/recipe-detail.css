@@ -1,5 +1,10 @@
 .step-title {
+    padding-top: 60px;
     margin-bottom: 10px;
+}
+
+.step-title > i {
+    padding: 0px 20px 0px 10px;
 }
 
 .step-contents {
@@ -9,14 +14,56 @@
 .step-offer-title-bar {
     margin-top: 10px;
     padding: 10px 20px 10px 50px;
-    border: solid #c5c5c5 2px;
+    border: solid #DDD 1px;
 }
 
 .step-offers {
+    padding: 20px;
+    background: #F6F6F6;
+}
+
+.step-offers > .step-offer-title {
+    font-style: italic;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.box {
+    box-shadow: none;
+    border: #DDD solid 1px;
+    border-radius: unset;
     padding: 30px;
-    background: #EEE;
+}
+
+.step-offer-content {
+
+    border-bottom: #DDD solid 1px;
+    border-left: #DDD solid 1px;
+    border-right: #DDD solid 1px;
 }
 
 .step-offer-content-hidden {
     display: none;
+}
+
+.btn-step-add {
+    color: #209cee;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    margin: auto;
+    display: block;
+    outline: none;
+    padding: 40px;
+    background: transparent;
+}
+
+hr.space {
+    background-color: transparent;
+    margin: 50px 0;
+}
+
+.step-container {
+    border: dashed #CCC 2px;
+    border-radius: 20px;
 }

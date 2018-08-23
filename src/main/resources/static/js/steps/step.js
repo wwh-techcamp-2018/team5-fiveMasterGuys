@@ -112,7 +112,7 @@ class StepManager {
         const stepId = data.target && data.target.id;
         return`
         <div class="step-offers" data-step-id="${stepId}">
-            <div class="title is-info">추가 제안</div>
+            <div class="title is-info">Step Offers</div>
         </div>
                
         `
@@ -195,14 +195,14 @@ class StepManager {
     templateStepOffer(data) {
         return `
             <a class="hero is-info step-offer-title-bar">
-                <h1 class="title">Step 추가 제안 : ${data.name}
+                <h1 class="title">${data.name}
                     <span class="step-offer-open is-pulled-right">-</span>
                 </h1>
             </a>
             <article class="box step-offer-content hidden">
                 <div class="columns">
                     <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
-                    <div class="column">
+                    <div class="column"> 
                         <div class="subtitle">${data.name}</div>
                         <div>
                             <ol class="step-contents">
@@ -244,7 +244,7 @@ class StepManager {
     }
 
     templateStepContentListItem(content) {
-        return `<li class="step-item"><div class="columns is-vcentered"><div class="column is-11 step-item-contents">${content}</div><button class="column btn-minus button is-small">-</button></div></li>`;
+        return `<li class="step-item"><div class="columns is-vcentered"><div class="column is-11 step-item-contents">${content}</div><button class="column btn-minus button is-small"><i class="fas fa-angle-down"></i></button></div></li>`;
     }
 
     templateStepContentInput() {
