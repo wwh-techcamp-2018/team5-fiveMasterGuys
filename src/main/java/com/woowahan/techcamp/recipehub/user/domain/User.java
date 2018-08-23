@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.user.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class User extends AbstractEntity {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(length = 40, nullable = false)
