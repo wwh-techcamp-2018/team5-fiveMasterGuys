@@ -2,7 +2,8 @@ package com.woowahan.techcamp.recipehub.common.config;
 
 import com.woowahan.techcamp.recipehub.common.security.AuthRequiredArgumentResolver;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequiredInterceptor;
-import com.woowahan.techcamp.recipehub.common.security.BasicAuthInterceptor;
+import com.woowahan.techcamp.recipehub.image.service.FileUploadService;
+import com.woowahan.techcamp.recipehub.image.service.S3FileUploadService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,24 +65,12 @@ public abstract class RecipehubConfig implements WebMvcConfigurer {
     }
 
     @Configuration
-    @Profile("test")
-    static class RecipehubTestConfig extends RecipehubConfig {
-        @Bean
-        public BasicAuthInterceptor basicAuthInterceptor() {
-            return new BasicAuthInterceptor();
-        }
-
-        @Override
-        public void addInterceptors(InterceptorRegistry registry) {
-            registry.addInterceptor(basicAuthInterceptor());
-            super.addInterceptors(registry);
-        }
-    }
-
-    @Configuration
     @Profile("production")
     static class RecipeHubProdConfig extends RecipehubConfig {
-
+        @Bean
+        public FileUploadService fileUploadService() {
+            return new S3FileUploadService();
+        }
     }
 
     @Configuration
