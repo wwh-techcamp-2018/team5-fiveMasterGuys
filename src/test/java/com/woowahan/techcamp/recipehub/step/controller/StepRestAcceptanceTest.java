@@ -58,6 +58,16 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
         assertThat(response.getBody().getData().getSequence()).isEqualTo(1L);
     }
 
+    @Test
+    public void hideWriterPassword() {
+        StepCreationDTO dto = dtoBuilder.build();
+        ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
+                dto, basicAuthUser, new ParameterizedTypeReference<RestResponse<Step>>() {
+                });
+
+        assertThat(response.getBody().getData().getWriter().getPassword()).isNull();
+    }
+
     @Override
     @After
     public void tearDown() throws Exception {
