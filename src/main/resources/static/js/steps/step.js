@@ -71,9 +71,9 @@ class StepManager {
         let path = e.path || (event.composedPath && event.composedPath());
         path.forEach(dom => {
             if (dom.classList) {
-                const handlerName = [...dom.classList].find((cls) => this.delegateMapping.hasOwnProperty(cls));
+                const handlerName = [...dom.classList].find((cls) => this.clickEventDelegationMapping.hasOwnProperty(cls));
                 if (handlerName) {
-                    return (this.delegateMapping[handlerName]).call(this, dom);
+                    return (this.clickEventDelegationMapping[handlerName]).call(this, dom);
                 }
             }
         });
