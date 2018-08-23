@@ -1,6 +1,6 @@
 package com.woowahan.techcamp.recipehub.image.service;
 
-import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
+import com.woowahan.techcamp.recipehub.image.exception.InvalidFileException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +30,7 @@ public class ImageStorageServiceTest {
     }
 
     @Test
-    public void save() throws FileUploadException {
+    public void save() throws InvalidFileException, IOException {
         String name = "image.png";
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", name, "image/png", "asdf".getBytes());
 
