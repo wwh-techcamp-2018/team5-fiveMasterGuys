@@ -144,8 +144,7 @@ class StepManager {
             this.createStepOfferContainer(targetStepId, data);
             this.createStepOffer(targetStepId, data);
         } else {
-            stepForm.insertAdjacentHTML('afterend', this.templateStep(data));
-
+            stepForm.closest('.step-container').insertAdjacentHTML('afterend', this.templateStep(data));
         }
     }
 
@@ -156,13 +155,14 @@ class StepManager {
     createStepOfferContainer(targetStepId, data) {
         let stepOfferContainer = $(`.step-offers[data-step-id="${targetStepId}"]`);
 
-        if (!stepOfferContainer) {
-            const step = (targetStepId === 'null')
-                ? $(`button[data-step-id="null"]`).previousElementSibling
-                : $(`article[data-step-id="${targetStepId}"]`);
-
-            step.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
+        if(targetStepId === 'null' && !stepOfferContainer){
+            const el = $(`button[data-step-id="null"]`).parentElement;
+            el.insertAdjacentHTML('afterbegin', this.templateStepOfferContainer(data));
+        }else{
+            const el = $(`article[data-step-id="${targetStepId}"]`);
+            el.insertAdjacentHTML('afterend', this.templateStepOfferContainer(data));
         }
+
     }
 
     closeAddForm(stepForm) {
