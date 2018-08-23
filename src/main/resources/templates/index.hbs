@@ -2,7 +2,7 @@
 <section class="section">
     <div class="container">
         <div class="columns is-multiline">
-            {{#recipes}}
+            {{#each recipes}}
             <div class="column is-one-third">
                 <a href="/recipes/{{id}}">
                     <div class="card">
@@ -18,25 +18,18 @@
                     </div>
                 </a>
             </div>
-            {{/recipes}}
+            {{/each}}
         </div>
-        <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous">Previous</a>
-            <a class="pagination-next">Next page</a>
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+            <a href="/?page={{paginationList.prev}}" class="pagination-previous">이전 페이지</a>
             <ul class="pagination-list">
+                {{#each paginationList.items}}
                 <li>
-                    <a class="pagination-link" aria-label="Goto page 1">1</a>
+                    <a href="/?page={{number}}" class="pagination-link {{#if current}}is-current{{/if}}" aria-label="Goto page {{number}}">{{number}}</a>
                 </li>
-                <li>
-                    <span class="pagination-ellipsis">&hellip;</span>
-                </li>
-                <li>
-                    <a class="pagination-link" aria-label="Goto page 45">45</a>
-                </li>
-                <li>
-                    <a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a>
-                </li>
+                {{/each}}
             </ul>
+            <a href="/?page={{paginationList.next}}" class="pagination-next">다음 페이지</a>
         </nav>
     </div>
 </section>
