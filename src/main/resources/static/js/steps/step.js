@@ -50,6 +50,7 @@ class StepManager {
     }
 
     showAddStepForm(target) {
+        checkLoginOrRedirect();
         target.insertAdjacentHTML('afterend', this.templateStepForm(target.getAttribute('data-step-id')));
         toggleHidden(target);
     }
