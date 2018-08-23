@@ -1,7 +1,7 @@
 package com.woowahan.techcamp.recipehub.image.service;
 
+import com.woowahan.techcamp.recipehub.image.exception.FileAlreadyExistsException;
 import com.woowahan.techcamp.recipehub.image.exception.FileNotFoundException;
-import com.woowahan.techcamp.recipehub.image.exception.FileUploadException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,53 +42,48 @@ public class LocalFileUploadService implements FileUploadService {
     }
 
     @Override
-    public String putObject(String bucketName, String fileName, InputStream inputStream) throws FileUploadException {
-        String filePath = String.format("%s/%s", fullImageStoragePath, fileName);
+    public String putObject(String bucketName, String fileName, InputStream inputStream) throws IOException {
+        String filePath = getFilePath(fullImageStoragePath, fileName);
         File targetFile = new File(filePath);
 
-        try {
-            if (targetFile.createNewFile()) {
-                writeFile(targetFile, inputStream);
-                return String.format("%s/%s", imageStoragePath, fileName);
-            }
-            throw new FileUploadException();
-        } catch (IOException e) {
-            deleteFileIfExist(Paths.get(filePath));
-            throw new FileUploadException(e);
+        if (targetFile.createNewFile()) {
+            writeFile(targetFile, inputStream);
+            return getFilePath(imageStoragePath, fileName);
         }
+
+        throw new FileAlreadyExistsException();
     }
 
+    private String getFilePath(String path, String fileName) {
+        return String.format("%s/%s", path, fileName);
+    }
 
     private void writeFile(File target, InputStream inputStream) throws IOException {
         try (InputStream is = inputStream; FileOutputStream fos = new FileOutputStream(target)) {
             IOUtils.copy(is, fos);
-        }
-    }
-
-    private void deleteFileIfExist(Path path) throws FileUploadException {
-        try {
-            Files.deleteIfExists(path);
         } catch (IOException e) {
-            throw new FileUploadException(e);
+            Files.deleteIfExists(Paths.get(target.getName()));
+            throw e;
         }
     }
 
     public Resource loadAsResource(String filename) throws FileNotFoundException {
+        Path file = resolvePath(filename);
+        Resource resource;
         try {
-            Path file = load(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            }
+            resource = new UrlResource(file.toUri());
         } catch (MalformedURLException e) {
             throw new FileNotFoundException(e);
+        }
+
+        if (resource.exists() || resource.isReadable()) {
+            return resource;
         }
 
         throw new FileNotFoundException();
     }
 
-    public Path load(String filename) {
+    private Path resolvePath(String filename) {
         return Paths.get(fullImageStoragePath).resolve(filename);
     }
-
 }
