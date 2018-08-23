@@ -12,12 +12,12 @@ public class StepServiceProvider {
     private StepOwnerService stepOwnerService;
 
     @Autowired
-    private StepOfferService userRecipeStepService;
+    private StepOfferService stepOfferService;
 
     public StepService getService(Recipe recipe, User user) {
         if (recipe.isOwner(user)) {
             return stepOwnerService;
         }
-        return userRecipeStepService;
+        return stepOfferService;
     }
 }

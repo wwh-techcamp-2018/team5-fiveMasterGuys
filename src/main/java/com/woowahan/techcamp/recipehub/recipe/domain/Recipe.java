@@ -3,12 +3,12 @@ package com.woowahan.techcamp.recipehub.recipe.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
-import com.woowahan.techcamp.recipehub.step.domain.AbstractStep;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,9 +30,10 @@ public class Recipe extends AbstractEntity {
     @Column(nullable = false)
     private boolean completed;
 
-    @OneToMany(mappedBy = "recipe", targetEntity = AbstractStep.class)
+    @OneToMany(mappedBy = "recipe")
     @OrderBy("sequence ASC")
     @JsonIgnore
+    @Where(clause = "type='Step'")
     private List<Step> recipeSteps;
 
     @Column
