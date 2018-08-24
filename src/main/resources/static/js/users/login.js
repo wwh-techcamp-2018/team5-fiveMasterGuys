@@ -17,7 +17,7 @@ class Login {
     registerEvents() {
         this.loginBtn.addEventListener('click', () => {
 
-            if (!this.validateLoginFields()) {
+            if (!this.checkLoginFields()) {
                 return;
             }
 
@@ -47,8 +47,8 @@ class Login {
         })
     }
 
-    validateLoginFields() {
-        return validateEmailValue(this.errorBox, this.emailField.value)
-            && validatePasswordValue(this.errorBox, this.passwordField.value);
+  checkLoginFields() {
+        return validateEmailValue(this.emailField.value, this.errorBox)
+            && validatePasswordValue(this.passwordField.value, this.errorBox);
     }
 }
