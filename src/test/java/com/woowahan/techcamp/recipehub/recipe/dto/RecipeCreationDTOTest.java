@@ -60,7 +60,7 @@ public class RecipeCreationDTOTest extends ValidationTest {
     }
 
     @Test
-    public void toEntity() {
+    public void toEntityImgUrlIsNull() {
         String name = "양념치킨";
         Category category = Category.builder().build();
         User user = User.builder().name("Ryun").email("ryuneeee@gmail.com").build();
@@ -68,6 +68,20 @@ public class RecipeCreationDTOTest extends ValidationTest {
         Recipe entity = dto.toEntity(user, category);
         assertThat(entity.getName()).isEqualTo(name);
         assertThat(entity.getCategory()).isEqualTo(category);
-        assertThat(entity.getImgUrl()).isEqualTo(null);
+        assertThat(entity.getImgUrl()).isEqualTo(Recipe.DEFAULT_RECIPE_IMAGE_URL);
+    }
+
+    @Test
+    public void toEntityNormally() {
+        final String name = "양념치킨";
+        final String imgUrl = "imgUrl";
+        Category category = Category.builder().build();
+        User user = User.builder().name("Ryun").email("ryuneeee@gmail.com").build();
+
+        RecipeCreationDTO dto = RecipeCreationDTO.builder().name(name).categoryId(1L).imgUrl(imgUrl).build();
+        Recipe entity = dto.toEntity(user, category);
+        assertThat(entity.getName()).isEqualTo(name);
+        assertThat(entity.getCategory()).isEqualTo(category);
+        assertThat(entity.getImgUrl()).isEqualTo(imgUrl);
     }
 }
