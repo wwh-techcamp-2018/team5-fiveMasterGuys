@@ -1,0 +1,21 @@
+{{#partial "head"}}
+    <link href="/css/recipe-detail.css" rel="stylesheet">
+{{/partial}}
+
+{{#partial "contents"}}
+    {{#recipe}}
+        <div class="section recipe" data-recipe-id="{{id}}">
+            <div class="container">
+                <div class="title is-1 has-text-centered">{{name}}</div>
+                <div>{{content}}</div>
+
+                {{#recipeSteps}}
+                    {{> recipe/step btn=false}}
+                {{/recipeSteps}}
+
+            </div>
+        </div>
+    {{/recipe}}
+{{/partial}}
+
+{{> base}}

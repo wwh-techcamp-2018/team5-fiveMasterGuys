@@ -1,14 +1,13 @@
 .step-container {
-    border: dashed #CCC 2px;
+    border: solid #FAFAFA 2px;
     border-radius: 20px;
-    box-shadow: none;
     padding: 30px;
-    margin-bottom: 100px;
+    margin-top: 100px;
+    box-shadow: 0px 0px 100px 0px rgba(68, 68, 68, 0.3);
 }
 
 .step-title {
-    padding-top: 60px;
-    margin-bottom: 10px;
+    margin: 30px;
 }
 
 .step-title > i {
@@ -19,28 +18,20 @@
     margin-top: 10px;
     padding: 10px 20px 10px 50px;
     border: solid #DDD 1px;
+    border-radius: 3px 3px 0 0;
 }
 
 .step-offers {
     padding: 20px;
     background: #F6F6F6;
+    border: #DDD solid 1px;
+    border-radius: 3px;
 }
 
 .step-offers > .step-offer-title {
     font-style: italic;
     font-weight: 500;
     padding-left: 10px;
-}
-
-.step-offer-content {
-
-    border-bottom: #DDD solid 1px;
-    border-left: #DDD solid 1px;
-    border-right: #DDD solid 1px;
-}
-
-.step-offer-content-hidden {
-    display: none;
 }
 
 .btn-step-add {
@@ -71,8 +62,7 @@
     margin: auto;
     cursor: pointer;
     line-height: 400px;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: no-repeat center;
     background-size: cover;
 }
 
@@ -82,9 +72,67 @@
 }
 
 .box {
+    margin-top: -1px;
     box-shadow: none;
     border: #DDD solid 1px;
-    border-radius: unset;
+    border-radius: 0 0 3px 3px;
+}
+
+.subtitle {
+    padding: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.subtitle-input {
+    padding: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.step-contents {
+    margin-left: 40px;
+}
+
+.step-item-contents {
+    padding-left: 28px;
+}
+
+.step-item {
+    padding-top: 28px;
+}
+
+.step-contents-container {
+    padding: 20px 0 0 10px;
+    font-size: 24px;
+}
+
+.step-item-container {
+    padding-bottom: 10px;
+}
+
+.step-item-input-container {
+    padding: 4px 5px 20px 15px;
+}
+
+.step-item-input-container > input {
+}
+
+.step-item-container > button {
+    border: none;
+    color: #209cee;
+}
+
+.step-item-input-container > button {
+    border: none;
+    color: #209cee;
+    padding-left: 10px;
+}
+
+.step-img {
+    /*border: solid #D9D9D9 1px;*/
 }
 
 .subtitle {
