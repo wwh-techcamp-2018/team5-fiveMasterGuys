@@ -1,7 +1,11 @@
 <article class="box{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
     <div class="columns">
         <div class="column is-one-third">
-            <img class="step-img" src="{{imgUrl}}" alt="{{name}}">
+            {{#if imgUrl}}
+                <img class="step-img" src="{{imgUrl}}" alt="{{name}}">
+            {{else}}
+                <img class="step-img" src="/img/recipe-default.png" alt="{{name}}">
+            {{/if}}
         </div>
         <div class="column">
             <div class="subtitle">{{name}}</div>
