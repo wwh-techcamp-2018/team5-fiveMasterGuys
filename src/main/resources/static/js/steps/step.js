@@ -135,17 +135,7 @@ class StepManager {
         });
     }
 
-    templateStepOfferContainer(data) {
-        const stepId = data.target && data.target.id;
-        return`
-        <div class="step-offers" data-step-id="${stepId}">
-            <div class="step-offer-title is-size-2"><i class="fas fa-bong"></i> Step Offers</div>
-        </div>
-               
-        `
-    }
-
-    addStep(stepForm, data) {
+    renderStep(stepForm, data) {
         if (data.offerType === 'APPEND') {
             const targetStepId = stepForm.getAttribute('data-step-id');
             this.createStepOfferContainer(targetStepId, data);
