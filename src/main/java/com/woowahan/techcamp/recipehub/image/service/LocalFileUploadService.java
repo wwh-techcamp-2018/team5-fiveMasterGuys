@@ -86,4 +86,12 @@ public class LocalFileUploadService implements FileUploadService {
     private Path resolvePath(String filename) {
         return Paths.get(fullImageStoragePath).resolve(filename);
     }
+
+    public void setImageStoragePath(String imageStoragePath) {
+        this.imageStoragePath = imageStoragePath;
+    }
+
+    public void setFullImageStoragePath(String fullImageStoragePath) {
+        this.fullImageStoragePath = fullImageStoragePath;
+    }
 }
