@@ -15,10 +15,6 @@
     padding: 0px 20px 0px 10px;
 }
 
-.step-contents {
-    margin-left: 15px;
-}
-
 .step-offer-title-bar {
     margin-top: 10px;
     padding: 10px 20px 10px 50px;
@@ -59,11 +55,6 @@
     background: transparent;
 }
 
-hr.space {
-    background-color: transparent;
-    margin: 50px 0;
-}
-
 .img-upload {
 	opacity: 0;
 	overflow: hidden;
@@ -95,3 +86,57 @@ hr.space {
     border: #DDD solid 1px;
     border-radius: unset;
 }
+
+.subtitle {
+    padding: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.subtitle-input {
+    padding: 10px;
+    font-size: 30px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.step-contents {
+    margin-left: 40px;
+}
+
+.step-item-contents {
+    padding-left: 28px;
+}
+
+.step-item {
+    padding-top: 28px;
+}
+
+.step-contents-container {
+    padding: 20px 0 0 10px;
+    font-size: 24px;
+}
+
+.step-item-container {
+    padding-bottom: 10px;
+}
+
+.step-item-input-container {
+    padding: 4px 5px 20px 15px;
+}
+
+.step-item-input-container > input {
+}
+
+.step-item-container > button {
+    border: none;
+    color: #209cee;
+}
+
+.step-item-input-container > button {
+    border: none;
+    color: #209cee;
+    padding-left: 10px;
+}
+
