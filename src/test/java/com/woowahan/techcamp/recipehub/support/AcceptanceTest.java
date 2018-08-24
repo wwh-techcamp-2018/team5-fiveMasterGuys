@@ -124,6 +124,7 @@ public abstract class AcceptanceTest {
     protected <T> ResponseEntity<String> requestPost(String path, T dto, User user) {
         return template(user).postForEntity(path, request(dto, null), String.class);
     }
+
     protected <T> ResponseEntity<String> requestPost(String path, T dto) {
         return requestPost(path, dto, null);
     }
