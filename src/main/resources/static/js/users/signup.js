@@ -1,4 +1,4 @@
-import { validateEmailValue, validatePasswordValue, validateNotEmptyValue } from './utils.js';
+import { validateEmailValue, validatePasswordValue, validateNameValue } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     new Signup();
@@ -25,7 +25,7 @@ class Signup {
         this.signupBtn.addEventListener('click', (e) => {
             const target = e.target;
 
-            if (!this.isValidaSignupForm()) {
+            if (!this.checkSignupForm()) {
                 return;
             }
 
@@ -59,10 +59,10 @@ class Signup {
         })
     }
 
-    isValidaSignupForm() {
-        return validateEmailValue(this.errorBox, this.emailField.value)
-                && validatePasswordValue(this.errorBox, this.passwordField.value)
-                && validatePasswordValue(this.errorBox, this.passwordCheckField.value)
-                && validateNotEmptyValue(this.errorBox, this.nameField.value);
+    checkSignupForm() {
+        return validateEmailValue(this.emailField.value, this.errorBox)
+                && validatePasswordValue(this.passwordField.value, this.errorBox)
+                && validatePasswordValue(this.passwordCheckField.value, this.errorBox)
+                && validateNameValue(this.nameField.value, this.errorBox);
     }
 }
