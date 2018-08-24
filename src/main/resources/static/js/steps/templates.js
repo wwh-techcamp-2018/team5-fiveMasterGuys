@@ -9,7 +9,9 @@ class Templates {
             </h1>
             <article class="box">
                 <div class="columns">
-                    <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
+                    <div class="column is-one-third">
+                        <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
+                    </div>
                     <div class="column">
                         <div class="subtitle">${data.name}</div>
                         <div>
@@ -42,7 +44,9 @@ class Templates {
             </a>
             <article class="box step-offer-content hidden">
                 <div class="columns">
-                    <img src="${data.imgUrl}" alt="${data.name}" class="column is-one-third">
+                    <div class="column is-one-third">
+                        <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
+                    </div>
                     <div class="column"> 
                         <div class="subtitle">${data.name}</div>
                         <div>
