@@ -47,7 +47,7 @@ class Login {
         })
     }
 
-    checkLoginFields() {
+  checkLoginFields() {
         return validateEmailValue(this.emailField.value, this.errorBox)
             && validatePasswordValue(this.passwordField.value, this.errorBox);
     }
