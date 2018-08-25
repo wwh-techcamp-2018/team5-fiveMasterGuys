@@ -21,10 +21,15 @@
     border-radius: 3px 3px 0 0;
 }
 
+
 .step-offers {
     padding: 20px;
     background: #F6F6F6;
     border: #DDD solid 1px;
+    border-radius: 3px;
+}
+
+.step-offers > .box {
     border-radius: 3px;
 }
 
@@ -76,7 +81,13 @@
     margin-top: -1px;
     box-shadow: none;
     border: #DDD solid 1px;
-    border-radius: 0 0 3px 3px;
+    border-radius: 10px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.box > .columns {
+    padding: 30px;
 }
 
 .subtitle {
@@ -86,61 +97,18 @@
     font-style: italic;
 }
 
-.subtitle-input {
-    padding: 10px;
-    font-size: 30px;
-    font-weight: bold;
-    font-style: italic;
-}
-
-.step-contents {
-    margin-left: 40px;
-}
-
-.step-item-contents {
-    padding-left: 28px;
-}
-
-.step-item {
-    padding-top: 28px;
-}
-
-.step-contents-container {
-    padding: 20px 0 0 10px;
-    font-size: 24px;
-}
-
-.step-item-container {
-    padding-bottom: 10px;
-}
-
-.step-item-input-container {
-    padding: 4px 5px 20px 15px;
-}
-
-.step-item-input-container > input {
-}
-
-.step-item-container > button {
-    border: none;
-    color: #209cee;
-}
-
-.step-item-input-container > button {
-    border: none;
-    color: #209cee;
-    padding-left: 10px;
-}
+/*.subtitle2 {*/
+/*color: #FFF;*/
+/*background: #ae7574;*/
+/*border-radius: 5px 5px 0 0;*/
+/*padding: 10px 10px 10px 30px;*/
+/*font-size: 30px;*/
+/*font-weight: bold;*/
+/*font-style: italic;*/
+/*}*/
 
 .step-img {
     /*border: solid #D9D9D9 1px;*/
-}
-
-.subtitle {
-    padding: 10px;
-    font-size: 40px;
-    font-weight: bold;
-    font-style: italic;
 }
 
 .subtitle-input {
@@ -191,4 +159,61 @@
 
 .step-article-container {
     overflow: hidden;
+}
+
+.step-contributors {
+    overflow: hidden;
+    height: 110px;
+    color: #FFF;
+    font-size: 0;
+    background: #b77272;
+    border-radius: 0 0 10px 10px;
+}
+
+.step-contributors-shadow {
+    position: relative;
+    box-shadow: 0px 0px 20px 4px rgba(68, 68, 68, 1);
+}
+
+.step-contributor {
+    display: inline-block;
+    width: 90px;
+    height: 110px;
+    font-size: 16px;
+    padding: 10px 4px 4px 4px;
+    text-align: center;
+}
+
+.step-contributor:hover {
+    background-color: #4f969d;
+}
+
+.step-contributor:hover:before {
+    border-top: 12px solid #FFF;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    content: "";
+    position: absolute;
+    margin: -14px 10px;
+}
+
+.step-contributor > i {
+    margin-top: 18px;
+}
+
+.step-contributor > div {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.main-contributor {
+    background-color: #4f969d;
+    border-radius: 0 0 0 10px;
+}
+
+.main-contributor > .approved {
+    font-size: 9px;
+    position: absolute;
 }

@@ -1,15 +1,36 @@
-{{#recipe}}
+{{#partial "head"}}
+    <link href="/css/recipe-detail.css" rel="stylesheet">
+
+    {{#unless completed}}
+        <script type="module" src="/js/steps/templates.js"></script>
+        <script type="module" src="/js/steps/step.js"></script>
+    {{/unless}}
+{{/partial}}
+
+{{#partial "contents"}}
+    {{#recipe}}
     <div class="section recipe" data-recipe-id="{{id}}">
         <div class="container">
             <h1 class="title is-1 has-text-centered one-line-ellipsis">{{name}}</h1>
             <div>{{content}}</div>
 
-            {{> recipe/step top=true id="null" offers=firstOffers}}
+            {{#unless completed}}
+                <div class="step-container">
+                    {{#if firstOffers}}
+                        {{> recipe/stepOffer offers=firstOffers}}
+                    {{/if}}
+
+                    {{> recipe/addBtn id="null"}}
+                </div>
+            {{/unless}}
 
             {{#recipeSteps}}
-                {{> recipe/step top=false}}
+                {{> recipe/step}}
             {{/recipeSteps}}
 
         </div>
     </div>
-{{/recipe}}
+    {{/recipe}}
+{{/partial}}
+
+{{> base}}

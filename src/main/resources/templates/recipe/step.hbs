@@ -1,15 +1,12 @@
 <div class="step-container">
-    {{#unless top}}
-        <h2 class="step-title is-size-2 has-text-weight-bold"><i class="fas fa-utensils fa-2x"></i>Step {{@index_1}}
-        </h2>
-        {{> recipe/stepBox}}
-    {{/unless}}
+    <h2 class="step-title is-size-2 has-text-weight-bold"><i class="fas fa-utensils fa-2x"></i>Step {{@index_1}}</h2>
+    {{> recipe/stepBox}}
 
     {{#if offers}}
         {{> recipe/stepOffer}}
     {{/if}}
 
-    {{#if btn}}
+    {{#unless completed}}
         {{> recipe/addBtn id=id}}
-    {{/if}}
+    {{/unless}}
 </div>
