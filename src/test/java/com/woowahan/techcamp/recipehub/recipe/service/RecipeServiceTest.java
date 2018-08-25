@@ -4,7 +4,7 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
@@ -36,14 +36,14 @@ public class RecipeServiceTest {
     private RecipeService recipeService;
     private User user;
     private Category category;
-    private RecipeCreationDTO dto;
+    private RecipeDTO dto;
 
     @Before
     public void setUp() throws Exception {
         // Given
         user = User.builder().name("Ryun").email("ryuneeee@gmail.com").build();
         category = Category.builder().title("양식").build();
-        dto = RecipeCreationDTO.builder().name("초코치킨").categoryId(1L).build();
+        dto = RecipeDTO.builder().name("초코치킨").categoryId(1L).build();
     }
 
     @Test
@@ -63,13 +63,13 @@ public class RecipeServiceTest {
 
     @Test(expected = BadRequestException.class)
     public void withNullCategory() throws Exception {
-        RecipeCreationDTO dtoWithNullCategory = RecipeCreationDTO.builder().name("초코치킨").categoryId(Long.MAX_VALUE).build();
+        RecipeDTO dtoWithNullCategory = RecipeDTO.builder().name("초코치킨").categoryId(Long.MAX_VALUE).build();
         recipeService.create(user, dtoWithNullCategory);
     }
 
     @Test(expected = BadRequestException.class)
     public void withNullUser() throws Exception {
-        RecipeCreationDTO dtoWithNullCategory = RecipeCreationDTO.builder().name("초코치킨").categoryId(1L).build();
+        RecipeDTO dtoWithNullCategory = RecipeDTO.builder().name("초코치킨").categoryId(1L).build();
         recipeService.create(null, dtoWithNullCategory);
     }
 
