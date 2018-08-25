@@ -11,6 +11,7 @@ class Signup {
         this.passwordCheckField = $('#password-check-field');
         this.nameField = $('#name-field');
         this.signupBtn = $('#signup-btn');
+        this.errorBox = $('#error-msg-box');
 
         this.registerEvents();
     }
