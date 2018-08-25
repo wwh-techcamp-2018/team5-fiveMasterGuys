@@ -8,5 +8,5 @@ import com.woowahan.techcamp.recipehub.user.domain.User;
 public interface StepService {
     AbstractStep create(User user, StepCreationDTO dto, Recipe recipe);
 
-    AbstractStep modify(User user, StepCreationDTO dto, Recipe recipe);
+    AbstractStep modify(User user, long targetId, StepCreationDTO dto, Recipe recipe);
 }

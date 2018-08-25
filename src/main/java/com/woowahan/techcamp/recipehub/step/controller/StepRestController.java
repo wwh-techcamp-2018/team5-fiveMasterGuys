@@ -42,7 +42,7 @@ public class StepRestController {
                                              @Valid @RequestBody StepCreationDTO dto) {
         Recipe recipe = recipeService.findById(recipeId);
         return RestResponse.success(
-                provider.getService(recipe, user).modify(user, dto, recipe)
+                provider.getService(recipe, user).modify(user, stepId, dto, recipe)
         );
     }
 }

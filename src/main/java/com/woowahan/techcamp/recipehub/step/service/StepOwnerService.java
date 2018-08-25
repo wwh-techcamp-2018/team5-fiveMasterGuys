@@ -35,8 +35,8 @@ public class StepOwnerService implements StepService {
 
     @Override
     @Transactional
-    public Step modify(User user, StepCreationDTO dto, Recipe recipe) {
-        Step previousStep = stepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
+    public Step modify(User user, long targetId, StepCreationDTO dto, Recipe recipe) {
+        Step previousStep = stepRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
         previousStep.close();
 
         Step modifiedStep = stepRepository.save(dto.toStep(user, recipe, previousStep.getSequence()));

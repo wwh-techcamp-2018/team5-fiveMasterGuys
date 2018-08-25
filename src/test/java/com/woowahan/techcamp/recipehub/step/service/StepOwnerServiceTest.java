@@ -115,7 +115,7 @@ public class StepOwnerServiceTest {
 
         when(stepRepository.save(any())).then(returnsFirstArg());
 
-        Step resultStep = service.modify(owner, dto, recipe);
+        Step resultStep = service.modify(owner, previousStepId, dto, recipe);
 
         StepCreationDTOTest.assertDtoEqualToStep(dto, resultStep);
         assertThat(resultStep.isClosed()).isFalse();
@@ -130,6 +130,6 @@ public class StepOwnerServiceTest {
     @Test(expected = EntityNotFoundException.class)
     public void modifyNotExistStep() {
         StepCreationDTO dto = dtoBuilder.previousStepId(1L).build();
-        service.modify(owner, dto, recipe);
+        service.modify(owner, 1L, dto, recipe);
     }
 }

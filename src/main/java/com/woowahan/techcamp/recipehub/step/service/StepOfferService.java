@@ -35,7 +35,7 @@ public class StepOfferService implements StepService {
     }
 
     @Override
-    public StepOffer modify(User user, StepCreationDTO dto, Recipe recipe) {
+    public StepOffer modify(User user, long targetId, StepCreationDTO dto, Recipe recipe) {
         return null;
     }
 }
