@@ -27,10 +27,7 @@ public class LocalFileUploadServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        localFileUploadService = new LocalFileUploadService();
-        localFileUploadService.setImageStoragePath(imageStoragePath);
-        localFileUploadService.setFullImageStoragePath(temporaryFolder.getRoot().getPath());
-        System.out.println(temporaryFolder.getRoot().getPath());
+        localFileUploadService = new LocalFileUploadService(temporaryFolder.getRoot().getPath(), "");
     }
 
     @Test
