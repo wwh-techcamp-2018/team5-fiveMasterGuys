@@ -17,7 +17,7 @@ class Templates {
 
     static templateStepBox(data) {
         return `
-        <article class="box">
+        <article class="box" data-step-id="${data.id}">
             <div class="columns">
                 <div class="column is-one-third">
                     <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
