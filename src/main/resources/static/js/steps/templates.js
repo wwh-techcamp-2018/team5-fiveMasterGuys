@@ -105,7 +105,7 @@ class Templates {
                 <div class="column is-one-fifth ingredient"></div>
             </div>
             <div class="buttons is-right">
-                <button class="btn-${type}-confirm button is-primary">추가</button>
+                <button class="btn-${type}-confirm button is-primary">${type === 'add' ? '추가' : '수정'}</button>
                 <button class="btn-${type}-cancel button is-danger">취소</button>
             </div>
         </article>
