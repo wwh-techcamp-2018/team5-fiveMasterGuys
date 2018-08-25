@@ -7,17 +7,18 @@
                 <img class="step-img" src="/img/recipe-default.png" alt="{{name}}">
             {{/if}}
         </div>
-        <div class="column">
-            <div class="subtitle">{{name}}</div>
+        <div class="column step-article-container">
+            <p class="subtitle one-line-ellipsis">{{name}}</p>
             <div class="step-contents-container">
                 <ol class="step-contents">
                     {{#content}}
-                        <li>{{.}}</li>
+                        <li>
+                            <p class="one-line-ellipsis">{{.}}</p>
+                        </li>
                     {{/content}}
                 </ol>
             </div>
         </div>
-        <div class="column is-one-fifth ingredient"></div>
     </div>
     <div>
         <div class="speech-bubble-triangle"></div>
