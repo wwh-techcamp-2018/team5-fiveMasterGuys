@@ -1,56 +1,24 @@
 package com.woowahan.techcamp.recipehub.user.controller;
 
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
-import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
-import com.woowahan.techcamp.recipehub.user.repository.UserRepository;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserAcceptanceTest extends AcceptanceTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    private static final String LOGIN_URL = "/api/users/login";
-
     @Test
-    public void login() throws Exception {
-        buildLoginRequest(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD)
-                .andExpect(status().isOk());
+    public void signup() {
+        ResponseEntity<String> response = requestGet("/users/signup");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("Sign up");
     }
 
     @Test
-    public void loginWithInvalidEmail() throws Exception {
-        buildLoginRequest(DEFAULT_USER_EMAIL + "A", DEFAULT_USER_PASSWORD)
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void loginWithInvalidPassword() throws Exception {
-        buildLoginRequest(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD + "A")
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void loginWithNullEmail() throws Exception {
-        buildLoginRequest(null, DEFAULT_USER_PASSWORD)
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void loginWithNullPassword() throws Exception {
-        buildLoginRequest(DEFAULT_USER_EMAIL, null)
-                .andExpect(status().isBadRequest());
-    }
-
-    private ResultActions buildLoginRequest(String email, String password) throws Exception {
-        return mvc.perform(post(LOGIN_URL).contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonBytes(new LoginDTO(email, password))));
+    public void login() {
+        ResponseEntity<String> response = requestGet("/users/login");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).contains("Login");
     }
 }
