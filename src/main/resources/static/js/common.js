@@ -37,17 +37,17 @@ function getCookie(cookieName) {
     const name = cookieName + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
     const cookieArray = decodedCookie.split(';');
-    for(let i = 0; i <cookieArray.length; i++) {
-        let cookie = cookieArray[i];
-        while (cookie.charAt(0) == ' ') {
-            cookie = cookie.substring(1);
-        }
-        if (cookie.indexOf(name) == 0) {
+
+    for (let cookie of cookieArray) {
+        cookie = cookie.trim();
+
+        if (cookie.indexOf(name) === 0) {
             return cookie.substring(name.length, cookie.length);
         }
     }
     return "";
 }
+
 
 function checkLoginOrRedirect() {
     if (getCookie('isLoggedIn') !== 'true') {
@@ -61,7 +61,6 @@ class ImageUploader {
     }
 
     upload(file) {
-
         const data = new FormData();
         data.append('file', file);
         return new Promise((resolve, reject) => {
