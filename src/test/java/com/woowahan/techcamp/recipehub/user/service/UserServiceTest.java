@@ -1,6 +1,6 @@
 package com.woowahan.techcamp.recipehub.user.service;
 
-import com.woowahan.techcamp.recipehub.common.exception.ConflictException;
+import com.woowahan.techcamp.recipehub.common.exception.ResourceExistsException;
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
@@ -48,7 +48,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void add() {
+    public void create() {
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         User user = signupDto.toEntity(passwordEncoder);
 
@@ -56,7 +56,7 @@ public class UserServiceTest {
         assertThat(userService.create(signupDto)).isEqualTo(user);
     }
 
-    @Test(expected = ConflictException.class)
+    @Test(expected = ResourceExistsException.class)
     public void duplicatedEmail() {
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
         signupDto.setEmail("ming@woowahan.com");

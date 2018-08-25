@@ -142,6 +142,17 @@ public class UserRestAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    public void signup_exist_email() {
+        SignupDTO dto = signupDTOBuilder.email(DEFAULT_USER_EMAIL).build();
+
+        ResponseEntity<RestResponse<User>> response = responseSignup(dto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().getMessage()).isEqualTo("이미 존재하는 아이디 입니다.");
+
+    }
+
+    @Test
     public void login() throws Exception {
         buildLoginRequest(DEFAULT_USER_EMAIL, DEFAULT_USER_PASSWORD)
                 .andExpect(status().isOk());
