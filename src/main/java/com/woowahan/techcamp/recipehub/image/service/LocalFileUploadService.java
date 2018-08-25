@@ -24,17 +24,23 @@ import java.nio.file.Paths;
 @Profile("local")
 @Service
 public class LocalFileUploadService implements FileUploadService {
-    @Value("${user.home}")
+
     private String userHomePath;
 
-    @Value("${local.storage.imageStoragePath}")
     private String imageStoragePath;
 
     private String fullImageStoragePath;
 
+    public LocalFileUploadService(@Value("${user.home}") String userHomePath,
+                                  @Value("${local.storage.imageStoragePath}") String imageStoragePath) {
+        this.userHomePath = userHomePath;
+        this.imageStoragePath = imageStoragePath;
+
+        fullImageStoragePath = userHomePath + imageStoragePath;
+    }
+
     @PostConstruct
     private void init() throws IOException {
-        fullImageStoragePath = userHomePath + imageStoragePath;
         Path rootDirPath = Paths.get(fullImageStoragePath);
         if (!Files.exists(rootDirPath)) {
             Files.createDirectories(rootDirPath);
