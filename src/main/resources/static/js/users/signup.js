@@ -12,7 +12,6 @@ class Signup {
         this.nameField = $('#name-field');
         this.signupBtn = $('#signup-btn');
         this.errorBox = $('#error-msg-box');
-        this.box = $('.box');
 
         this.registerEvents();
     }

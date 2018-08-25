@@ -1,0 +1,15 @@
+{{#recipe}}
+    <div class="section recipe" data-recipe-id="{{id}}">
+        <div class="container">
+            <div class="title is-1 has-text-centered">{{name}}</div>
+            <div>{{content}}</div>
+
+            {{> recipe/step top=true id="null" offers=firstOffers}}
+
+            {{#recipeSteps}}
+                {{> recipe/step top=false}}
+            {{/recipeSteps}}
+
+        </div>
+    </div>
+{{/recipe}}

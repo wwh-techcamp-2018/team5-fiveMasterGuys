@@ -1,0 +1,26 @@
+<article class="box{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
+    <div class="columns">
+        <div class="column is-one-third">
+            {{#if imgUrl}}
+                <img class="step-img" src="{{imgUrl}}" alt="{{name}}">
+            {{else}}
+                <img class="step-img" src="/img/recipe-default.png" alt="{{name}}">
+            {{/if}}
+        </div>
+        <div class="column">
+            <div class="subtitle">{{name}}</div>
+            <div class="step-contents-container">
+                <ol class="step-contents">
+                    {{#content}}
+                        <li>{{.}}</li>
+                    {{/content}}
+                </ol>
+            </div>
+        </div>
+        <div class="column is-one-fifth ingredient"></div>
+    </div>
+    <div>
+        <div class="speech-bubble-triangle"></div>
+        <span>{{writer.name}}</span>
+    </div>
+</article>
