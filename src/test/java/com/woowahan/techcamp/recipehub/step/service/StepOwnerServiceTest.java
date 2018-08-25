@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.step.service;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
+import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTOTest;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -32,6 +34,8 @@ public class StepOwnerServiceTest {
     private StepRepository stepRepository;
     private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
     private Step recipeStep;
+    private Recipe recipe;
+    private User owner;
 
     @Before
     public void setUp() throws Exception {
@@ -42,13 +46,12 @@ public class StepOwnerServiceTest {
                 .ingredients(null)
                 .previousStepId(null)
                 .imgUrl("/static/img/image.jpg");
+        recipe = Recipe.builder().build();
+        owner = User.builder().id(1L).build();
     }
 
     @Test
     public void createFirstStep() {
-        User owner = User.builder().id(1L).build();
-        Recipe recipe = Recipe.builder().build();
-
         StepCreationDTO dto = dtoBuilder.build();
 
         when(stepRepository.save(any())).then(returnsFirstArg());
@@ -75,9 +78,6 @@ public class StepOwnerServiceTest {
 
         Step previousStep = Step.builder().id(previousStepId).sequence(3L).build();
 
-        User owner = User.builder().id(1L).build();
-        Recipe recipe = Recipe.builder().build();
-
         when(stepRepository.findById(previousStepId)).thenReturn(Optional.of(previousStep));
 
         when(stepRepository.save(any())).then(returnsFirstArg());
@@ -94,5 +94,34 @@ public class StepOwnerServiceTest {
         assertThat(resultRecipeStep.getWriter()).isEqualTo(owner);
         assertThat(resultRecipeStep.getSequence()).isEqualTo(previousStep.getSequence() + 1);
         assertThat(resultRecipeStep.isClosed()).isFalse();
+    }
+
+    @Test
+    public void modify() {
+        Long previousStepId = 1L;
+        StepCreationDTO dto = dtoBuilder.previousStepId(previousStepId).build();
+
+        Step previousStep = Step.builder().id(previousStepId)
+                .closed(false)
+                .sequence(3L)
+                .build();
+
+        when(stepRepository.findById(previousStepId)).thenReturn(Optional.of(previousStep));
+
+        when(stepRepository.save(any())).then(returnsFirstArg());
+
+        Step resultStep = service.modify(owner, dto, recipe);
+
+        StepCreationDTOTest.assertDtoEqualToStep(dto, resultStep);
+        assertThat(resultStep.isClosed()).isFalse();
+        assertThat(resultStep.getSequence()).isEqualTo(previousStep.getSequence());
+        assertThat(previousStep.isClosed()).isTrue();
+    }
+
+
+    @Test(expected = EntityNotFoundException.class)
+    public void modifyNotExistStep() {
+        StepCreationDTO dto = dtoBuilder.previousStepId(1L).build();
+        service.modify(owner, dto, recipe);
     }
 }

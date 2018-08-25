@@ -20,24 +20,27 @@ public class StepOwnerService implements StepService {
     @Override
     @Transactional
     public Step create(User user, StepCreationDTO dto, Recipe recipe) {
-        Long sequence = dto.getPreviousStepId() == null
-                ? 1
-                : findById(dto.getPreviousStepId()).getSequence() + 1;
+        Long sequence = getNextSequence(dto);
 
         stepRepository.increaseSequenceGte(recipe, sequence);
 
         return stepRepository.save(
-                Step.builder()
-                        .recipe(recipe)
-                        .imgUrl(dto.getImgUrl())
-                        .content(dto.getContent())
-                        .name(dto.getName())
-                        .ingredients(null)
-                        .sequence(sequence)
-                        .closed(false)
-                        .writer(user)
-                        .build()
+                dto.toStep(user, recipe, sequence)
         );
+    }
+
+    @Override
+    @Transactional
+    public Step modify(User user, StepCreationDTO dto, Recipe recipe) {
+        Step previousStep = stepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
+        previousStep.close();
+        return stepRepository.save(dto.toStep(user, recipe, previousStep.getSequence()));
+    }
+
+    private Long getNextSequence(StepCreationDTO dto) {
+        return dto.getPreviousStepId() == null
+                ? 1
+                : findById(dto.getPreviousStepId()).getSequence() + 1;
     }
 
     private Step findById(Long id) {
