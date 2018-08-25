@@ -216,7 +216,7 @@ class StepManager {
 
     addStepWithOwner(stepForm, data) {
         stepForm.closest('.step-container').insertAdjacentHTML('afterend', Templates.templateStep(data));
-        $All('h1.step-title').forEach((e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i + 1}`);
+        $All('h2.step-title').forEach((e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i + 1}`);
     }
 
     createStepOffer(targetStepId, data) {
