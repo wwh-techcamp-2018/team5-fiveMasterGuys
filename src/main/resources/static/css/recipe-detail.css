@@ -189,3 +189,6 @@
     padding-left: 10px;
 }
 
+.step-article-container {
+    overflow: hidden;
+}
