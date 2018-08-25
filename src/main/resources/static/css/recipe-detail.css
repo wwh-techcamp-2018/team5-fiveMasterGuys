@@ -161,8 +161,10 @@
     overflow: hidden;
 }
 
-.step-contributors {
+.contributors {
     overflow: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
     height: 110px;
     color: #FFF;
     font-size: 0;
@@ -170,38 +172,36 @@
     border-radius: 0 0 10px 10px;
 }
 
-.step-contributors-shadow {
+.contributors-shadow {
     position: relative;
+    z-index: 10;
     box-shadow: 0px 0px 20px 4px rgba(68, 68, 68, 1);
 }
 
-.step-contributor {
+.shadow-wrapper {
+    overflow: hidden;
+}
+
+.contributor-container {
+    overflow: hidden;
     display: inline-block;
+}
+
+.contributor {
     width: 90px;
     height: 110px;
     font-size: 16px;
     padding: 10px 4px 4px 4px;
     text-align: center;
+    position: relative;
+    display: block;
 }
 
-.step-contributor:hover {
-    background-color: #4f969d;
-}
-
-.step-contributor:hover:before {
-    border-top: 12px solid #FFF;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    content: "";
-    position: absolute;
-    margin: -14px 10px;
-}
-
-.step-contributor > i {
+.contributor > i {
     margin-top: 18px;
 }
 
-.step-contributor > div {
+.contributor > div {
     font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
@@ -213,7 +213,22 @@
     border-radius: 0 0 0 10px;
 }
 
+.contributor-selected {
+    background-color: #4f969d;
+}
+
+.contributor-selected:before {
+    border-top: 12px solid #FFF;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    content: "";
+    position: absolute;
+    margin: -14px 10px;
+    z-index: 20;
+}
+
 .main-contributor > .approved {
     font-size: 9px;
+    width: 80px;
     position: absolute;
 }
