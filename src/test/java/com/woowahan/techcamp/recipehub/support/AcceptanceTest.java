@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -146,13 +149,20 @@ public abstract class AcceptanceTest {
     }
 
 
-    protected ResponseEntity<RestResponse<String>> requestFileUpload(User user, String key, ClassPathResource resource) {
-        HttpEntity<MultiValueMap<String, Object>> request = HtmlFormDataBuilder
-                .multipartFormData()
-                .addParameter(key, resource)
-                .build();
-        return template(user).exchange("/images", HttpMethod.POST, request, new ParameterizedTypeReference<RestResponse<String>>() {
-        });
+    protected ResultActions requestFileUpload(MockMultipartFile mockMultipartFile, User user) throws Exception {
+        String base64Credential = new String(Base64.getEncoder().encode((user.getEmail() + ":" + user.getPassword()).getBytes()));
+
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        return mockMvc.perform(MockMvcRequestBuilders.multipart("/images")
+                .file(mockMultipartFile)
+                .header("Authorization", "Basic " + base64Credential));
+    }
+
+
+    protected ResultActions requestFileUpload(MockMultipartFile mockMultipartFile) throws Exception {
+        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        return mockMvc.perform(MockMvcRequestBuilders.multipart("/images")
+                .file(mockMultipartFile));
     }
 
 

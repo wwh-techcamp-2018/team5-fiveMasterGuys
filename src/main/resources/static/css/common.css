@@ -5,3 +5,9 @@
 .hidden {
     display: none;
 }
+
+.one-line-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
