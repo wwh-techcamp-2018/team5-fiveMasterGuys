@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.step.service;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class StepOwnerService implements StepService {
 
     @Autowired
     private StepRepository stepRepository;
+
+    @Autowired
+    private StepOfferRepository stepOfferRepository;
 
     @Override
     @Transactional
@@ -34,7 +38,12 @@ public class StepOwnerService implements StepService {
     public Step modify(User user, StepCreationDTO dto, Recipe recipe) {
         Step previousStep = stepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
         previousStep.close();
-        return stepRepository.save(dto.toStep(user, recipe, previousStep.getSequence()));
+
+        Step modifiedStep = stepRepository.save(dto.toStep(user, recipe, previousStep.getSequence()));
+
+        stepOfferRepository.rejectModifyingOfferByTarget(previousStep);
+        stepOfferRepository.changeAppendOffersTarget(previousStep, modifiedStep);
+        return modifiedStep;
     }
 
     private Long getNextSequence(StepCreationDTO dto) {

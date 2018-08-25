@@ -4,6 +4,7 @@ import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTOTest;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
@@ -31,6 +32,9 @@ public class StepOwnerServiceTest {
     private StepOwnerService service;
 
     @Mock
+    private StepOfferRepository stepOfferRepository;
+
+    @Mock
     private StepRepository stepRepository;
     private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
     private Step recipeStep;
@@ -46,8 +50,8 @@ public class StepOwnerServiceTest {
                 .ingredients(null)
                 .previousStepId(null)
                 .imgUrl("/static/img/image.jpg");
-        recipe = Recipe.builder().build();
         owner = User.builder().id(1L).build();
+        recipe = Recipe.builder().owner(owner).build();
     }
 
     @Test
@@ -96,6 +100,7 @@ public class StepOwnerServiceTest {
         assertThat(resultRecipeStep.isClosed()).isFalse();
     }
 
+
     @Test
     public void modify() {
         Long previousStepId = 1L;
@@ -116,6 +121,9 @@ public class StepOwnerServiceTest {
         assertThat(resultStep.isClosed()).isFalse();
         assertThat(resultStep.getSequence()).isEqualTo(previousStep.getSequence());
         assertThat(previousStep.isClosed()).isTrue();
+
+        verify(stepOfferRepository).rejectModifyingOfferByTarget(previousStep);
+        verify(stepOfferRepository).changeAppendOffersTarget(previousStep, resultStep);
     }
 
 
