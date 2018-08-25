@@ -31,7 +31,10 @@ public class SignupDTO {
     private String name;
 
     @AssertTrue
-    private boolean matchPassword() {
+    private boolean isMatchPassword() {
+        if (password == null || passwordCheck == null) {
+            return false;
+        }
         return password.equals(passwordCheck);
     }
 

@@ -26,7 +26,7 @@ public class SignupDTOTest extends ValidationTest {
 
     @Test
     public void invalidAll() {
-        assertConstraintViolations(new SignupDTO(), 4);
+        assertConstraintViolations(new SignupDTO(), 5);
     }
 
     @Test
@@ -67,7 +67,17 @@ public class SignupDTOTest extends ValidationTest {
 
     @Test
     public void null_password() {
-        assertConstraintViolations(setPairPasswordDto(null), 2);
+        assertConstraintViolations(setPairPasswordDto(null), 3);
+    }
+
+    @Test
+    public void not_match_password() {
+        SignupDTO dto = signupDtoBuilder
+                .password("1234qwer")
+                .passwordCheck("1234qwer1")
+                .build();
+
+        assertConstraintViolations(dto, 1);
     }
 
     @Test

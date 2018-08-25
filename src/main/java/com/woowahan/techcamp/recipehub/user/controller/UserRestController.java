@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.user.controller;
 
 import com.woowahan.techcamp.recipehub.common.security.CookieFactory;
 import com.woowahan.techcamp.recipehub.common.security.SessionUtils;
+import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
 import com.woowahan.techcamp.recipehub.user.dto.SignupDTO;
@@ -23,8 +24,8 @@ public class UserRestController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public User signup(@Valid @RequestBody SignupDTO dto) {
-        return userService.create(dto);
+    public RestResponse<User> signup(@Valid @RequestBody SignupDTO dto) {
+        return RestResponse.success(userService.create(dto));
     }
 
     @PostMapping("/login")
