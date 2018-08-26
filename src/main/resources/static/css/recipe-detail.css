@@ -161,6 +161,11 @@
     overflow: hidden;
 }
 
+.btn-step-modify {
+    margin: 10px;
+    cursor: pointer;
+}
+
 .contributors {
     overflow: hidden;
     overflow-x: scroll;

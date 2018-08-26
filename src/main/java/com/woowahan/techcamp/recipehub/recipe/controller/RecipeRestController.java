@@ -3,7 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.controller;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class RecipeRestController {
     @PostMapping
     @AuthRequired
     @ResponseStatus(code = HttpStatus.CREATED)
-    public RestResponse<Recipe> create(User user, @Valid @RequestBody RecipeCreationDTO dto) {
+    public RestResponse<Recipe> create(User user, @Valid @RequestBody RecipeDTO dto) {
         return RestResponse.success(recipeService.create(user, dto));
     }
 }

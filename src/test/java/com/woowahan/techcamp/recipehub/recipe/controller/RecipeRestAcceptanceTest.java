@@ -4,7 +4,7 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import org.junit.After;
@@ -36,7 +36,7 @@ public class RecipeRestAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void create() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(category.getId()).name("초코치킨").build();
+        RecipeDTO dto = RecipeDTO.builder().categoryId(category.getId()).name("초코치킨").build();
         ResponseEntity<RestResponse<Recipe>> resp = requestJson("/api/recipes", HttpMethod.POST, dto, basicAuthUser,
                 new ParameterizedTypeReference<RestResponse<Recipe>>() {
                 });
@@ -45,7 +45,7 @@ public class RecipeRestAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void createWrongDTO() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().name("초코치킨").build();
+        RecipeDTO dto = RecipeDTO.builder().name("초코치킨").build();
         ResponseEntity<RestResponse<Recipe>> resp = requestJson("/api/recipes", HttpMethod.POST, dto, basicAuthUser,
                 new ParameterizedTypeReference<RestResponse<Recipe>>() {
                 });

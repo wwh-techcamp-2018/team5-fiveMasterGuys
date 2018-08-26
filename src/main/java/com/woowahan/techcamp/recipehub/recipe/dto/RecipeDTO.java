@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RecipeCreationDTO {
+public class RecipeDTO {
 
     @NotNull
     private Long categoryId;
@@ -27,7 +27,7 @@ public class RecipeCreationDTO {
     private String imgUrl;
 
     @Builder
-    public RecipeCreationDTO(@NotNull Long categoryId, @NotBlank @NotNull String name, String imgUrl) {
+    public RecipeDTO(@NotNull Long categoryId, @NotBlank @NotNull String name, String imgUrl) {
         this.categoryId = categoryId;
         this.name = name;
         this.imgUrl = imgUrl;
