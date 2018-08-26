@@ -80,20 +80,20 @@ public class StepAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
-    public void create() {
+    public void createStepOfferAppend() {
         List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
         StepCreationDTO dto = StepCreationDTO.builder().name("Put tomato paste")
-                .ingredients(null).previousStepId(step.getId()).content(content).build();
+                .ingredients(null).targetStepId(step.getId()).content(content).build();
 
         ResponseEntity<RestResponse<StepOffer>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    public void createWithNullDTO() {
+    public void createStepOfferAppendWithNullDTO() {
         List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
         StepCreationDTO dto = StepCreationDTO.builder().name("Put tomato paste")
-                .ingredients(null).previousStepId(null).content(content).build();
+                .ingredients(null).targetStepId(null).content(content).build();
 
         ResponseEntity<RestResponse<StepOffer>> request = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST, dto, otherUser, getRecipeStepRequestTypeRef());
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);

@@ -56,7 +56,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .content(Arrays.asList("a", "b"))
                 .imgUrl("/static/img/image.jpg")
                 .ingredients(null)
-                .previousStepId(null);
+                .targetStepId(null);
     }
 
     @Test
@@ -96,7 +96,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                         .content(new ArrayList<>())
                         .name("test step")
                         .build());
-        StepCreationDTO dto = dtoBuilder.previousStepId(oldStep.getId()).build();
+        StepCreationDTO dto = dtoBuilder.targetStepId(oldStep.getId()).build();
         StepOffer appendOffer = stepOfferRepository.save(
                 StepOffer.from(savedUser, dto, recipe, oldStep, OfferType.APPEND)
         );
@@ -158,7 +158,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
         //when
         List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
         StepCreationDTO dto = StepCreationDTO.builder().name("Put tomato paste")
-                .ingredients(null).previousStepId(targetStep.getId()).content(content).build();
+                .ingredients(null).targetStepId(targetStep.getId()).content(content).build();
 
         //then
         ResponseEntity<RestResponse<Step>> request = requestJson(
@@ -166,7 +166,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 HttpMethod.PUT, dto, contributor, stepType());
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        StepOffer offer = recipeRepository.findById(recipe.getId()).get().getRecipeSteps().get(0).getOffers().get(0);
+        StepOffer offer = stepOfferRepository.findById(request.getBody().getData().getId()).get();
         assertThat(offer.getTarget()).isEqualTo(targetStep);
         assertThat(offer.getOfferType()).isEqualTo(OfferType.MODIFY);
     }
@@ -184,7 +184,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                         .name("test step")
                         .build());
 
-        StepCreationDTO dto = dtoBuilder.previousStepId(oldStep.getId()).build();
+        StepCreationDTO dto = dtoBuilder.targetStepId(oldStep.getId()).build();
         ResponseEntity<RestResponse<Step>> response = requestJson(
                 "/api/recipes/" + recipe.getId() + "/steps/" + oldStep.getId(),
                 HttpMethod.PUT,
