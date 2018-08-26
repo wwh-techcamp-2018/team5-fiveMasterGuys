@@ -32,4 +32,8 @@ public class Step extends AbstractStep {
         this.closed = closed;
         this.offers = offers;
     }
+
+    public void close() {
+        this.closed = true;
+    }
 }

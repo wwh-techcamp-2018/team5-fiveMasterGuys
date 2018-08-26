@@ -33,4 +33,9 @@ public class StepOfferService implements StepService {
 
         return stepOfferRepository.save(StepOffer.from(user, dto, recipe, step, OfferType.APPEND));
     }
+
+    @Override
+    public StepOffer modify(User user, long targetId, StepCreationDTO dto, Recipe recipe) {
+        return null;
+    }
 }

@@ -1,8 +1,11 @@
 package com.woowahan.techcamp.recipehub.step.dto;
 
+import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.support.ValidationTest;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepCreationDTOTest extends ValidationTest {
 
@@ -44,5 +47,12 @@ public class StepCreationDTOTest extends ValidationTest {
     public void allConstraintViolations() {
         StepCreationDTO dto = StepCreationDTO.builder().build();
         assertConstraintViolations(dto, 1);
+    }
+
+
+    public static void assertDtoEqualToStep(StepCreationDTO dto, Step step) {
+        assertThat(dto).isEqualToComparingOnlyGivenFields(
+                step,
+                "name", "content", "imgUrl");
     }
 }

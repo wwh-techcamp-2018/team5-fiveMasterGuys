@@ -3,7 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.controller;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import org.junit.After;
@@ -49,21 +49,21 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void create() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(category.getId()).name("초코치킨").build();
+        RecipeDTO dto = RecipeDTO.builder().categoryId(category.getId()).name("초코치킨").build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, basicAuthUser);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.MOVED_PERMANENTLY);
     }
 
     @Test
     public void createWrongCategoryId() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(Long.MAX_VALUE).name("초코치킨").build();
+        RecipeDTO dto = RecipeDTO.builder().categoryId(Long.MAX_VALUE).name("초코치킨").build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, basicAuthUser);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
     public void createWithoutName() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(category.getId()).name(null).build();
+        RecipeDTO dto = RecipeDTO.builder().categoryId(category.getId()).name(null).build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, basicAuthUser);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
@@ -76,7 +76,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void createNotLogin() {
-        RecipeCreationDTO dto = RecipeCreationDTO.builder().categoryId(category.getId()).name("초코치킨").build();
+        RecipeDTO dto = RecipeDTO.builder().categoryId(category.getId()).name("초코치킨").build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, null);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }

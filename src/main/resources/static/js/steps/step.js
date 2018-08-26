@@ -8,8 +8,11 @@ class StepManager {
             'btn-step-add': this.showAddStepForm,
             'btn-plus': this.appendStepItem,
             'btn-minus': this.removeStepItem,
-            'btn-confirm': this.handleConfirmButtonClick,
-            'btn-cancel': this.handleCancelButtonClick,
+            'btn-add-confirm': this.handleAddFormConfirmButtonClick,
+            'btn-add-cancel': this.handleAddFormCancelButtonClick,
+            'btn-modify-confirm': this.handleModifyFormConfirmButtonClick,
+            'btn-modify-cancel': this.handleModifyFormCancelButtonClick,
+            'btn-step-modify': this.showModifyStepForm,
             'step-offer-title-bar': this.toggleStepOfferContent,
         };
         this.registerEvents();
@@ -24,7 +27,7 @@ class StepManager {
         });
         this.recipe.addEventListener('change', (e) => {
             this.handleChangeEvent(e);
-        })
+        });
     }
 
     handleChangeEvent({target}) {
@@ -57,8 +60,30 @@ class StepManager {
 
     showAddStepForm(target) {
         checkLoginOrRedirect();
-        target.insertAdjacentHTML('afterend', Templates.templateStepForm(target.getAttribute('data-step-id')));
+        target.insertAdjacentHTML('afterend', Templates.templateStepForm(target.getAttribute('data-step-id'), 'add'));
         toggleHidden(target);
+    }
+
+    showModifyStepForm(target) {
+        checkLoginOrRedirect();
+        const stepBox = target.closest('.box');
+        stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
+        
+        const stepForm = stepBox.previousElementSibling;
+        this.copyValuesToForm(stepBox, stepForm);
+        toggleHidden(stepBox);
+    }
+
+    copyValuesToForm(stepBox, stepForm) {
+        const stepItemList = stepForm.querySelector('ol.step-contents');
+        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
+        stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
+        
+        removeElement(stepItemList.firstElementChild);
+        stepItems.forEach((item) => {
+            stepItemList.insertAdjacentHTML('beforeend', Templates.templateStepContentListItem(item));
+        })
+        stepItemList.insertAdjacentHTML('beforeend', Templates.templateStepContentInput());
     }
 
     appendStepItem(target) {
@@ -86,7 +111,7 @@ class StepManager {
         });
     }
 
-    handleConfirmButtonClick(target) {
+    handleAddFormConfirmButtonClick(target) {
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
@@ -106,9 +131,33 @@ class StepManager {
         })
     }
 
-    handleCancelButtonClick(target) {
+    handleAddFormCancelButtonClick(target) {
         const stepForm = target.closest('.box');
         this.closeAddForm(stepForm);
+    }
+
+    handleModifyFormConfirmButtonClick(target) {
+        const stepForm = target.closest('.box');
+        const requestBody = this.makeRequestBody(stepForm);
+        this.requestStepModification(requestBody)
+            .then((data) => {
+                const stepBox = stepForm.nextElementSibling;
+                stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepBox(data));
+                removeElement(stepBox);
+                removeElement(stepForm);
+            })
+            .catch((status) => {
+                if (status === 401) {
+                    location.href = '/users/login';
+                }
+            });
+    }
+
+    handleModifyFormCancelButtonClick(target) {
+        const stepForm = target.closest('.box');
+        const stepBox = stepForm.nextElementSibling;
+        toggleHidden(stepBox);
+        removeElement(stepForm);
     }
 
     toggleStepOfferContent(target) {
@@ -145,9 +194,29 @@ class StepManager {
         }
     }
 
+    requestStepModification(requestBody) {
+        return new Promise((resolve, reject) => {
+            fetchManager({
+                url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${requestBody.previousStepId}`,
+                headers: {"Content-Type": "application/json"},
+                method: 'PUT',
+                body: JSON.stringify(requestBody),
+                onSuccess: ({json}) => {
+                    resolve(json.data);
+                },
+                onFailed: ({status}) => {
+                    reject(status);
+                },
+                onError: () => {
+                    reject();
+                }
+            })
+        });
+    }
+
     addStepWithOwner(stepForm, data) {
         stepForm.closest('.step-container').insertAdjacentHTML('afterend', Templates.templateStep(data));
-        $All('h1.step-title').forEach((e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i + 1}`);
+        $All('h2.step-title').forEach((e, i) => e.innerHTML = `<i class="fas fa-utensils fa-2x"></i>Step ${i + 1}`);
     }
 
     createStepOffer(targetStepId, data) {
@@ -184,7 +253,7 @@ class StepManager {
         const stepId = stepForm.getAttribute('data-step-id') !== "null" ? stepForm.getAttribute('data-step-id') : null;
         return {
             name: stepForm.querySelector('.subtitle-input').value,
-            content: this.getStepItemTexts(stepForm),
+            content: this.getStepItemTexts(stepForm.querySelectorAll('.step-item-contents')),
             previousStepId: stepId,
             imgUrl: this.findImageUrl(stepId)
         }
@@ -196,8 +265,8 @@ class StepManager {
         return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
-    getStepItemTexts(steps) {
-        return [...steps.querySelectorAll('.step-item-contents')].map(contentElement => contentElement.innerText);
+    getStepItemTexts(itemElements) {
+        return [...itemElements].map(contentElement => contentElement.innerText);
     }
 
 }

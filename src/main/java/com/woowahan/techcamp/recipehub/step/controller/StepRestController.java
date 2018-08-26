@@ -34,4 +34,15 @@ public class StepRestController {
         );
     }
 
+    @AuthRequired
+    @PutMapping("/{stepId}")
+    public RestResponse<AbstractStep> modify(@PathVariable("recipeId") long recipeId,
+                                             @PathVariable("stepId") long stepId,
+                                             User user,
+                                             @Valid @RequestBody StepCreationDTO dto) {
+        Recipe recipe = recipeService.findById(recipeId);
+        return RestResponse.success(
+                provider.getService(recipe, user).modify(user, stepId, dto, recipe)
+        );
+    }
 }

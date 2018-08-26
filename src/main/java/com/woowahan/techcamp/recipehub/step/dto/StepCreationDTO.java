@@ -1,5 +1,8 @@
 package com.woowahan.techcamp.recipehub.step.dto;
 
+import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
+import com.woowahan.techcamp.recipehub.step.domain.Step;
+import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +29,18 @@ public class StepCreationDTO {
         this.ingredients = ingredients;
         this.imgUrl = imgUrl;
         this.previousStepId = previousStepId;
+    }
+
+    public Step toStep(User user, Recipe recipe, Long sequence) {
+        return Step.builder()
+                .recipe(recipe)
+                .imgUrl(imgUrl)
+                .content(content)
+                .name(name)
+                .ingredients(null)
+                .sequence(sequence)
+                .closed(false)
+                .writer(user)
+                .build();
     }
 }

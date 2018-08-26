@@ -51,7 +51,7 @@ public class RecipeResponseDTOTest {
         RecipeResponseDTO detailDTO = RecipeResponseDTO.from(incompletedRecipe);
 
         assertThat(detailDTO.getRecipeSteps()).containsExactly(
-                StepResponseDTO.from(openedStep), StepResponseDTO.from(closedStep)
+                StepResponseDTO.from(openedStep)
         );
     }
 

@@ -3,8 +3,12 @@ package com.woowahan.techcamp.recipehub.step.controller;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
+import com.woowahan.techcamp.recipehub.step.domain.OfferType;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
+import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
+import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTOTest;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import org.junit.After;
@@ -16,9 +20,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class StepRestAcceptanceTest extends AcceptanceTest {
     @Autowired
@@ -26,6 +32,9 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private StepRepository stepRepository;
+
+    @Autowired
+    private StepOfferRepository stepOfferRepository;
 
     private Recipe recipe;
     private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
@@ -47,8 +56,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     public void createFirstStep() {
         StepCreationDTO dto = dtoBuilder.build();
         ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
-                dto, basicAuthUser, new ParameterizedTypeReference<RestResponse<Step>>() {
-                });
+                dto, basicAuthUser, stepType());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -62,17 +70,96 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     public void hideWriterPassword() {
         StepCreationDTO dto = dtoBuilder.build();
         ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
-                dto, basicAuthUser, new ParameterizedTypeReference<RestResponse<Step>>() {
-                });
+                dto, basicAuthUser, stepType());
 
         assertThat(response.getBody().getData().getWriter().getPassword()).isNull();
     }
 
+    @Test
+    public void modifyByOwner() {
+
+        Step oldStep = stepRepository.save(
+                Step.builder()
+                        .recipe(recipe)
+                        .writer(savedUser)
+                        .sequence(1L)
+                        .closed(false)
+                        .imgUrl("")
+                        .content(new ArrayList<>())
+                        .name("test step")
+                        .build());
+        StepCreationDTO dto = dtoBuilder.previousStepId(oldStep.getId()).build();
+        StepOffer appendOffer = stepOfferRepository.save(
+                StepOffer.from(savedUser, dto, recipe, oldStep, OfferType.APPEND)
+        );
+        StepOffer modifyOffer = stepOfferRepository.save(
+                StepOffer.from(savedUser, dto, recipe, oldStep, OfferType.MODIFY)
+        );
+
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + oldStep.getId(),
+                HttpMethod.PUT,
+                dto, basicAuthUser,
+                stepType());
+
+        Step responseStep = response.getBody().getData();
+
+        Step savedStep = stepRepository.findById(responseStep.getId()).get();
+
+        oldStep = stepRepository.findById(oldStep.getId()).get();
+        appendOffer = stepOfferRepository.findById(appendOffer.getId()).get();
+        modifyOffer = stepOfferRepository.findById(modifyOffer.getId()).get();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        StepCreationDTOTest.assertDtoEqualToStep(dto, responseStep);
+        StepCreationDTOTest.assertDtoEqualToStep(dto, savedStep);
+        assertThat(appendOffer.getTarget()).isEqualTo(savedStep);
+        assertThat(savedStep.isClosed()).isFalse();
+        assertThat(modifyOffer.getTarget()).isEqualTo(oldStep);
+        assertThat(oldStep.isClosed()).isTrue();
+        assertThat(modifyOffer.isRejected()).isTrue();
+    }
+
+
+    @Test
+    public void modifyByNotLoginedUser() {
+        Step oldStep = stepRepository.save(
+                Step.builder()
+                        .recipe(recipe)
+                        .writer(savedUser)
+                        .sequence(1L)
+                        .closed(false)
+                        .imgUrl("")
+                        .content(new ArrayList<>())
+                        .name("test step")
+                        .build());
+
+        StepCreationDTO dto = dtoBuilder.previousStepId(oldStep.getId()).build();
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + oldStep.getId(),
+                HttpMethod.PUT,
+                dto,
+                stepType());
+
+        Step oldStepAfterRequest = stepRepository.findById(oldStep.getId()).get();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(oldStep).isEqualToIgnoringGivenFields(oldStepAfterRequest, "ingredients", "offers");
+        assertThat(oldStep.isClosed()).isFalse();
+    }
+
+
     @Override
     @After
     public void tearDown() throws Exception {
+        stepOfferRepository.deleteAll();
         stepRepository.deleteAll();
         recipeRepository.deleteAll();
         super.tearDown();
+    }
+
+    private ParameterizedTypeReference<RestResponse<Step>> stepType() {
+        return new ParameterizedTypeReference<RestResponse<Step>>() {
+        };
     }
 }
