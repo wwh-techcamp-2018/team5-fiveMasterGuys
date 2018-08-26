@@ -36,6 +36,7 @@ public class StepOfferService implements StepService {
 
     @Override
     public StepOffer modify(User user, long targetId, StepCreationDTO dto, Recipe recipe) {
-        return null;
+        Step targetStep = stepRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
+        return stepOfferRepository.save(StepOffer.from(user, dto, recipe, targetStep, OfferType.MODIFY));
     }
 }
