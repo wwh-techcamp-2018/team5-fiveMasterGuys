@@ -46,8 +46,16 @@ public abstract class AcceptanceTest {
     private UserRepository userRepository;
 
     protected MockMvc mvc;
+
+    protected final String DEFAULT_RECIPE_OWNER_EMAIL = "IamRecipeOwner@recipehub.com";
+    protected final String DEFAULT_RECIPE_OWNER_PASSWORD = "password4321@";
+
     protected final String DEFAULT_USER_EMAIL = "WeAreTheBestTeam@recipehub.com";
     protected final String DEFAULT_USER_PASSWORD = "password1234!";
+
+    protected User basicAuthRecipeOwner;
+    protected User savedRecipeOwner;
+
     protected User basicAuthUser;
     protected User savedUser;
 
@@ -57,8 +65,15 @@ public abstract class AcceptanceTest {
                 .email(DEFAULT_USER_EMAIL)
                 .password(new BCryptPasswordEncoder().encode(DEFAULT_USER_PASSWORD))
                 .name("Team5");
+        User.UserBuilder recipeOwnerBuilder = User.builder()
+                .email(DEFAULT_RECIPE_OWNER_EMAIL)
+                .password(new BCryptPasswordEncoder().encode(DEFAULT_RECIPE_OWNER_PASSWORD))
+                .name("Recipe Owner");
+
+        savedRecipeOwner = userRepository.save(recipeOwnerBuilder.build());
         savedUser = userRepository.save(userBuilder.build());
 
+        basicAuthRecipeOwner = recipeOwnerBuilder.password(DEFAULT_RECIPE_OWNER_PASSWORD).build();
         basicAuthUser = userBuilder.password(DEFAULT_USER_PASSWORD).build();
 
         mvc = MockMvcBuilders
@@ -102,6 +117,10 @@ public abstract class AcceptanceTest {
 
     protected <R> ResponseEntity<RestResponse<R>> requestJson(String path, HttpMethod method, ParameterizedTypeReference<RestResponse<R>> typeRef) {
         return requestJson(path, method, null, null, typeRef);
+    }
+
+    protected <R> ResponseEntity<RestResponse<R>> requestJson(String path, HttpMethod method, User user, ParameterizedTypeReference<RestResponse<R>> typeRef) {
+        return requestJson(path, method, null, user, typeRef);
     }
 
     protected <T, R> ResponseEntity<RestResponse<List<R>>> requestJsonList(String path, HttpMethod method, T dto, User user, ParameterizedTypeReference<RestResponse<List<R>>> typeref) {
