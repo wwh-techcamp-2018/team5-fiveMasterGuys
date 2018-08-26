@@ -43,9 +43,7 @@ public class RecipeResponseDTO {
     public static RecipeResponseDTO from(Recipe recipe) {
         Stream<Step> stepStream = recipe.getRecipeSteps().stream();
 
-        if (recipe.isCompleted()) {
-            stepStream = stepStream.filter(step -> !step.isClosed());
-        }
+        stepStream = stepStream.filter(step -> !step.isClosed());
 
         return RecipeResponseDTO.builder()
                 .name(recipe.getName())

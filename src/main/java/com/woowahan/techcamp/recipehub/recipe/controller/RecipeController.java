@@ -4,7 +4,7 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import com.woowahan.techcamp.recipehub.user.domain.User;
@@ -55,7 +55,7 @@ public class RecipeController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.MOVED_PERMANENTLY)
     @AuthRequired
-    public String create(User owner, @Valid RecipeCreationDTO dto) {
+    public String create(User owner, @Valid RecipeDTO dto) {
         Recipe recipe = recipeService.create(owner, dto);
         return "redirect:/recipes/" + recipe.getId();
     }

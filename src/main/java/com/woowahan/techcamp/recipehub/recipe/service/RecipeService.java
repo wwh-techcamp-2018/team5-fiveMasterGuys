@@ -4,7 +4,7 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
-import com.woowahan.techcamp.recipehub.recipe.dto.RecipeCreationDTO;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
 import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
@@ -28,7 +28,7 @@ public class RecipeService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Recipe create(User owner, RecipeCreationDTO dto) {
+    public Recipe create(User owner, RecipeDTO dto) {
         Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(BadRequestException::new);
         return recipeRepository.save(dto.toEntity(owner, category));
     }

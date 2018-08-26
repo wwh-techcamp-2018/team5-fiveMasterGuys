@@ -192,3 +192,7 @@
 .step-article-container {
     overflow: hidden;
 }
+.btn-step-modify {
+    margin: 10px;
+    cursor: pointer;
+}

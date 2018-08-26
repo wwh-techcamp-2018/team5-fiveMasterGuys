@@ -7,29 +7,42 @@ class Templates {
             <i class="fas fa-utensils fa-2x"></i>
                 Step ${data.sequence}
             </h2>
-            <article class="box">
-                <div class="columns">
-                    <div class="column is-one-third">
-                        <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
-                    </div>
-                    <div class="column step-article-container">
-                        <p class="subtitle one-line-ellipsis">${data.name}</p>
-                        <div class="step-contents-container">
-                            <ol class="step-contents">
-                                ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="speech-bubble-triangle"></div>
-                    <span>${data.writer.name}</span>
-                </div>
-            </article>
+            ${this.templateStepBox(data)}
             <button class="btn-step-add" data-step-id="${data.id}">
                 <i class="fas fa-plus-circle fa-4x"> Step 추가 제안하기</i>
             </button>
         </div>
+        `;
+    }
+
+    static templateStepBox(data) {
+        return `
+        <article class="box" data-step-id="${data.id}">
+            <div class="columns">
+                <div class="column is-one-third">
+                    <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
+                </div>
+                <div class="column step-article-container">
+                    <p class="subtitle one-line-ellipsis">${data.name}</p>
+                    <div class="step-contents-container">
+                        <ol class="step-contents">
+                            ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
+                        </ol>
+                    </div>
+                </div>
+                <div class="column is-one-fifth">
+                    <div class="is-clearfix">
+                        <div class="btn-step-modify icon is-pulled-right fa-2x"><i class="fas fa-edit"></i></div>
+                    </div>
+                    <div class="ingredient"></div>
+                </div>
+            </div>
+            <div>
+                <div class="speech-bubble-triangle"></div>
+                <div></div>
+                <span>${data.writer.name}</span>
+            </div>
+        </article>
         `;
     }
 
@@ -71,7 +84,7 @@ class Templates {
         `
     }
 
-    static templateStepForm(targetStepId) {
+    static templateStepForm(targetStepId, type) {
         return `
         <article class="box" data-step-id=${targetStepId}>
             <div class="columns">
@@ -89,8 +102,8 @@ class Templates {
                 </div>
             </div>
             <div class="buttons is-right">
-                <button class="btn-confirm button is-primary">추가</button>
-                <button class="btn-cancel button is-danger">취소</button>
+                <button class="btn-${type}-confirm button is-primary">${type === 'add' ? '추가' : '수정'}</button>
+                <button class="btn-${type}-cancel button is-danger">취소</button>
             </div>
         </article>
         `;
