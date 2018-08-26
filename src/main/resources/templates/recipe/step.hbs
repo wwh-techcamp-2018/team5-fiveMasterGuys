@@ -5,8 +5,10 @@
         {{> recipe/stepBox}}
     {{/unless}}
 
+    {{#if isIncomplete}}
     {{#if offers}}
-        {{> recipe/stepOffer}}
+    {{> recipe/stepOffer}}
+    {{/if}}
     {{/if}}
 
     {{#if btn}}

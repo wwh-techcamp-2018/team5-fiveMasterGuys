@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.controller;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
+import com.woowahan.techcamp.recipehub.common.security.SessionUtils;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -41,9 +43,16 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String get(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model, HttpSession session) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
+
+        SessionUtils.getUserFromSession(session)
+                .ifPresent(user -> {
+                    if (recipe.isOwner(user) && !recipe.isCompleted()) {
+                        model.addAttribute("authorizedUser", true);
+                    }
+                });
 
         if (!recipe.isCompleted()) {
             model.addAttribute(FIRST_OFFERS, recipeService.findNullTargetStepOffersByRecipe(recipe));
