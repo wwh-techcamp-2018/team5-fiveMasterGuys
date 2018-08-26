@@ -1,7 +1,8 @@
 package com.woowahan.techcamp.recipehub.common.support;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.common.exception.ResourceExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -9,15 +10,16 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
-@RestControllerAdvice
+@Slf4j
+@RestControllerAdvice(annotations = RestController.class)
 public class APIControllerAdvice {
-    private static final Logger log = LoggerFactory.getLogger(APIControllerAdvice.class);
 
     @Resource(name = "messageSourceAccessor")
     private MessageSourceAccessor messageSourceAccessor;
@@ -33,6 +35,15 @@ public class APIControllerAdvice {
             errorResponseBuilder.appendError(fieldError.getField(), getErrorMessage(fieldError));
         }
         return errorResponseBuilder.build();
+    }
+
+    @ExceptionHandler(ResourceExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RestResponse<?> handleResourceExistsException(BadRequestException exception) {
+        RestResponse.ErrorResponseBuilder errorResponseBuilder = RestResponse.error();
+        errorResponseBuilder.appendError(exception.getMessage());
+        return errorResponseBuilder.build();
+
     }
 
     private String getErrorMessage(FieldError fieldError) {

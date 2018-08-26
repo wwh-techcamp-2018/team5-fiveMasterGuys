@@ -48,8 +48,8 @@ class Signup {
                 onSuccess: () => {
                     location.href = document.referrer;
                 },
-                onFailed: () => {
-                    this.errorBox.innerText = '입력 값을 다시 확인해주세요.';
+                onFailed: ({json}) => {
+                    this.errorBox.innerText = json.message;
                 },
                 onError: () => {
                     this.errorBox.innerText = '요청 중 문제가 발생하였습네다. 다시 요청해주세요.';

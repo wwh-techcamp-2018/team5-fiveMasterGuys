@@ -1,6 +1,6 @@
 package com.woowahan.techcamp.recipehub.user.service;
 
-import com.woowahan.techcamp.recipehub.common.exception.ConflictException;
+import com.woowahan.techcamp.recipehub.common.exception.ResourceExistsException;
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import com.woowahan.techcamp.recipehub.user.dto.LoginDTO;
@@ -20,7 +20,7 @@ public class UserService {
 
     public User create(SignupDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
-            throw new ConflictException();
+            throw new ResourceExistsException("이미 존재하는 아이디 입니다.");
         }
         return userRepository.save(dto.toEntity(passwordEncoder));
     }
