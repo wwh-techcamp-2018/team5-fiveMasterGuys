@@ -76,7 +76,7 @@ class StepManager {
 
     copyValuesToForm(stepBox, stepForm) {
         const stepItemList = stepForm.querySelector('ol.step-contents');
-        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li'));
+        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
         
         removeElement(stepItemList.firstElementChild);

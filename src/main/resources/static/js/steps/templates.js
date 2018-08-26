@@ -22,11 +22,11 @@ class Templates {
                 <div class="column is-one-third">
                     <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
                 </div>
-                <div class="column">
+                <div class="column step-article-container">
                     <p class="subtitle one-line-ellipsis">${data.name}</p>
                     <div class="step-contents-container">
                         <ol class="step-contents">
-                            ${data.content.map((e) => (`<li>${e}</li>`)).join('\n')}
+                            ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
                         </ol>
                     </div>
                 </div>
