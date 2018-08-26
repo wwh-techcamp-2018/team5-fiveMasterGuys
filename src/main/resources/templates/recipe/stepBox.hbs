@@ -1,4 +1,4 @@
-<article class="box{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
+<article class="box{{#if isOffer}} hidden{{/if}}" data-step-id="{{id}}">
     <div class="columns">
         <div class="column is-one-third">
             {{#if imgUrl}}
@@ -30,5 +30,8 @@
     <div>
         <div class="speech-bubble-triangle"></div>
         <span>{{writer.name}}</span>
+        {{#if isOffer}}
+            {{#if authorizedUser}}<button class="btn-approve button is-success">승인</button>{{/if}}
+        {{/if}}
     </div>
 </article>

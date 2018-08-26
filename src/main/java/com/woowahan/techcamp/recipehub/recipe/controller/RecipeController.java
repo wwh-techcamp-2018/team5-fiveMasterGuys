@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.controller;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.security.AuthRequired;
+import com.woowahan.techcamp.recipehub.common.security.SessionUtils;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,8 +25,10 @@ public class RecipeController {
     private static final String RECIPE_CREATE = "recipe/create";
     private static final String RECIPE_COMPLETED = "recipe/completed";
     private static final String RECIPE_INCOMPLETED = "recipe/incompleted";
+
     private static final String RECIPE_KEY = "recipe";
     private static final String FIRST_OFFERS = "firstOffers";
+    private static final String AUTHORIZED_USER = "authorizedUser";
 
     @Autowired
     private RecipeService recipeService;
@@ -41,12 +45,17 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String get(@PathVariable Long id, Model model) {
+    public String get(@PathVariable Long id, Model model, HttpSession session) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
 
         if (!recipe.isCompleted()) {
             model.addAttribute(FIRST_OFFERS, recipeService.findNullTargetStepOffersByRecipe(recipe));
+        }
+
+        if (SessionUtils.isLoggedIn(session)) {
+            model.addAttribute(AUTHORIZED_USER,
+                    recipe.isOwner(SessionUtils.getUserFromSession(session).get()));
         }
 
         return recipe.isCompleted() ? RECIPE_COMPLETED : RECIPE_INCOMPLETED;

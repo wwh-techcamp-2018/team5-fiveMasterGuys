@@ -48,30 +48,32 @@ class Templates {
 
     static templateStepOffer(data) {
         return `
-            <a class="hero is-info step-offer-title-bar">
-                <h3 class="title">${data.name}
-                    <span class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></span>
-                </h3>
-            </a>
-            <article class="box step-offer-content hidden">
-                <div class="columns">
-                    <div class="column is-one-third">
-                        <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
-                    </div>
-                    <div class="column step-article-container">
-                        <p class="subtitle one-line-ellipsis">${data.name}</p>
-                        <div class="step-contents-container">
-                            <ol class="step-contents">
-                                ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
-                            </ol>
+            <div class="step-offer" data-offer-id=${data.id}>
+                <a class="hero is-info step-offer-title-bar">
+                    <h3 class="title">${data.name}
+                        <span class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></span>
+                    </h3>
+                </a>
+                <article class="box step-offer-content hidden">
+                    <div class="columns">
+                        <div class="column is-one-third">
+                            <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
+                        </div>
+                        <div class="column step-article-container">
+                            <p class="subtitle one-line-ellipsis">${data.name}</p>
+                            <div class="step-contents-container">
+                                <ol class="step-contents">
+                                    ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
+                                </ol>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <div class="speech-bubble-triangle"></div>
-                    <span>${data.writer.name}</span>
-                </div>
-            </article>
+                    <div>
+                        <div class="speech-bubble-triangle"></div>
+                        <span>${data.writer.name}</span>
+                    </div>
+                </article>
+            </div>
         `;
     }
 
