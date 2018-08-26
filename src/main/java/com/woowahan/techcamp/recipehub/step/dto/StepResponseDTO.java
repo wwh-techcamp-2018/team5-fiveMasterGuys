@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class StepResponseDTO {
     private Long sequence;
     private boolean closed;
 
-    private List<StepOffer> offers;
+    private List<StepResponseDTO> offers;
     private Step target;
     private OfferType offerType;
     private boolean rejected;
@@ -40,7 +41,7 @@ public class StepResponseDTO {
     @Builder
     public StepResponseDTO(Long id, Recipe recipe, String name, List<String> content,
                            User writer, String imgUrl, List<Ingredient> ingredients, Long sequence,
-                           boolean closed, List<StepOffer> offers, Step target, OfferType offerType, boolean rejected) {
+                           boolean closed, List<StepResponseDTO> offers, Step target, OfferType offerType, boolean rejected) {
         this.id = id;
         this.recipe = recipe;
         this.name = name;
@@ -61,7 +62,8 @@ public class StepResponseDTO {
     }
 
     private static StepResponseDTO fromStep(Step step) {
-        return StepResponseDTO.builder()
+        List<StepOffer> offers = step.getOffers();
+        StepResponseDTOBuilder builder = StepResponseDTO.builder()
                 .id(step.getId())
                 .name(step.getName())
                 .closed(step.isClosed())
@@ -70,9 +72,13 @@ public class StepResponseDTO {
                 .ingredients(step.getIngredients())
                 .sequence(step.getSequence())
                 .writer(step.getWriter())
-                .recipe(step.getRecipe())
-                .offers(step.getOffers())
-                .build();
+                .recipe(step.getRecipe());
+
+        if (offers != null) {
+            builder.offers(offers.stream().map(StepResponseDTO::from).collect(Collectors.toList()));
+        }
+
+        return builder.build();
     }
 
     private static StepResponseDTO fromStepOffer(StepOffer offer) {
@@ -104,6 +110,10 @@ public class StepResponseDTO {
                 Objects.equals(imgUrl, that.imgUrl) &&
                 Objects.equals(ingredients, that.ingredients) &&
                 Objects.equals(sequence, that.sequence);
+    }
+
+    public String getOfferType() {
+        return offerType.toString();
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -75,7 +76,7 @@ public class StepResponseDTOTest {
         assertAbstractRecipeStepDtoEqualToRecipe(stepResponseDTO, recipeStep);
 
         assertThat(stepResponseDTO.getSequence()).isEqualTo(recipeStep.getSequence());
-        assertThat(stepResponseDTO.getOffers()).isEqualTo(recipeStep.getOffers());
+        assertThat(stepResponseDTO.getOffers()).isEqualTo(recipeStep.getOffers().stream().map(StepResponseDTO::from).collect(Collectors.toList()));
         assertThat(stepResponseDTO.isClosed()).isEqualTo(recipeStep.isClosed());
 
     }
