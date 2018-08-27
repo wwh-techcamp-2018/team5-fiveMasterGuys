@@ -19,8 +19,11 @@
         </div>
     </div>
     <div class="column is-one-fifth">
-        {{#eq writer user}}
-            {{#eq recipe.owner user}}
+        {{#eq recipe.owner user}}
+            {{#eq offerType "APPEND"}}
+            <button class="btn-approve button is-success">승인</button>
+            {{/eq}}
+            {{#eq writer user}}
                 <div class="is-clearfix">
                     <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
                         <i class="fas fa-edit fa-2x"></i>

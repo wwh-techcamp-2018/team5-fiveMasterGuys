@@ -24,8 +24,10 @@ import java.util.List;
 public class RecipeController {
     private static final String TEMPLATE_RECIPE_CREATE = "recipe/create";
     private static final String TEMPLATE_RECIPE_DETAIL = "recipe/recipe";
+
     private static final String RECIPE_KEY = "recipe";
     private static final String FIRST_OFFERS = "firstOffers";
+    private static final String AUTHORIZED_USER = "authorizedUser";
 
     @Autowired
     private RecipeService recipeService;
@@ -50,7 +52,7 @@ public class RecipeController {
         SessionUtils.getUserFromSession(session)
                 .ifPresent(user -> {
                     if (recipe.isOwner(user) && !recipe.isCompleted()) {
-                        model.addAttribute("authorizedUser", true);
+                        model.addAttribute(AUTHORIZED_USER, true);
                     }
                 });
 

@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.step.service;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
+import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
 import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
@@ -46,10 +47,40 @@ public class StepOwnerService implements StepService {
         return modifiedStep;
     }
 
+    @Override
+    @Transactional
+    public Step approve(Recipe recipe, Long offerId, User user) {
+        StepOffer offer = stepOfferRepository.findById(offerId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Long sequence = getSequenceFromOffer(offer);
+        stepRepository.increaseSequenceGte(recipe, sequence);
+
+        rejectOffersByTarget(offer.getTarget(), recipe);
+        stepOfferRepository.approveStepOffer(offer.getId(), sequence);
+
+        return stepRepository.findById(offer.getId())
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
     private Long getNextSequence(StepCreationDTO dto) {
         return dto.getTargetStepId() == null
                 ? 1
                 : findById(dto.getTargetStepId()).getSequence() + 1;
+    }
+
+    private Long getSequenceFromOffer(StepOffer stepOffer) {
+        return stepOffer.getTarget() == null
+                ? 1L
+                : stepOffer.getTarget().getSequence() + 1L;
+    }
+
+    private void rejectOffersByTarget(Step target, Recipe recipe) {
+        if (target == null) {
+            stepOfferRepository.rejectAllOffersByNullTarget(recipe);
+        }
+
+        stepOfferRepository.rejectAllOffersByTarget(target, recipe);
     }
 
     private Step findById(Long id) {

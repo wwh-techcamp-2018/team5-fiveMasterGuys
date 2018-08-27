@@ -2,11 +2,15 @@
     <h2 class="step-offer-title is-size-2"><i class="fas fa-bong"></i> Step Offers</h2>
     {{#offers}}
         {{#eq offerType "APPEND"}}
-            <a class="hero is-info step-offer-title-bar">
-                <h3 class="title">{{name}} <span
-                        class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></h3>
-            </a>
-            {{> recipe/stepOfferBox completed=true}}
+            {{#unless rejected}}
+            <div class="step-offer" data-offer-id="{{id}}">
+                <a class="hero is-info step-offer-title-bar">
+                    <h3 class="title">{{name}} <span
+                            class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></h3>
+                </a>
+                {{> recipe/stepOfferBox completed=true}}
+            </div>
+            {{/unless}}
         {{/eq}}
     {{/offers}}
 </div>
