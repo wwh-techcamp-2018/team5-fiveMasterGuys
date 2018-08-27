@@ -10,7 +10,7 @@ function setUserLogout() {
         url: '/api/users/logout',
         method: 'POST',
         onSuccess: () => {
-            location.href = '/';
+            location.reload();
         },
         onFailed: () => {},
         onError: () => {}
