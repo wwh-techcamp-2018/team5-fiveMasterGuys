@@ -88,7 +88,7 @@ public class StepResponseDTOTest {
 
         assertAbstractRecipeStepDtoEqualToRecipe(stepResponseDTO, offer);
         assertThat(stepResponseDTO.isRejected()).isEqualTo(offer.isRejected());
-        assertThat(stepResponseDTO.getOfferType()).isEqualTo(offer.getOfferType());
+        assertThat(stepResponseDTO.getOfferType()).isEqualTo(offer.getOfferType().toString());
         assertThat(stepResponseDTO.getTarget()).isEqualTo(offer.getTarget());
     }
 
