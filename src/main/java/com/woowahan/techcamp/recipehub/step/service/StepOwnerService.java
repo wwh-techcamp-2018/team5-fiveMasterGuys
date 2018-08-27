@@ -47,8 +47,9 @@ public class StepOwnerService implements StepService {
         return modifiedStep;
     }
 
+    @Override
     @Transactional
-    public Step approveAppendOffer(Recipe recipe, Long offerId, User user) {
+    public Step approve(Recipe recipe, Long offerId, User user) {
         StepOffer offer = stepOfferRepository.findById(offerId)
                 .orElseThrow(EntityNotFoundException::new);
 

@@ -77,7 +77,7 @@ public class StepRestController {
         }
 
         return RestResponse.success(
-                ownerService.approveAppendOffer(recipe, offerId, user)
+                provider.getService(recipe, user).approve(recipe, offerId, user)
         );
     }
 }

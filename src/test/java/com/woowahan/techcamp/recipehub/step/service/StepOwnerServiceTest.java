@@ -153,7 +153,7 @@ public class StepOwnerServiceTest {
         when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
         when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approvedStep));
 
-        Step resultStep = service.approveAppendOffer(recipe, offer.getId(), owner);
+        Step resultStep = service.approve(recipe, offer.getId(), owner);
         assertThat(resultStep.getId()).isEqualTo(offer.getId());
         assertThat(resultStep.getRecipe()).isEqualTo(offer.getRecipe());
         assertThat(resultStep.getSequence()).isEqualTo(firstSequence);
@@ -183,7 +183,7 @@ public class StepOwnerServiceTest {
         when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
         when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approvedStep));
 
-        Step resultStep = service.approveAppendOffer(recipe, offer.getId(), owner);
+        Step resultStep = service.approve(recipe, offer.getId(), owner);
         assertThat(resultStep.getId()).isEqualTo(offer.getId());
         assertThat(resultStep.getRecipe()).isEqualTo(offer.getRecipe());
         assertThat(resultStep.getSequence()).isEqualTo(target.getSequence() + 1L);
