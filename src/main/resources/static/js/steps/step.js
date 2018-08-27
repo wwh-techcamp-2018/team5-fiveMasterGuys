@@ -13,6 +13,7 @@ class StepManager {
             'btn-modify-confirm': this.handleModifyFormConfirmButtonClick,
             'btn-modify-cancel': this.handleModifyFormCancelButtonClick,
             'btn-step-modify': this.showModifyStepForm,
+            'btn-approve': this.handleApproveButtonClick,
             'step-offer-title-bar': this.toggleStepOfferContent,
         };
         this.registerEvents();
@@ -68,7 +69,7 @@ class StepManager {
         checkLoginOrRedirect();
         const stepBox = target.closest('.box');
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
-        
+
         const stepForm = stepBox.previousElementSibling;
         this.copyValuesToForm(stepBox, stepForm);
         toggleHidden(stepBox);
@@ -78,7 +79,7 @@ class StepManager {
         const stepItemList = stepForm.querySelector('ol.step-contents');
         const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
-        
+
         removeElement(stepItemList.firstElementChild);
         stepItems.forEach((item) => {
             stepItemList.insertAdjacentHTML('beforeend', Templates.templateStepContentListItem(item));
@@ -160,6 +161,28 @@ class StepManager {
         removeElement(stepForm);
     }
 
+    handleApproveButtonClick(target) {
+            const stepOffer = target.closest('.step-offer');
+            this.requestStepApproval(stepOffer)
+                .then((data) => {
+
+                    console.log(data);
+
+                    removeElement(stepOffer);
+                })
+                .catch((status) => {
+                    if (typeof status === 'undefined') {
+                        alert('네트워크 오류 발생함');
+                        return;
+                    }
+                    if (status === 401) {
+                        location.href = '/users/login';
+                        return;
+                    }
+                    console.log(status);
+                });
+        }
+
     toggleStepOfferContent(target) {
         toggleHidden(target.nextElementSibling);
     }
@@ -180,18 +203,8 @@ class StepManager {
                 onError: () => {
                     reject();
                 }
-            })
+            });
         });
-    }
-
-    renderStep(stepForm, data) {
-        if (data.offerType === 'APPEND') {
-            const targetStepId = stepForm.getAttribute('data-step-id');
-            this.createStepOfferContainer(targetStepId, data);
-            this.createStepOffer(targetStepId, data);
-        } else {
-            this.addStepWithOwner(stepForm, data);
-        }
     }
 
     requestStepModification(requestBody) {
@@ -212,6 +225,38 @@ class StepManager {
                 }
             })
         });
+    }
+
+    requestStepApproval(stepOffer) {
+        const recipeId = this.recipe.getAttribute('data-recipe-id');
+        const offerId = stepOffer.getAttribute('data-offer-id');
+
+        return new Promise((resolve, reject) => {
+            fetchManager({
+                url: `/api/recipes/${recipeId}/steps/${offerId}/approve`,
+                headers: {"Content-Type": "application/json"},
+                method: 'GET',
+                onSuccess: ({json}) => {
+                    resolve(json.data);
+                },
+                onFailed: ({status}) => {
+                    reject(status);
+                },
+                onError: () => {
+                    reject();
+                }
+            });
+        });
+    }
+
+    renderStep(stepForm, data) {
+        if (data.offerType === 'APPEND') {
+            const targetStepId = stepForm.getAttribute('data-step-id');
+            this.createStepOfferContainer(targetStepId, data);
+            this.createStepOffer(targetStepId, data);
+        } else {
+            this.addStepWithOwner(stepForm, data);
+        }
     }
 
     addStepWithOwner(stepForm, data) {
