@@ -74,6 +74,28 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    public void getStep() throws Exception {
+        Step savedStep = stepRepository.save(
+                Step.builder()
+                        .recipe(recipe)
+                        .writer(savedUser)
+                        .sequence(1L)
+                        .closed(false)
+                        .imgUrl("")
+                        .content(new ArrayList<>())
+                        .name("test step")
+                        .build());
+
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + savedStep.getId(), HttpMethod.GET, absStepType());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(response.getBody().getData().getId()).isEqualTo(savedStep.getId());
+        assertThat(response.getBody().getData().getWriter()).isEqualTo(savedStep.getWriter());
+        assertThat(response.getBody().getData().getName()).isEqualTo(savedStep.getName());
+    }
+
+    @Test
     public void hideWriterPassword() {
         StepCreationDTO dto = dtoBuilder.build();
         ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
@@ -209,6 +231,11 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     }
 
     private ParameterizedTypeReference<RestResponse<Step>> stepType() {
+        return new ParameterizedTypeReference<RestResponse<Step>>() {
+        };
+    }
+
+    private ParameterizedTypeReference<RestResponse<Step>> absStepType() {
         return new ParameterizedTypeReference<RestResponse<Step>>() {
         };
     }

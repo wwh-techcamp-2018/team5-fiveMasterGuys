@@ -6,12 +6,15 @@ import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import com.woowahan.techcamp.recipehub.step.domain.AbstractStep;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
+import com.woowahan.techcamp.recipehub.step.dto.StepResponseDTO;
+import com.woowahan.techcamp.recipehub.step.repository.AbstractStepRepository;
 import com.woowahan.techcamp.recipehub.step.service.StepServiceProvider;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 @RestController
@@ -21,8 +24,17 @@ public class StepRestController {
     private StepServiceProvider provider;
 
     @Autowired
+    private AbstractStepRepository abstractStepRepository;
+
+    @Autowired
     private RecipeService recipeService;
 
+    @GetMapping("/{stepId}")
+    @ResponseStatus(HttpStatus.OK)
+    public RestResponse<StepResponseDTO> get(@PathVariable("recipeId") long recipeId, @PathVariable("stepId") long stepId) {
+        AbstractStep step = abstractStepRepository.findById(stepId).orElseThrow(EntityNotFoundException::new);
+        return RestResponse.success(StepResponseDTO.from(step));
+    }
 
     @AuthRequired
     @PostMapping
