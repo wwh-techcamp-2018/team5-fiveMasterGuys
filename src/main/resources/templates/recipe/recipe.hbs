@@ -29,6 +29,11 @@
             {{/recipeSteps}}
 
         </div>
+        {{#if authorizedUser}}
+        <div class="container has-text-centered">
+            <button class="button is-primary is-large btn-recipe-complete" id="btn-recipe-complete">레시피 완성하기</button>
+        </div>
+        {{/if}}
     </div>
     {{/recipe}}
 {{/partial}}

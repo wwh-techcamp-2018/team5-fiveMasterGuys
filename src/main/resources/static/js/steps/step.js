@@ -16,6 +16,7 @@ class StepManager {
             'btn-modify-offer-cancel': this.handleModifyFormCancelButtonClick,
             'btn-step-modify': this.showModifyStepForm,
             'step-offer-title-bar': this.toggleStepOfferContent,
+            'btn-recipe-complete': this.completeRecipe,
             'offer': this.showModifyOfferStepForm,
         };
         this.registerEvents();
@@ -353,6 +354,16 @@ class StepManager {
 
     getStepItemTexts(itemElements) {
         return [...itemElements].map(contentElement => contentElement.innerText);
+    }
+
+    completeRecipe(target) {
+        fetchManager({
+            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/complete`,
+            method: 'POST',
+            onSuccess: () => {
+                location.reload();
+            }
+        })
     }
 
     renderStepInnerBefore(target, data) {

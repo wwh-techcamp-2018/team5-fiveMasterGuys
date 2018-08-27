@@ -248,6 +248,18 @@
     position: absolute;
 }
 
+.btn-step-modify {
+    margin: 10px;
+    cursor: pointer;
+}
+
+#btn-recipe-complete {
+    right: 50px;
+    bottom: 50px;
+    position: fixed;
+    border-radius: 10px;
+}
+
 .contributor.offer {
     background: #d0ba43;
 }

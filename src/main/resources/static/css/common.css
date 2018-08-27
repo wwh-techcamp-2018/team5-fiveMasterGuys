@@ -12,23 +12,7 @@
     text-overflow: ellipsis;
 }
 
-figure.image.is-4by3 {
-    width: 400px;
-    height: 400px;
-    overflow: hidden;
-    margin: 10px;
-    position: relative;
-}
-
-figure.image.is-4by3 > img {
-    /*border: solid #D9D9D9 1px;*/
-    position: absolute;
-    margin: auto;
-    min-height: 100%;
-    min-width: 100%;
-
-    left: -100%;
-    right: -100%;
-    top: -100%;
-    bottom: -100%;
+img {
+    object-fit: cover;
+    border: solid #D9D9D9 1px;
 }
