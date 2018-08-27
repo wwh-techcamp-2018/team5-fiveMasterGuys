@@ -3,6 +3,8 @@ REPOSITORY=/home/ec2-user/app/travis
 
 . /home/ec2-user/.bash_profile
 
+echo "current profile : $SERVER_PROFILE"
+
 echo "> Checking exist process id ..."
 CURRENT_PID=$(pgrep -f recipehub)
 
