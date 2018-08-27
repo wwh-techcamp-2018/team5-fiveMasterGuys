@@ -29,8 +29,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class StepRestAcceptanceTest extends AcceptanceTest {
+
     @Autowired
     private RecipeRepository recipeRepository;
 
@@ -43,27 +43,66 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     @Autowired
     private StepOfferRepository stepOfferRepository;
 
+    private Step firstStep;
+    private StepOffer stepAppendOffer;
     private Recipe recipe;
-    private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
+
+    private StepCreationDTO.StepCreationDTOBuilder creationDtoBuilder;
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        recipe = recipeRepository.save(Recipe.builder().name("a recipe").owner(savedUser).build());
-        dtoBuilder = StepCreationDTO.builder()
-                .name("recipe-step1")
-                .content(Arrays.asList("a", "b"))
+
+        recipe = recipeRepository.save(Recipe.builder()
+                .name("a recipe")
+                .owner(savedRecipeOwner)
                 .imgUrl("/static/img/image.jpg")
+                .recipeSteps(null)
+                .category(null)
+                .completed(false)
+                .build());
+
+        firstStep = stepRepository.save(Step.builder()
+                .name("recipe-step1")
+                .writer(savedRecipeOwner)
+                .content(Arrays.asList("First", "Step"))
+                .imgUrl("/static/img/image.jpg")
+                .offers(null)
+                .recipe(recipe)
+                .sequence(1L)
+                .closed(false)
                 .ingredients(null)
-                .targetStepId(null);
+                .build());
+
+        stepAppendOffer = stepOfferRepository.save(StepOffer.builder()
+                .name("recipe-step1-offer")
+                .writer(savedUser)
+                .content(Arrays.asList("Step", "Append", "Offer"))
+                .imgUrl("/static/img/fixed-image.jpg")
+                .recipe(recipe)
+                .offerType(OfferType.APPEND)
+                .target(firstStep)
+                .rejected(false)
+                .ingredients(null)
+                .build());
+
+        creationDtoBuilder = StepCreationDTO.builder()
+                .name("recipe-step-builder")
+                .content(Arrays.asList("step", "builder"))
+                .imgUrl("/static/img/image.jpg")
+                .ingredients(null);
     }
 
     @Test
     public void createFirstStep() {
-        StepCreationDTO dto = dtoBuilder.build();
-        ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
-                dto, basicAuthUser, stepType());
+        StepCreationDTO dto = creationDtoBuilder.targetStepId(null).build();
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps",
+                HttpMethod.POST,
+                dto,
+                basicAuthRecipeOwner,
+                stepType());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -71,6 +110,81 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .isEqualToComparingOnlyGivenFields(dto, "name", "content", "ingredients", "imgUrl");
 
         assertThat(response.getBody().getData().getSequence()).isEqualTo(1L);
+    }
+
+    @Test
+    public void createNextStep() {
+        StepCreationDTO dto = creationDtoBuilder.targetStepId(firstStep.getId()).build();
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps",
+                HttpMethod.POST,
+                dto,
+                basicAuthRecipeOwner,
+                stepType());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+        assertThat(response.getBody().getData())
+                .isEqualToComparingOnlyGivenFields(dto, "name", "content", "ingredients", "imgUrl");
+
+        assertThat(response.getBody().getData().getSequence()).isEqualTo(firstStep.getSequence() + 1L);
+    }
+
+    @Test
+    public void approveStepAppendOffer() {
+        StepOffer otherOffer = stepOfferRepository.save(StepOffer.builder()
+                .name("recipe-step1-other-offer")
+                .writer(savedUser)
+                .content(Arrays.asList("Step", "Append", "Other", "Offer"))
+                .imgUrl("/static/img/fixed-image.jpg")
+                .recipe(recipe)
+                .offerType(OfferType.APPEND)
+                .target(firstStep)
+                .rejected(false)
+                .ingredients(null)
+                .build());
+
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + otherOffer.getId() + "/approve",
+                HttpMethod.GET,
+                basicAuthRecipeOwner,
+                stepType());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(stepOfferRepository.findById(stepAppendOffer.getId()).get().isRejected())
+                .isTrue();
+
+        assertThat(response.getBody().getData()).isInstanceOf(Step.class);
+        assertThat(response.getBody().getData().getId())
+                .isEqualTo(stepRepository.findById(otherOffer.getId()).get().getId());
+
+        assertThat(response.getBody().getData())
+                .isEqualToComparingOnlyGivenFields(otherOffer, "name", "writer", "content", "imgUrl");
+
+        assertThat(response.getBody().getData().getSequence()).isEqualTo(firstStep.getSequence() + 1L);
+        assertThat(response.getBody().getData().isClosed()).isFalse();
+    }
+
+    @Test
+    public void approveStepAppendOfferByNotOwner() {
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + stepAppendOffer.getId() + "/approve",
+                HttpMethod.GET,
+                basicAuthUser,
+                stepType());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    public void approveStepAppendOfferByNotLoginUser() {
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + stepAppendOffer.getId() + "/approve",
+                HttpMethod.GET,
+                stepType());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Test
@@ -87,7 +201,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                         .build());
 
         ResponseEntity<RestResponse<Step>> response = requestJson(
-                "/api/recipes/" + recipe.getId() + "/steps/" + savedStep.getId(), HttpMethod.GET, absStepType());
+                "/api/recipes/" + recipe.getId() + "/steps/" + savedStep.getId(), HttpMethod.GET, stepType());
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         assertThat(response.getBody().getData().getId()).isEqualTo(savedStep.getId());
@@ -97,46 +211,42 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void hideWriterPassword() {
-        StepCreationDTO dto = dtoBuilder.build();
-        ResponseEntity<RestResponse<Step>> response = requestJson("/api/recipes/" + recipe.getId() + "/steps", HttpMethod.POST,
-                dto, basicAuthUser, stepType());
+        StepCreationDTO dto = creationDtoBuilder.build();
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps",
+                HttpMethod.POST,
+                dto,
+                basicAuthRecipeOwner,
+                stepType());
 
         assertThat(response.getBody().getData().getWriter().getPassword()).isNull();
     }
 
     @Test
     public void modifyByOwner() {
+        StepCreationDTO dto = creationDtoBuilder.targetStepId(firstStep.getId()).build();
 
-        //given
-        Step oldStep = stepRepository.save(
-                Step.builder()
-                        .recipe(recipe)
-                        .writer(savedUser)
-                        .sequence(1L)
-                        .closed(false)
-                        .imgUrl("")
-                        .content(new ArrayList<>())
-                        .name("test step")
-                        .build());
-        StepCreationDTO dto = dtoBuilder.targetStepId(oldStep.getId()).build();
         StepOffer appendOffer = stepOfferRepository.save(
-                StepOffer.from(savedUser, dto, recipe, oldStep, OfferType.APPEND)
+                StepOffer.from(savedUser, dto, recipe, firstStep, OfferType.APPEND)
         );
+
         StepOffer modifyOffer = stepOfferRepository.save(
-                StepOffer.from(savedUser, dto, recipe, oldStep, OfferType.MODIFY)
+                StepOffer.from(savedUser, dto, recipe, firstStep, OfferType.MODIFY)
         );
 
         //when
         ResponseEntity<RestResponse<Step>> response = requestJson(
-                "/api/recipes/" + recipe.getId() + "/steps/" + oldStep.getId(),
+                "/api/recipes/" + recipe.getId() + "/steps/" + firstStep.getId(),
                 HttpMethod.PUT,
-                dto, basicAuthUser,
+                dto,
+                basicAuthRecipeOwner,
                 stepType());
 
         //then
         Step responseStep = response.getBody().getData();
         Step savedStep = stepRepository.findById(responseStep.getId()).get();
-        oldStep = stepRepository.findById(oldStep.getId()).get();
+
+        firstStep = stepRepository.findById(firstStep.getId()).get();
         appendOffer = stepOfferRepository.findById(appendOffer.getId()).get();
         modifyOffer = stepOfferRepository.findById(modifyOffer.getId()).get();
 
@@ -145,8 +255,8 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
         StepCreationDTOTest.assertDtoEqualToStep(dto, savedStep);
         assertThat(appendOffer.getTarget()).isEqualTo(savedStep);
         assertThat(savedStep.isClosed()).isFalse();
-        assertThat(modifyOffer.getTarget()).isEqualTo(oldStep);
-        assertThat(oldStep.isClosed()).isTrue();
+        assertThat(modifyOffer.getTarget()).isEqualTo(firstStep);
+        assertThat(firstStep.isClosed()).isTrue();
         assertThat(modifyOffer.isRejected()).isTrue();
     }
 
@@ -195,29 +305,18 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void modifyByNotLoginedUser() {
-        Step oldStep = stepRepository.save(
-                Step.builder()
-                        .recipe(recipe)
-                        .writer(savedUser)
-                        .sequence(1L)
-                        .closed(false)
-                        .imgUrl("")
-                        .content(new ArrayList<>())
-                        .name("test step")
-                        .build());
-
-        StepCreationDTO dto = dtoBuilder.targetStepId(oldStep.getId()).build();
+        StepCreationDTO dto = creationDtoBuilder.targetStepId(firstStep.getId()).build();
         ResponseEntity<RestResponse<Step>> response = requestJson(
-                "/api/recipes/" + recipe.getId() + "/steps/" + oldStep.getId(),
+                "/api/recipes/" + recipe.getId() + "/steps/" + firstStep.getId(),
                 HttpMethod.PUT,
                 dto,
                 stepType());
 
-        Step oldStepAfterRequest = stepRepository.findById(oldStep.getId()).get();
+        Step oldStepAfterRequest = stepRepository.findById(firstStep.getId()).get();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-        assertThat(oldStep).isEqualToIgnoringGivenFields(oldStepAfterRequest, "ingredients", "offers");
-        assertThat(oldStep.isClosed()).isFalse();
+        assertThat(firstStep).isEqualToIgnoringGivenFields(oldStepAfterRequest, "ingredients", "offers");
+        assertThat(firstStep.isClosed()).isFalse();
     }
 
 
@@ -231,11 +330,6 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     }
 
     private ParameterizedTypeReference<RestResponse<Step>> stepType() {
-        return new ParameterizedTypeReference<RestResponse<Step>>() {
-        };
-    }
-
-    private ParameterizedTypeReference<RestResponse<Step>> absStepType() {
         return new ParameterizedTypeReference<RestResponse<Step>>() {
         };
     }

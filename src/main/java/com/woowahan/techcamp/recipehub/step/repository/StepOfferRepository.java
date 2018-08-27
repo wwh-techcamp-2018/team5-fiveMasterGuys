@@ -12,13 +12,11 @@ import java.util.List;
 
 public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
 
-
     List<StepOffer> findAllByRecipeAndTargetIsNull(Recipe recipe);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StepOffer so SET so.target = :target WHERE so.target = :prevStep AND so.offerType = 'APPEND'")
     void changeAppendOffersTarget(@Param("prevStep") AbstractStep prevStep, @Param("target") AbstractStep target);
-
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StepOffer so SET so.rejected = true WHERE so.target = :target AND so.offerType = 'MODIFY'")
@@ -27,4 +25,21 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StepOffer so SET so.rejected = true WHERE so.recipe = :recipe")
     void rejectAllOffersByRecipe(@Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE StepOffer so SET so.rejected = true " +
+            "WHERE so.target IS NOT NULL AND so.target = :target AND so.recipe = :recipe")
+    void rejectAllOffersByTarget(@Param("target") AbstractStep target, @Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE StepOffer so SET so.rejected = true " +
+            "WHERE so.target IS NULL AND so.recipe = :recipe")
+    void rejectAllOffersByNullTarget(@Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE Step s " +
+            "SET s.TYPE = 'Step', s.CLOSED = false, s.SEQUENCE = :seq, s.TARGET_ID = NULL, s.OFFER_TYPE = NULL, s.REJECTED = NULL " +
+            "WHERE s.ID = :id",
+            nativeQuery = true)
+    void approveStepOffer(@Param("id") Long offerId, @Param("seq") Long sequence);
 }

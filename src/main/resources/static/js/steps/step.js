@@ -15,6 +15,7 @@ class StepManager {
             'btn-modify-offer-confirm': this.handleOfferModifyFormConfirmButtonClick,
             'btn-modify-offer-cancel': this.handleModifyFormCancelButtonClick,
             'btn-step-modify': this.showModifyStepForm,
+            'btn-approve': this.handleApproveButtonClick,
             'step-offer-title-bar': this.toggleStepOfferContent,
             'btn-recipe-complete': this.completeRecipe,
             'offer': this.showModifyOfferStepForm,
@@ -93,7 +94,7 @@ class StepManager {
         const stepItemList = stepForm.querySelector('ol.step-contents');
         const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
-        
+
         removeElement(stepItemList.firstElementChild);
         stepItems.forEach((item) => {
             stepItemList.insertAdjacentHTML('beforeend', Templates.templateStepContentListItem(item));
@@ -229,6 +230,25 @@ class StepManager {
         removeElement(stepForm);
     }
 
+    handleApproveButtonClick(target) {
+            const stepOffer = target.closest('.step-offer');
+            this.requestStepApproval(stepOffer)
+                .then((data) => {
+                   location.reload();
+                })
+                .catch((status) => {
+                    if (typeof status === 'undefined') {
+                        alert('네트워크 오류 발생함');
+                        return;
+                    }
+                    if (status === 401) {
+                        location.href = '/users/login';
+                        return;
+                    }
+                    console.error(status);
+                });
+        }
+
     toggleStepOfferContent(target) {
         toggleHidden(target.nextElementSibling);
     }
@@ -249,7 +269,7 @@ class StepManager {
                 onError: () => {
                     reject();
                 }
-            })
+            });
         });
     }
 
@@ -300,6 +320,38 @@ class StepManager {
                 }
             })
         });
+    }
+
+    requestStepApproval(stepOffer) {
+        const recipeId = this.recipe.getAttribute('data-recipe-id');
+        const offerId = stepOffer.getAttribute('data-offer-id');
+
+        return new Promise((resolve, reject) => {
+            fetchManager({
+                url: `/api/recipes/${recipeId}/steps/${offerId}/approve`,
+                headers: {"Content-Type": "application/json"},
+                method: 'GET',
+                onSuccess: ({json}) => {
+                    resolve(json.data);
+                },
+                onFailed: ({status}) => {
+                    reject(status);
+                },
+                onError: () => {
+                    reject();
+                }
+            });
+        });
+    }
+
+    renderStep(stepForm, data) {
+        if (data.offerType === 'APPEND') {
+            const targetStepId = stepForm.getAttribute('data-step-id');
+            this.createStepOfferContainer(targetStepId, data);
+            this.createStepOffer(targetStepId, data);
+        } else {
+            this.addStepWithOwner(stepForm, data);
+        }
     }
 
     addStepWithOwner(stepForm, data) {

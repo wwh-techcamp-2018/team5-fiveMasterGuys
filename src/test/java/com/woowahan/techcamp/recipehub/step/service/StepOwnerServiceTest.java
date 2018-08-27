@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.step.service;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
+import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTOTest;
 import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
@@ -131,5 +132,63 @@ public class StepOwnerServiceTest {
     public void modifyNotExistStep() {
         StepCreationDTO dto = dtoBuilder.targetStepId(1L).build();
         service.modify(owner, 1L, dto, recipe);
+    }
+
+    @Test
+    public void approveWithNullTarget() {
+        long firstSequence = 1L;
+
+        StepOffer offer = StepOffer.builder()
+                .id(1L)
+                .target(null)
+                .recipe(recipe)
+                .build();
+
+        Step approvedStep = Step.builder()
+                .id(1L)
+                .sequence(firstSequence)
+                .recipe(recipe)
+                .build();
+
+        when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
+        when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approvedStep));
+
+        Step resultStep = service.approve(recipe, offer.getId(), owner);
+        assertThat(resultStep.getId()).isEqualTo(offer.getId());
+        assertThat(resultStep.getRecipe()).isEqualTo(offer.getRecipe());
+        assertThat(resultStep.getSequence()).isEqualTo(firstSequence);
+
+        verify(stepOfferRepository).approveStepOffer(offer.getId(), firstSequence);
+        verify(stepOfferRepository).rejectAllOffersByTarget(offer.getTarget(), recipe);
+    }
+
+    @Test
+    public void approveWithTarget() {
+        Step target = Step.builder()
+                .sequence(1L)
+                .recipe(recipe)
+                .build();
+
+        StepOffer offer = StepOffer.builder()
+                .id(1L)
+                .target(target)
+                .recipe(recipe)
+                .build();
+        Step approvedStep = Step.builder()
+                .id(1L)
+                .sequence(target.getSequence() + 1L)
+                .recipe(recipe)
+                .build();
+
+        when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
+        when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approvedStep));
+
+        Step resultStep = service.approve(recipe, offer.getId(), owner);
+        assertThat(resultStep.getId()).isEqualTo(offer.getId());
+        assertThat(resultStep.getRecipe()).isEqualTo(offer.getRecipe());
+        assertThat(resultStep.getSequence()).isEqualTo(target.getSequence() + 1L);
+
+        verify(stepOfferRepository).approveStepOffer(offer.getId(), target.getSequence() + 1L);
+        verify(stepOfferRepository).rejectAllOffersByTarget(offer.getTarget(), recipe);
     }
 }
