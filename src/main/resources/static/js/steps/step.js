@@ -165,10 +165,7 @@ class StepManager {
             const stepOffer = target.closest('.step-offer');
             this.requestStepApproval(stepOffer)
                 .then((data) => {
-
-                    console.log(data);
-
-                    removeElement(stepOffer);
+                   location.reload();
                 })
                 .catch((status) => {
                     if (typeof status === 'undefined') {
@@ -179,7 +176,7 @@ class StepManager {
                         location.href = '/users/login';
                         return;
                     }
-                    console.log(status);
+                    console.error(status);
                 });
         }
 

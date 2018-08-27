@@ -48,14 +48,18 @@ public class StepOwnerService implements StepService {
     }
 
     @Transactional
-    public Step approve(Recipe recipe, long offerId, User user) {
-        Long sequence = getSequenceFromOffer(stepOfferRepository.findById(offerId)
-                .orElseThrow(EntityNotFoundException::new));
+    public Step approveAppendOffer(Recipe recipe, Long offerId, User user) {
+        StepOffer offer = stepOfferRepository.findById(offerId)
+                .orElseThrow(EntityNotFoundException::new);
 
+        Long sequence = getSequenceFromOffer(offer);
         stepRepository.increaseSequenceGte(recipe, sequence);
-        stepOfferRepository.approveStepOffer(offerId, sequence);
 
-        return stepRepository.findById(offerId).orElseThrow(EntityNotFoundException::new);
+        rejectOffersByTarget(offer.getTarget(), recipe);
+        stepOfferRepository.approveStepOffer(offer.getId(), sequence);
+
+        return stepRepository.findById(offer.getId())
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     private Long getNextSequence(StepCreationDTO dto) {
@@ -68,6 +72,14 @@ public class StepOwnerService implements StepService {
         return stepOffer.getTarget() == null
                 ? 1L
                 : stepOffer.getTarget().getSequence() + 1L;
+    }
+
+    private void rejectOffersByTarget(Step target, Recipe recipe) {
+        if (target == null) {
+            stepOfferRepository.rejectAllOffersByNullTarget(recipe);
+        }
+
+        stepOfferRepository.rejectAllOffersByTarget(target, recipe);
     }
 
     private Step findById(Long id) {

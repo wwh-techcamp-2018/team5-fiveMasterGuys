@@ -23,6 +23,20 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
     void rejectModifyingOfferByTarget(@Param("target") AbstractStep target);
 
     @Modifying(clearAutomatically = true)
+    @Query("UPDATE StepOffer so SET so.rejected = true WHERE so.recipe = :recipe")
+    void rejectAllOffersByRecipe(@Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE StepOffer so SET so.rejected = true " +
+            "WHERE so.target IS NOT NULL AND so.target = :target AND so.recipe = :recipe")
+    void rejectAllOffersByTarget(@Param("target") AbstractStep target, @Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE StepOffer so SET so.rejected = true " +
+            "WHERE so.target IS NULL AND so.recipe = :recipe")
+    void rejectAllOffersByNullTarget(@Param("recipe") Recipe recipe);
+
+    @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Step s " +
             "SET s.TYPE = 'Step', s.CLOSED = false, s.SEQUENCE = :seq, s.TARGET_ID = NULL, s.OFFER_TYPE = NULL, s.REJECTED = NULL " +
             "WHERE s.ID = :id",

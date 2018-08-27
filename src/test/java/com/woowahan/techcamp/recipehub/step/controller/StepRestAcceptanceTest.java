@@ -124,19 +124,35 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void approveStepAppendOffer() {
+        StepOffer otherOffer = stepOfferRepository.save(StepOffer.builder()
+                .name("recipe-step1-other-offer")
+                .writer(savedUser)
+                .content(Arrays.asList("Step", "Append", "Other", "Offer"))
+                .imgUrl("/static/img/fixed-image.jpg")
+                .recipe(recipe)
+                .offerType(OfferType.APPEND)
+                .target(firstStep)
+                .rejected(false)
+                .ingredients(null)
+                .build());
+
         ResponseEntity<RestResponse<Step>> response = requestJson(
-                "/api/recipes/" + recipe.getId() + "/steps/" + stepAppendOffer.getId() + "/approve",
+                "/api/recipes/" + recipe.getId() + "/steps/" + otherOffer.getId() + "/approve",
                 HttpMethod.GET,
                 basicAuthRecipeOwner,
                 stepType());
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
+        assertThat(stepOfferRepository.findById(stepAppendOffer.getId()).get().isRejected())
+                .isTrue();
+
         assertThat(response.getBody().getData()).isInstanceOf(Step.class);
-        assertThat(response.getBody().getData().getId()).isEqualTo(stepRepository.findById(stepAppendOffer.getId()).get().getId());
+        assertThat(response.getBody().getData().getId())
+                .isEqualTo(stepRepository.findById(otherOffer.getId()).get().getId());
 
         assertThat(response.getBody().getData())
-                .isEqualToComparingOnlyGivenFields(stepAppendOffer, "name", "writer", "content", "imgUrl");
+                .isEqualToComparingOnlyGivenFields(otherOffer, "name", "writer", "content", "imgUrl");
 
         assertThat(response.getBody().getData().getSequence()).isEqualTo(firstStep.getSequence() + 1L);
         assertThat(response.getBody().getData().isClosed()).isFalse();

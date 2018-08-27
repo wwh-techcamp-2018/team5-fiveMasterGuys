@@ -8,6 +8,7 @@ import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import com.woowahan.techcamp.recipehub.step.domain.AbstractStep;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
+import com.woowahan.techcamp.recipehub.step.service.StepOfferService;
 import com.woowahan.techcamp.recipehub.step.service.StepOwnerService;
 import com.woowahan.techcamp.recipehub.step.service.StepServiceProvider;
 import com.woowahan.techcamp.recipehub.user.domain.User;
@@ -26,6 +27,9 @@ public class StepRestController {
 
     @Autowired
     private StepOwnerService ownerService;
+
+    @Autowired
+    private StepOfferService offerService;
 
     @Autowired
     private RecipeService recipeService;
@@ -57,12 +61,13 @@ public class StepRestController {
     @ResponseStatus(HttpStatus.OK)
     public RestResponse<Step> approveAppendOffer(@PathVariable("recipeId") long recipeId, @PathVariable("offerId") long offerId, User user) {
         Recipe recipe = recipeService.findById(recipeId);
+
         if (!recipe.isOwner(user)) {
             throw new UnauthorizedException();
         }
 
         return RestResponse.success(
-                ownerService.approve(recipe, offerId, user)
+                ownerService.approveAppendOffer(recipe, offerId, user)
         );
     }
 }
