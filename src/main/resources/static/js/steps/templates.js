@@ -9,7 +9,7 @@ class Templates {
             </h2>
             ${this.templateStepBox(data)}
             <button class="btn-step-add" data-step-id="${data.id}">
-                <i class="fas fa-plus-circle fa-4x"> Step 추가 제안하기</i>
+                <i class="fas fa-plus-circle fa-4x"> Step 추가 하기</i>
             </button>
         </div>
         `;
@@ -18,7 +18,14 @@ class Templates {
     static templateStepBox(data) {
         return `
         <article class="box" data-step-id="${data.id}">
-            <div class="columns">
+            ${Templates.templateStepBoxInner(data)}
+        </article>
+        `;
+    }
+
+    static templateStepBoxInner(data) {
+        return `
+            <div class="columns" data-step-id="${data.id}">
                 <div class="column is-one-third">
                     <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
                 </div>
@@ -31,18 +38,21 @@ class Templates {
                     </div>
                 </div>
                 <div class="column is-one-fifth">
-                    <div class="is-clearfix">
-                        <div class="btn-step-modify icon is-pulled-right fa-2x"><i class="fas fa-edit"></i></div>
-                    </div>
                     <div class="ingredient"></div>
                 </div>
             </div>
-            <div>
-                <div class="speech-bubble-triangle"></div>
-                <div></div>
-                <span>${data.writer.name}</span>
+            <div class="shadow-wrapper">
+                <div class="contributors-shadow"></div>
+                <div class="contributors">
+                    <div class="contributor-container">
+                        <div class="contributor main-contributor contributor-selected" data-step-id="${data.id}">
+                            <div class="approved">Approved</div>
+                            <i class="fas fa-user-circle fa-3x"></i>
+                            <div>${data.writer.name}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </article>
         `;
     }
 
@@ -67,10 +77,6 @@ class Templates {
                                 </ol>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="speech-bubble-triangle"></div>
-                        <span>${data.writer.name}</span>
                     </div>
                 </article>
             </div>
@@ -129,6 +135,15 @@ class Templates {
             </div>
         </li>
         `;
+    }
+
+    static templateStepContributor(content) {
+        return `<div class="contributor-container">
+            <div class="contributor contributor-selected" data-step-id="${content.id}">
+                <i class="fas fa-user-circle fa-3x"></i>
+                <div>${content.writer.name}</div>
+            </div>
+        </div>`
     }
 }
 

@@ -49,7 +49,7 @@ public class StepOwnerServiceTest {
                 .name("asdf")
                 .content(Arrays.asList("a", "b"))
                 .ingredients(null)
-                .previousStepId(null)
+                .targetStepId(null)
                 .imgUrl("/static/img/image.jpg");
         owner = User.builder().id(1L).build();
         recipe = Recipe.builder().owner(owner).build();
@@ -79,7 +79,7 @@ public class StepOwnerServiceTest {
     @Test
     public void createWithPreviousStep() {
         Long previousStepId = 1L;
-        StepCreationDTO dto = dtoBuilder.previousStepId(previousStepId).build();
+        StepCreationDTO dto = dtoBuilder.targetStepId(previousStepId).build();
 
         Step previousStep = Step.builder().id(previousStepId).sequence(3L).build();
 
@@ -104,19 +104,19 @@ public class StepOwnerServiceTest {
 
     @Test
     public void modify() {
-        Long previousStepId = 1L;
-        StepCreationDTO dto = dtoBuilder.previousStepId(previousStepId).build();
+        Long targetStepId = 1L;
+        StepCreationDTO dto = dtoBuilder.targetStepId(targetStepId).build();
 
-        Step previousStep = Step.builder().id(previousStepId)
+        Step previousStep = Step.builder().id(targetStepId)
                 .closed(false)
                 .sequence(3L)
                 .build();
 
-        when(stepRepository.findById(previousStepId)).thenReturn(Optional.of(previousStep));
+        when(stepRepository.findById(targetStepId)).thenReturn(Optional.of(previousStep));
 
         when(stepRepository.save(any())).then(returnsFirstArg());
 
-        Step resultStep = service.modify(owner, previousStepId, dto, recipe);
+        Step resultStep = service.modify(owner, targetStepId, dto, recipe);
 
         StepCreationDTOTest.assertDtoEqualToStep(dto, resultStep);
         assertThat(resultStep.isClosed()).isFalse();
@@ -130,7 +130,7 @@ public class StepOwnerServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void modifyNotExistStep() {
-        StepCreationDTO dto = dtoBuilder.previousStepId(1L).build();
+        StepCreationDTO dto = dtoBuilder.targetStepId(1L).build();
         service.modify(owner, 1L, dto, recipe);
     }
 

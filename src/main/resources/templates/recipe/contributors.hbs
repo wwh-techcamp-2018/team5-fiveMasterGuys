@@ -1,0 +1,30 @@
+<div class="shadow-wrapper">
+    <div class="contributors-shadow"></div>
+    <div class="contributors">
+        <div class="contributor-container">
+            <div class="contributor main-contributor contributor-selected" data-step-id="{{id}}">
+                <div class="approved">Approved</div>
+                <i class="fas fa-user-circle fa-3x"></i>
+                <div>{{writer.name}}</div>
+            </div>
+        </div>
+        {{#eqnot recipe.owner user}}
+            <div class="contributor-container">
+                <div class="contributor offer">
+                    <i class="fas fa-plus-circle fa-3x"></i>
+                    <div>제안하기</div>
+                </div>
+            </div>
+        {{/eqnot}}
+        {{#offers}}
+            {{#eq offerType "MODIFY"}}
+                <div class="contributor-container">
+                    <div class="contributor" data-step-id="{{id}}">
+                        <i class="fas fa-user-circle fa-3x"></i>
+                        <div>{{writer.name}}</div>
+                    </div>
+                </div>
+            {{/eq}}
+        {{/offers}}
+    </div>
+</div>
