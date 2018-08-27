@@ -113,6 +113,9 @@ public class StepResponseDTO {
     }
 
     public String getOfferType() {
+        if (offerType == null) {
+            return null;
+        }
         return offerType.toString();
     }
 
