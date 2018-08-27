@@ -2,7 +2,7 @@
 <!DOCTYPE configuration>
 <configuration>
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>recipehub_now.log</file>
+        <file>${HOME}/log/recipehub_now.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- rollover daily -->
             <fileNamePattern>recipehub_%d{yyyy_MM_dd}_%i.log</fileNamePattern>
