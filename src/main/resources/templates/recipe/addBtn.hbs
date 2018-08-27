@@ -1,3 +1,7 @@
 <button class="btn-step-add" title="스텝 추가하기" data-step-id={{id}}>
-    <i class="fas fa-plus-circle fa-3x"> Step 추가 제안하기</i>
+    {{#eq recipe.owner user}}
+        <i class="fas fa-plus-circle fa-3x"> Step 추가 하기</i>
+    {{else}}
+        <i class="fas fa-plus-circle fa-3x"> Step 추가 제안하기</i>
+    {{/eq}}
 </button>

@@ -76,4 +76,24 @@ public class StepOfferServiceTest {
         assertThat(stepOffer.getOfferType()).isEqualTo(OfferType.APPEND);
     }
 
+    @Test
+    public void modify() throws Exception {
+        // given
+        String name = "핏짜";
+
+        Step targetStep = Step.builder().build();
+        StepCreationDTO dto = StepCreationDTO.builder()
+                .name(name).build();
+
+        StepOffer saved = StepOffer.from(user, dto, recipe, targetStep, OfferType.MODIFY);
+        when(stepOfferRepository.save(saved)).thenReturn(saved);
+
+        // when
+        StepOffer stepOffer = userRecipeStepService.create(user, dto, recipe);
+
+        // then
+        assertThat(stepOffer.getName()).isEqualTo(name);
+        assertThat(stepOffer.getTarget()).isEqualTo(targetStep);
+        assertThat(stepOffer.getOfferType()).isEqualTo(OfferType.MODIFY);
+    }
 }

@@ -20,9 +20,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/recipes")
 public class RecipeController {
-    private static final String RECIPE_CREATE = "recipe/create";
-    private static final String RECIPE_COMPLETED = "recipe/completed";
-    private static final String RECIPE_INCOMPLETED = "recipe/incompleted";
+    private static final String TEMPLATE_RECIPE_CREATE = "recipe/create";
+    private static final String TEMPLATE_RECIPE_DETAIL = "recipe/recipe";
     private static final String RECIPE_KEY = "recipe";
     private static final String FIRST_OFFERS = "firstOffers";
 
@@ -37,19 +36,20 @@ public class RecipeController {
     public String get(Model model) {
         List<Category> categories = categoryService.findAll();
         model.addAttribute("categories", categories);
-        return RECIPE_CREATE;
+        return TEMPLATE_RECIPE_CREATE;
     }
 
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute(RECIPE_KEY, RecipeResponseDTO.from(recipe));
+        model.addAttribute("completed", recipe.isCompleted());
 
         if (!recipe.isCompleted()) {
             model.addAttribute(FIRST_OFFERS, recipeService.findNullTargetStepOffersByRecipe(recipe));
         }
 
-        return recipe.isCompleted() ? RECIPE_COMPLETED : RECIPE_INCOMPLETED;
+        return TEMPLATE_RECIPE_DETAIL;
     }
 
     @PostMapping
