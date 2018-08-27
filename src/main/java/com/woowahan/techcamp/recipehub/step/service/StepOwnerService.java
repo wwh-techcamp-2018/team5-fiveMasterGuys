@@ -47,9 +47,9 @@ public class StepOwnerService implements StepService {
     }
 
     private Long getNextSequence(StepCreationDTO dto) {
-        return dto.getPreviousStepId() == null
+        return dto.getTargetStepId() == null
                 ? 1
-                : findById(dto.getPreviousStepId()).getSequence() + 1;
+                : findById(dto.getTargetStepId()).getSequence() + 1;
     }
 
     private Step findById(Long id) {

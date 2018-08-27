@@ -1,0 +1,33 @@
+<div class="columns{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
+    <div class="column is-one-third">
+        {{#if imgUrl}}
+            <img class="step-img" src="{{imgUrl}}" alt="{{name}}">
+        {{else}}
+            <img class="step-img" src="/img/recipe-default.png" alt="{{name}}">
+        {{/if}}
+    </div>
+    <div class="column step-article-container">
+        <p class="subtitle one-line-ellipsis">{{name}}</p>
+        <div class="step-contents-container">
+            <ol class="step-contents">
+                {{#content}}
+                    <li>
+                        <p class="one-line-ellipsis">{{.}}</p>
+                    </li>
+                {{/content}}
+            </ol>
+        </div>
+    </div>
+    <div class="column is-one-fifth">
+        {{#eq writer user}}
+            {{#eq recipe.owner user}}
+                <div class="is-clearfix">
+                    <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
+                        <i class="fas fa-edit fa-2x"></i>
+                    </div>
+                </div>
+            {{/eq}}
+        {{/eq}}
+        <div class="ingredient"></div>
+    </div>
+</div>

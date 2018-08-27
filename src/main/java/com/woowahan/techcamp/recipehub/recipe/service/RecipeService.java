@@ -43,7 +43,7 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public Page<Recipe> findAllByPagable(Pageable pageable) {
+    public Page<Recipe> findAllByPageable(Pageable pageable) {
         return recipeRepository.findAll(pageable);
     }
 

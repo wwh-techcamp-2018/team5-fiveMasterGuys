@@ -27,8 +27,8 @@ public class StepOfferService implements StepService {
     public StepOffer create(User user, StepCreationDTO dto, Recipe recipe) {
         Step step = null;
 
-        if (dto.getPreviousStepId() != null) {
-            step = stepRepository.findById(dto.getPreviousStepId()).orElseThrow(EntityNotFoundException::new);
+        if (dto.getTargetStepId() != null) {
+            step = stepRepository.findById(dto.getTargetStepId()).orElseThrow(EntityNotFoundException::new);
         }
 
         return stepOfferRepository.save(StepOffer.from(user, dto, recipe, step, OfferType.APPEND));
@@ -36,6 +36,7 @@ public class StepOfferService implements StepService {
 
     @Override
     public StepOffer modify(User user, long targetId, StepCreationDTO dto, Recipe recipe) {
-        return null;
+        Step targetStep = stepRepository.findById(targetId).orElseThrow(EntityNotFoundException::new);
+        return stepOfferRepository.save(StepOffer.from(user, dto, recipe, targetStep, OfferType.MODIFY));
     }
 }

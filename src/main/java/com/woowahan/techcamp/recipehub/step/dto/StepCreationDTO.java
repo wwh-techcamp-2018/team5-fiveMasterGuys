@@ -20,15 +20,15 @@ public class StepCreationDTO {
     private List<String> content;
     private List<Long> ingredients;
     private String imgUrl;
-    private Long previousStepId;
+    private Long targetStepId;
 
     @Builder
-    public StepCreationDTO(@NotBlank @NotNull String name, List<String> content, List<Long> ingredients, String imgUrl, Long previousStepId) {
+    public StepCreationDTO(@NotBlank @NotNull String name, List<String> content, List<Long> ingredients, String imgUrl, Long targetStepId) {
         this.name = name;
         this.content = content;
         this.ingredients = ingredients;
         this.imgUrl = imgUrl;
-        this.previousStepId = previousStepId;
+        this.targetStepId = targetStepId;
     }
 
     public Step toStep(User user, Recipe recipe, Long sequence) {

@@ -1,6 +1,8 @@
 #!/bin/bash
 REPOSITORY=/home/ec2-user/app/travis
 
+. /home/ec2-user/.bash_profile
+
 echo "> Checking exist process id ..."
 CURRENT_PID=$(pgrep -f recipehub)
 

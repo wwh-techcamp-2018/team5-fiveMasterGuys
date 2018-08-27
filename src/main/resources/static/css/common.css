@@ -3,11 +3,16 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .one-line-ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+img {
+    object-fit: cover;
+    border: solid #D9D9D9 1px;
 }
