@@ -3,9 +3,11 @@ package com.woowahan.techcamp.recipehub.recipe.service;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +36,9 @@ public class RecipeServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private StepOfferRepository stepOfferRepository;
+
     @InjectMocks
     private RecipeService recipeService;
     private User user;
@@ -41,7 +48,7 @@ public class RecipeServiceTest {
     @Before
     public void setUp() throws Exception {
         // Given
-        user = User.builder().name("Ryun").email("ryuneeee@gmail.com").build();
+        user = User.builder().id(1L).name("Ryun").email("ryuneeee@gmail.com").build();
         category = Category.builder().title("양식").build();
         dto = RecipeDTO.builder().name("초코치킨").categoryId(1L).build();
     }
@@ -90,6 +97,23 @@ public class RecipeServiceTest {
     @Test(expected = EntityNotFoundException.class)
     public void getNotExistRecipe() {
         recipeService.findById(Long.MAX_VALUE);
+    }
+
+    @Test
+    public void completeRecipeOwner() {
+        final long recipeId = 1L;
+        Recipe recipe = Recipe.builder().name("초코치킨").owner(user).build();
+        when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
+        when(recipeRepository.save(any())).then(returnsFirstArg());
+        assertThat(recipeService.completeRecipe(user, recipeId).isCompleted()).isTrue();
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void completeRecipeNotOwner() {
+        final long recipeId = 1L;
+        Recipe recipe = Recipe.builder().name("초코치킨").owner(user).build();
+        when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
+        recipeService.completeRecipe(new User(), recipeId);
     }
 
     private static List<Recipe> generateRecipeList(int count) {
