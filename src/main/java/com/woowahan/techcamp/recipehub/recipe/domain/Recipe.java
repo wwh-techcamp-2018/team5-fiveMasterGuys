@@ -70,4 +70,8 @@ public class Recipe extends AbstractEntity {
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
+    public void complete() {
+        completed = true;
+    }
 }

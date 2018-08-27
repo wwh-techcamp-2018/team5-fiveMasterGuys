@@ -47,7 +47,7 @@ public class RecipeListServiceTest {
 
         when(recipeRepository.findAll(pageRequest))
                 .thenReturn(new PageImpl<>(lastRecipeList, pageRequest, PAGE_NUMBER * PAGE_SIZE + lastRecipeList.size()));
-        resultRecipePage = recipeService.findAllByPagable(pageRequest);
+        resultRecipePage = recipeService.findAllByPageable(pageRequest);
     }
 
     @Test

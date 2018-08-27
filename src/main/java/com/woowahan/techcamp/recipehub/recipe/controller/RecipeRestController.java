@@ -25,4 +25,11 @@ public class RecipeRestController {
     public RestResponse<Recipe> create(User user, @Valid @RequestBody RecipeDTO dto) {
         return RestResponse.success(recipeService.create(user, dto));
     }
+
+    @PostMapping("/{recipeId}/complete")
+    @AuthRequired
+    @ResponseStatus(code = HttpStatus.OK)
+    public RestResponse<Recipe> complete(User user, @PathVariable long recipeId) {
+        return RestResponse.success(recipeService.completeRecipe(user, recipeId));
+    }
 }

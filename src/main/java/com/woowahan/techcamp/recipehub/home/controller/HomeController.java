@@ -27,7 +27,7 @@ public class HomeController {
     @GetMapping
     public String home(Model model,
                        @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE) Pageable pageable) {
-        Page<Recipe> recipePage = recipeService.findAllByPagable(zeroBased(pageable));
+        Page<Recipe> recipePage = recipeService.findAllByPageable(zeroBased(pageable));
 
         model.addAttribute("recipes", recipePage.getContent());
         model.addAttribute("paginationList", PageListDTO.from(recipePage, SHOWING_PAGE_SIZE));

@@ -46,6 +46,12 @@ public abstract class AcceptanceTest {
     private UserRepository userRepository;
 
     protected MockMvc mvc;
+
+    protected final String DEFAULT_RECIPE_OWNER_EMAIL = "IamRecipeOwner@recipehub.co";
+    protected final String DEFAULT_RECIPE_OWNER_PASSWORD = "password4321@";
+    protected User basicAuthRecipeOwner;
+    protected User savedRecipeOwner;
+
     protected final String DEFAULT_USER_EMAIL = "WeAreTheBestTeam@recipehub.com";
     protected final String DEFAULT_USER_PASSWORD = "password1234!";
     protected User basicAuthUser;
@@ -54,13 +60,19 @@ public abstract class AcceptanceTest {
     @Before
     public void setUp() throws Exception {
         User.UserBuilder userBuilder = User.builder()
-                .email(DEFAULT_USER_EMAIL)
-                .password(new BCryptPasswordEncoder().encode(DEFAULT_USER_PASSWORD))
                 .name("Team5");
-        savedUser = userRepository.save(userBuilder.build());
+        final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+        savedUser = userRepository.save(userBuilder
+                .email(DEFAULT_USER_EMAIL)
+                .password(passwordEncoder.encode(DEFAULT_USER_PASSWORD)).build()
+        );
         basicAuthUser = userBuilder.password(DEFAULT_USER_PASSWORD).build();
-
+        savedRecipeOwner = userRepository.save(userBuilder
+                .email(DEFAULT_RECIPE_OWNER_EMAIL)
+                .password(passwordEncoder.encode(DEFAULT_RECIPE_OWNER_PASSWORD)).build()
+        );
+        basicAuthRecipeOwner = userBuilder.password(DEFAULT_RECIPE_OWNER_PASSWORD).build();
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .build();
