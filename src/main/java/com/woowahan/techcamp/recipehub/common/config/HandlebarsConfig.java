@@ -23,5 +23,16 @@ public class HandlebarsConfig {
                     ? options.hash("yes", true)
                     : options.hash("no", false);
         }
+
+        public Object eqnot(Object a, final Options options) throws IOException {
+            Object b = options.param(0, null);
+            boolean result = !new EqualsBuilder().append(a, b).isEquals();
+            if (options.tagType == TagType.SECTION) {
+                return result ? options.fn() : options.inverse();
+            }
+            return result
+                    ? options.hash("yes", true)
+                    : options.hash("no", false);
+        }
     }
 }

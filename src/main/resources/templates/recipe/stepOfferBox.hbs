@@ -1,9 +1,9 @@
-<article class="box" data-step-id="{{id}}">
+<article class="box hidden" data-step-id="{{id}}">
     {{> recipe/stepBoxInner}}
 
     {{#offers}}
-        {{#eq offerType "MODIFY"}}
-            {{> recipe/stepBoxInner hidden=true}}
+        {{#eq offerType "APPEND"}}
+            {{> recipe/stepBoxInner hidden=false}}
         {{/eq}}
     {{/offers}}
 
