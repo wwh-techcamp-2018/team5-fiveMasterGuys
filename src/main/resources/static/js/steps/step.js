@@ -57,11 +57,7 @@ class StepManager {
 
     handleKeyUpEvent(e) {
         if (e.target.classList.contains('step-item-input') && e.keyCode === 13) {
-            if (e.target.value !== "") {
-                let stepId = e.target.closest('.box').getAttribute('data-step-id');
-                this.appendStepItem(e.target);
-                $(`.box[data-step-id="${stepId}"] .step-item-input`).focus();
-            }
+            this.appendStepItem(e.target);
             return;
         }
     }
@@ -107,12 +103,17 @@ class StepManager {
     }
 
     appendStepItem(target) {
+        const stepId = target.closest('.box').getAttribute('data-step-id');
         const stepItem = target.closest('.step-item');
         const value = stepItem.querySelector('input').value;
+        if (value.trim() === '') {
+            return;
+        }
         const stepContainer = target.closest('ol.step-contents');
         removeElement(stepItem);
         stepContainer.insertAdjacentHTML('beforeend', Templates.templateStepContentListItem(value));
         stepContainer.insertAdjacentHTML('beforeend', Templates.templateStepContentInput());
+        $(`.box[data-step-id="${stepId}"] .step-item-input`).focus();
     }
 
     removeStepItem(target) {
