@@ -68,7 +68,7 @@ public class Recipe extends AbstractEntity {
         }
 
         this.category = category != null ? category : this.category;
-        this.name = dto.getName() != null ? dto.getName() : name;
+        this.name = (dto.getName() != null && !dto.getName().equals("")) ? dto.getName() : name;
         this.imgUrl = dto.getImgUrl() != null ? dto.getImgUrl() : imgUrl;
     }
 
