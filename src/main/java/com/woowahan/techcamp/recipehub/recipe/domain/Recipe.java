@@ -22,7 +22,7 @@ public class Recipe extends AbstractEntity {
 
     public static final String DEFAULT_RECIPE_IMAGE_URL = "/img/recipe-default.png";
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Category category;
 
     @ManyToOne

@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.domain;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
@@ -27,11 +29,18 @@ public class StepRepositoryTest {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     @Transactional
     public void increaseSequences() {
         Recipe recipe = recipeRepository.save(
-                Recipe.builder().name("a").completed(false).build()
+                Recipe.builder()
+                        .name("a")
+                        .category(categoryRepository.save(new Category("category")))
+                        .completed(false)
+                        .build()
         );
 
         List<Step> recipeSteps = Arrays.asList(

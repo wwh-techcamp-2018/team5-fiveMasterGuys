@@ -15,11 +15,13 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
     List<StepOffer> findAllByRecipeAndTargetIsNull(Recipe recipe);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE StepOffer so SET so.target = :target WHERE so.target = :prevStep AND so.offerType = 'APPEND'")
+    @Query("UPDATE StepOffer so SET so.target = :target " +
+            "WHERE so.target = :prevStep AND so.offerType = 'APPEND'")
     void changeAppendOffersTarget(@Param("prevStep") AbstractStep prevStep, @Param("target") AbstractStep target);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE StepOffer so SET so.rejected = true WHERE so.target = :target AND so.offerType = 'MODIFY'")
+    @Query("UPDATE StepOffer so SET so.rejected = true " +
+            "WHERE so.target = :target AND so.offerType = 'MODIFY'")
     void rejectModifyingOfferByTarget(@Param("target") AbstractStep target);
 
     @Modifying(clearAutomatically = true)
@@ -28,13 +30,13 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StepOffer so SET so.rejected = true " +
-            "WHERE so.target IS NOT NULL AND so.target = :target AND so.recipe = :recipe")
-    void rejectAllOffersByTarget(@Param("target") AbstractStep target, @Param("recipe") Recipe recipe);
+            "WHERE so.target IS NOT NULL AND so.target = :target AND so.offerType = 'APPEND'")
+    void rejectAppendingOffersByTarget(@Param("target") AbstractStep target);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE StepOffer so SET so.rejected = true " +
             "WHERE so.target IS NULL AND so.recipe = :recipe")
-    void rejectAllOffersByNullTarget(@Param("recipe") Recipe recipe);
+    void rejectAppendingOffersByNullTarget(@Param("recipe") Recipe recipe);
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Step s " +

@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.controller;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -43,11 +45,15 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     @Autowired
     private StepOfferRepository stepOfferRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Step firstStep;
     private StepOffer stepAppendOffer;
     private Recipe recipe;
 
     private StepCreationDTO.StepCreationDTOBuilder creationDtoBuilder;
+    private StepOffer.StepOfferBuilder stepOfferBuilder;
 
     @Override
     @Before
@@ -59,7 +65,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .owner(savedRecipeOwner)
                 .imgUrl("/static/img/image.jpg")
                 .recipeSteps(null)
-                .category(null)
+                .category(categoryRepository.save(new Category("category")))
                 .completed(false)
                 .build());
 
@@ -92,6 +98,19 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .content(Arrays.asList("step", "builder"))
                 .imgUrl("/static/img/image.jpg")
                 .ingredients(null);
+
+
+        stepOfferBuilder = StepOffer.builder()
+                .writer(savedUser)
+                .offerType(OfferType.MODIFY)
+                .content(Arrays.asList("Boil", "Cut", "Cook"))
+                .name("Eat")
+                .recipe(recipe)
+                .target(firstStep)
+                .ingredients(null)
+                .rejected(false)
+                .imgUrl("/static/img/image.jpg");
+
     }
 
     @Test
@@ -319,6 +338,75 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
         assertThat(firstStep.isClosed()).isFalse();
     }
 
+    @Test
+    public void approveStepModifyOfferByOwner() {
+        // Given
+        StepOffer willBeStepModifyOffer = stepOfferRepository.save(stepOfferBuilder.build());
+        StepOffer modifyOffer = stepOfferRepository.save(stepOfferBuilder.content(Arrays.asList("a", "b", "c")).build());
+
+        // When
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + willBeStepModifyOffer.getId() + "/approve",
+                HttpMethod.GET,
+                basicAuthRecipeOwner,
+                stepType());
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getData()).isInstanceOf(Step.class);
+
+        assertThat(stepOfferRepository.findById(modifyOffer.getId()).get().isRejected()).isTrue();
+        assertThat(response.getBody().getData())
+                .isEqualToComparingOnlyGivenFields(willBeStepModifyOffer, "name", "writer", "content", "imgUrl");
+        assertThat(response.getBody().getData().getOffers()).isNull();
+    }
+
+    @Test
+    public void approveModifyOfferByOwnerWithStepAppendOffer() {
+        // Given
+        StepOffer willBeStepModifyOffer = stepOfferRepository.save(stepOfferBuilder.build());
+        StepOffer modifyOffer = stepOfferRepository.save(stepOfferBuilder.content(Arrays.asList("a", "b", "c")).build());
+
+        // When
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + willBeStepModifyOffer.getId() + "/approve",
+                HttpMethod.GET,
+                basicAuthRecipeOwner,
+                stepType());
+
+        Step resultStep = response.getBody().getData();
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(resultStep).isInstanceOf(Step.class);
+
+        assertThat(stepOfferRepository.findById(modifyOffer.getId()).get().isRejected()).isTrue();
+        assertThat(resultStep)
+                .isEqualToComparingOnlyGivenFields(willBeStepModifyOffer, "name", "writer", "content", "imgUrl");
+
+        assertThat(stepOfferRepository.findById(stepAppendOffer.getId()).get().getTarget()).isEqualTo(resultStep);
+    }
+
+    @Test
+    public void notApproveStepModifyOfferByNotLoginUser() {
+        // Given
+        StepOffer willBeStepModifyOffer = stepOfferRepository.save(stepOfferBuilder.build());
+        StepOffer modifyOffer = stepOfferRepository.save(stepOfferBuilder.content(Arrays.asList("a", "b", "c")).build());
+
+        // When
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + willBeStepModifyOffer.getId() + "/approve",
+                HttpMethod.GET,
+                stepType());
+
+        Step originalFirstStep = stepRepository.findById(firstStep.getId()).get();
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(firstStep).isEqualToIgnoringGivenFields(originalFirstStep, "ingredients", "offers");
+        assertThat(willBeStepModifyOffer.getOfferType()).isEqualTo(OfferType.MODIFY);
+        assertThat(modifyOffer.getOfferType()).isEqualTo(OfferType.MODIFY);
+    }
 
     @Override
     @After

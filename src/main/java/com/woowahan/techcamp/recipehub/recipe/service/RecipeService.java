@@ -1,9 +1,10 @@
 package com.woowahan.techcamp.recipehub.recipe.service;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
+import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -28,10 +29,10 @@ public class RecipeService {
     private StepOfferRepository stepOfferRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     public Recipe create(User owner, RecipeDTO dto) {
-        Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(BadRequestException::new);
+        Category category = categoryService.findById(dto.getCategoryId()).orElseThrow(BadRequestException::new);
         return recipeRepository.save(dto.toEntity(owner, category));
     }
 
@@ -67,10 +68,24 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    public Page<Recipe> search(Long categoryId, String keyword, Pageable pageable) throws NotFoundException {
+        return recipeRepository.findByCategoryAndNameContaining(
+                categoryService.findById(categoryId).orElseThrow(NotFoundException::new),
+                keyword,
+                pageable);
+    }
+
+    public Page<Recipe> search(String keyword, Pageable pageable) {
+        return recipeRepository.findByNameContaining(
+                keyword,
+                pageable);
+    }
+  
     private Category getCategoryIfIdExist(Long categoryId) {
         if (categoryId != null) {
             return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
         }
         return null;
     }
+
 }
