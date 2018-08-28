@@ -14,6 +14,14 @@
                         <div class="card-content">
                             <p class="title is-4 one-line-ellipsis">{{name}}</p>
                             <p class="subtitle is-6 one-line-ellipsis">{{owner.name}}</p>
+                            <div class="tags is-right">
+                                {{#if completed}}
+                                <span class="tag is-success">완료</span>
+                                {{else}}
+                                <span class="tag is-warning">진행중</span>
+                                {{/if}}
+                                <span class="tag">{{category.title}}</span>
+                            </div>
                         </div>
                     </div>
                 </a>
