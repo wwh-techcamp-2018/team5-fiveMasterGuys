@@ -9,6 +9,7 @@ import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
+import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,9 @@ public class RecipeServiceTest {
 
     @Mock
     private CategoryService categoryService;
+
+    @Mock
+    private StepOfferRepository stepOfferRepository;
 
     @Mock
     private CategoryRepository categoryRepository;
