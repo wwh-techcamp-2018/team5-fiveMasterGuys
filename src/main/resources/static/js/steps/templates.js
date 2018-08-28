@@ -154,5 +154,3 @@ class Templates {
         </div>`
     }
 }
-
-export {Templates};
