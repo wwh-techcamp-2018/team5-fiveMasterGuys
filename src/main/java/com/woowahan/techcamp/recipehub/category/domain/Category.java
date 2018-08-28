@@ -32,4 +32,11 @@ public class Category extends AbstractEntity {
     public int hashCode() {
         return Objects.hash(title);
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }

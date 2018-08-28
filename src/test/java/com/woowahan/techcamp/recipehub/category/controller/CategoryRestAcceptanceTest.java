@@ -20,8 +20,8 @@ public class CategoryRestAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
-    private Category categoryB;
     private Category categoryA;
+    private Category categoryB;
 
     @Override
     @Before
@@ -37,6 +37,6 @@ public class CategoryRestAcceptanceTest extends AcceptanceTest {
         });
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getData()).containsOnly(categoryA, categoryB);
+        assertThat(response.getBody().getData()).contains(categoryA, categoryB);
     }
 }
