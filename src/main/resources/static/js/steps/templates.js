@@ -8,8 +8,10 @@ class Templates {
                 Step ${data.sequence}
             </h2>
             ${this.templateStepBox(data)}
+        </div>
+        <div class="step-container">
             <button class="btn-step-add" data-step-id="${data.id}">
-                <i class="fas fa-plus-circle fa-4x"> Step 추가 하기</i>
+                <i class="fas fa-plus-circle fa-3x"> Step 추가 하기</i>
             </button>
         </div>
         `;
@@ -37,20 +39,27 @@ class Templates {
 
     static templateStepBoxInner(data) {
         return `
-            <div class="columns" data-step-id="${data.id}">
-                <div class="column is-one-third">
-                    <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
-                </div>
-                <div class="column step-article-container">
-                    <p class="subtitle one-line-ellipsis">${data.name}</p>
-                    <div class="step-contents-container">
-                        <ol class="step-contents">
-                            ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
-                        </ol>
+            <div class="step-inner-container" data-step-id="${data.id}">
+                <p class="subtitle one-line-ellipsis">${data.name}</p>
+                <div class="columns">
+                    <div class="column is-one-third">
+                        <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
                     </div>
-                </div>
-                <div class="column is-one-fifth">
-                    <div class="ingredient"></div>
+                    <div class="column step-article-container">
+                        <div class="step-contents-container">
+                            <ol class="step-contents">
+                                ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifth">
+                        <div class="is-clearfix">
+                            <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
+                                <i class="fas fa-edit fa-2x"></i>
+                            </div>
+                        </div>
+                        <div class="ingredient"></div>
+                    </div>
                 </div>
             </div>
         `;
@@ -70,7 +79,6 @@ class Templates {
                             <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
                         </div>
                         <div class="column step-article-container">
-                            <p class="subtitle one-line-ellipsis">${data.name}</p>
                             <div class="step-contents-container">
                                 <ol class="step-contents">
                                     ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
