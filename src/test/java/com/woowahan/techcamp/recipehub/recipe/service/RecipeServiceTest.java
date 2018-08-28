@@ -1,9 +1,10 @@
 package com.woowahan.techcamp.recipehub.recipe.service;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
+import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -34,7 +35,7 @@ public class RecipeServiceTest {
     private RecipeRepository recipeRepository;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @Mock
     private StepOfferRepository stepOfferRepository;
@@ -56,7 +57,7 @@ public class RecipeServiceTest {
     @Test
     public void create() throws Exception {
         // Given
-        when(categoryRepository.findById(1L)).thenReturn(Optional.ofNullable(category));
+        when(categoryService.findById(1L)).thenReturn(Optional.ofNullable(category));
         Recipe recipe = dto.toEntity(user, category);
         when(recipeRepository.save(recipe)).thenReturn(recipe);
 
@@ -114,6 +115,12 @@ public class RecipeServiceTest {
         Recipe recipe = Recipe.builder().name("초코치킨").owner(user).build();
         when(recipeRepository.findById(recipeId)).thenReturn(Optional.of(recipe));
         recipeService.completeRecipe(new User(), recipeId);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void searchWithCategory() throws NotFoundException {
+        when(categoryService.findById(any())).thenReturn(Optional.empty());
+        recipeService.search(1L, null, null);
     }
 
     private static List<Recipe> generateRecipeList(int count) {

@@ -37,15 +37,16 @@
             {{/each}}
         </div>
         <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-            <a href="/?page={{paginationList.prev}}" class="pagination-previous">이전 페이지</a>
+            <a href="{{baseUrl}}page={{paginationList.prev}}" class="pagination-previous">이전 페이지</a>
             <ul class="pagination-list">
                 {{#each paginationList.items}}
                 <li>
-                    <a href="/?page={{number}}" class="pagination-link {{#if current}}is-current{{/if}}" aria-label="Goto page {{number}}">{{number}}</a>
+                    <a href="{{baseUrl}}page={{number}}" class="pagination-link {{#if current}}is-current{{/if}}"
+                       aria-label="Goto page {{number}}">{{number}}</a>
                 </li>
                 {{/each}}
             </ul>
-            <a href="/?page={{paginationList.next}}" class="pagination-next">다음 페이지</a>
+            <a href="{{baseUrl}}page={{paginationList.next}}" class="pagination-next">다음 페이지</a>
         </nav>
     </div>
 </section>

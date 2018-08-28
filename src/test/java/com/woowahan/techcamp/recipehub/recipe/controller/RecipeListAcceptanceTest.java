@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.controller;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.home.controller.HomeController;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -35,14 +37,16 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private List<Recipe> recipeList;
 
     @Override
     @Before
     public void setUp() throws Exception {
         super.setUp();
-
-        recipeList = generateRecipeList(PAGE_SIZE * TOTAL_PAGE);
+        recipeList = generateRecipeList(categoryRepository.save(new Category("category")), PAGE_SIZE * TOTAL_PAGE);
         recipeRepository.saveAll(recipeList);
     }
 

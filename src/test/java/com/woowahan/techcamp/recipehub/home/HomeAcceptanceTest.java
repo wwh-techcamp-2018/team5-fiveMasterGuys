@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.home;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
@@ -16,6 +18,9 @@ public class HomeAcceptanceTest extends AcceptanceTest {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Test
     public void mainPage() throws Exception {
         assertThat(requestGet("/").getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -23,7 +28,11 @@ public class HomeAcceptanceTest extends AcceptanceTest {
 
     @Test
     public void mainPageWithRecipes() throws Exception {
-        recipeRepository.save(Recipe.builder().name("Hello").owner(savedUser).build());
+        recipeRepository.save(Recipe.builder()
+                .name("Hello")
+                .category(categoryRepository.save(new Category("a")))
+                .owner(savedUser)
+                .build());
         ResponseEntity<String> response = requestGet("/");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).contains("Hello");
