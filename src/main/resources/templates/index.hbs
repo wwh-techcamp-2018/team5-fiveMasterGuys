@@ -1,3 +1,7 @@
+{{#partial "head"}}
+<link href="/css/home.css" rel="stylesheet">
+{{/partial}}
+
 {{#partial "contents"}}
 <section class="section">
     <div class="container">
@@ -15,13 +19,17 @@
                             <p class="title is-4 one-line-ellipsis">{{name}}</p>
                             <p class="subtitle is-6 one-line-ellipsis">{{owner.name}}</p>
                             <div class="tags is-right">
-                                {{#if completed}}
-                                <span class="tag is-success">완료</span>
-                                {{else}}
-                                <span class="tag is-warning">진행중</span>
-                                {{/if}}
                                 <span class="tag">{{category.title}}</span>
                             </div>
+                            <nav class="level">
+                                <div class="level-item has-text-centered">
+                                    {{#if completed}}
+                                    <p class="subtitle is-6">완료</p>
+                                    {{else}}
+                                    <p class="subtitle is-6">진행중</p>
+                                    {{/if}}
+                                </div>
+                            </nav>
                         </div>
                     </div>
                 </a>
