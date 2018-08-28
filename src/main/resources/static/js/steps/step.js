@@ -81,9 +81,11 @@ class StepManager {
 
     showModifyOfferStepForm(target) {
         checkLoginOrRedirect();
-        let stepBox = target.closest('.box');
-        const stepBoxInner = stepBox.querySelector('.columns:not(.hidden)');
-        stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify-offer'));
+
+        const stepBox = target.closest('.box');
+        const stepId = stepBox.getAttribute('data-step-id');
+        const stepBoxInner = stepBox.querySelector(`.columns[data-step-id='${stepId}']`);
+        stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepId, 'modify-offer'));
 
         const stepForm = stepBox.previousElementSibling;
         this.copyValuesToForm(stepBoxInner, stepForm);
@@ -91,6 +93,10 @@ class StepManager {
     }
 
     copyValuesToForm(stepBox, stepForm) {
+        const imgLabel = stepForm.querySelector('label.has-text-centered');
+        imgLabel.style.backgroundImage = `url(${stepBox.querySelector('img.step-img').getAttribute('src')})`;
+        imgLabel.innerText = '';
+
         const stepItemList = stepForm.querySelector('ol.step-contents');
         const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
