@@ -40,7 +40,7 @@ public class RecipeListServiceTest {
 
     @Before
     public void createPageInfo() throws Exception {
-        lastRecipeList = generateRecipeList(5);
+        lastRecipeList = generateRecipeList(null, 5);
 
         sort = new Sort(Sort.Direction.ASC, SORT_PROPERTY);
         PageRequest pageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE, sort);

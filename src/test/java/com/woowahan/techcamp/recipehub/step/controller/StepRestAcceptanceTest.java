@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.controller;
 
+import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -43,6 +45,9 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     @Autowired
     private StepOfferRepository stepOfferRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     private Step firstStep;
     private StepOffer stepAppendOffer;
     private Recipe recipe;
@@ -60,7 +65,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .owner(savedRecipeOwner)
                 .imgUrl("/static/img/image.jpg")
                 .recipeSteps(null)
-                .category(null)
+                .category(categoryRepository.save(new Category("category")))
                 .completed(false)
                 .build());
 
