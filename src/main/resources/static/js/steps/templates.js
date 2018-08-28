@@ -19,6 +19,18 @@ class Templates {
         return `
         <article class="box" data-step-id="${data.id}">
             ${Templates.templateStepBoxInner(data)}
+            <div class="shadow-wrapper">
+                <div class="contributors-shadow"></div>
+                <div class="contributors">
+                    <div class="contributor-container">
+                        <div class="contributor main-contributor contributor-selected" data-step-id="${data.id}">
+                            <div class="approved">Approved</div>
+                            <i class="fas fa-user-circle fa-3x"></i>
+                            <div>${data.writer.name}</div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </article>
         `;
     }
@@ -39,18 +51,6 @@ class Templates {
                 </div>
                 <div class="column is-one-fifth">
                     <div class="ingredient"></div>
-                </div>
-            </div>
-            <div class="shadow-wrapper">
-                <div class="contributors-shadow"></div>
-                <div class="contributors">
-                    <div class="contributor-container">
-                        <div class="contributor main-contributor contributor-selected" data-step-id="${data.id}">
-                            <div class="approved">Approved</div>
-                            <i class="fas fa-user-circle fa-3x"></i>
-                            <div>${data.writer.name}</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         `;
