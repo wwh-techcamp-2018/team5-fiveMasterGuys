@@ -24,13 +24,13 @@ class Templates {
                 <div class="contributors">
                     <div class="contributor-container">
                         <div class="contributor main-contributor contributor-selected" data-step-id="${data.id}">
-                            <div class="approved">Approved</div>
+                            <div class="approved fas fa-medal fa-3x"></div>
                             <i class="fas fa-user-circle fa-3x"></i>
                             <div>${data.writer.name}</div>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </article>
         `;
     }
