@@ -7,7 +7,7 @@
 }
 
 .step-title {
-    margin: 30px;
+    margin: 20px 0;
 }
 
 .step-title > i {
@@ -26,7 +26,7 @@
     padding: 20px;
     background: #F6F6F6;
     border: #DDD solid 1px;
-    border-radius: 3px;
+    border-radius: 10px;
 }
 
 .step-offers .box {
@@ -89,7 +89,7 @@
 .box > .step-inner-container {
 }
 
-.columns {
+.step-inner-container > .columns {
     padding: 30px;
 }
 
