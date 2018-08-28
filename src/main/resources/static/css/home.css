@@ -1,0 +1,8 @@
+.card-content > .tags {
+    margin-bottom: 5px;
+}
+
+.card-content > nav.level {
+    border-top: 1px solid #dbdbdb;
+    padding-top: 10px;
+}
