@@ -10,6 +10,7 @@
     <link href="/css/font-awesome-5.2.0.all.min.css" rel="stylesheet">
     <link href="/css/common.css" rel="stylesheet">
     <script src="/js/common.js"></script>
+    <script src="/js/recipes/search.js"></script>
     <script src="/js/users/logout.js"></script>
     {{#block "head"}}
     {{/block}}
@@ -27,16 +28,16 @@
             <div class="field has-addons">
                 <p class="control">
                         <span class="select">
-                            <select>
+                            <select id="select-search">
                                 <option>전체</option>
                             </select>
                         </span>
                 </p>
                 <p class="control">
-                    <input class="input" type="text" placeholder="레시피 이름">
+                    <input class="input" id="input-search" type="text" placeholder="레시피 이름">
                 </p>
                 <p class="control">
-                    <a class="button is-info">
+                    <a class="button is-info" id="btn-search">
                         검색하기
                     </a>
                 </p>
