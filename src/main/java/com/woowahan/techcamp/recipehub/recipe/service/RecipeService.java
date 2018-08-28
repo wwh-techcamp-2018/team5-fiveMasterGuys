@@ -60,4 +60,17 @@ public class RecipeService {
         recipe.complete();
         return recipeRepository.save(recipe);
     }
+
+    public Recipe modify(User user, Recipe recipe, RecipeDTO dto) {
+        Category category = getCategoryIfIdExist(dto.getCategoryId());
+        recipe.modify(user, dto, category);
+        return recipeRepository.save(recipe);
+    }
+
+    private Category getCategoryIfIdExist(Long categoryId) {
+        if (categoryId != null) {
+            return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
+        }
+        return null;
+    }
 }

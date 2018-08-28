@@ -17,15 +17,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceTest {
@@ -116,16 +113,88 @@ public class RecipeServiceTest {
         recipeService.completeRecipe(new User(), recipeId);
     }
 
-    private static List<Recipe> generateRecipeList(int count) {
-        List<Recipe> result = new ArrayList<>();
+    @Test
+    public void modify() {
+        Recipe recipe = Recipe.builder().name("초코치킨")
+                .owner(user)
+                .category(new Category("카테고리"))
+                .build();
 
-        for (int i = 0; i < count; i++) {
-            result.add(Recipe.builder()
-                    .name(String.format("recipe %d", i))
-                    .build());
-        }
+        RecipeDTO dto = RecipeDTO.builder()
+                .name("newName")
+                .categoryId(2L)
+                .imgUrl("http://new.com/image.png")
+                .build();
 
-        return result;
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(new Category("카테고리2")));
+        when(recipeRepository.save(recipe)).thenReturn(recipe);
+
+        Recipe modified = recipeService.modify(user, recipe, dto);
+
+        assertThat(dto).isEqualToIgnoringGivenFields(modified, "categoryId");
+        assertThat(modified.getCategory().getTitle()).isEqualTo("카테고리2");
     }
 
+
+    @Test(expected = ForbiddenException.class)
+    public void modifyByOtherUser() {
+        User otherUser = User.builder().id(user.getId() + 1).build();
+        Recipe recipe = Recipe.builder().name("초코치킨")
+                .owner(user)
+                .category(new Category("카테고리"))
+                .build();
+
+        RecipeDTO dto = RecipeDTO.builder()
+                .name("newName")
+                .categoryId(2L)
+                .imgUrl("http://new.com/image.png")
+                .build();
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(new Category("카테고리2")));
+
+
+        recipeService.modify(otherUser, recipe, dto);
+        verify(recipeRepository, never()).save(any());
+    }
+
+    @Test
+    public void modifyPartialContents() {
+        Category category = new Category("카테고리");
+        String recipeName = "초코치킨";
+        Recipe recipe = Recipe.builder()
+                .name(recipeName)
+                .owner(user)
+                .category(category)
+                .build();
+
+        RecipeDTO dto = RecipeDTO.builder()
+                .imgUrl("http://new.com/image.png")
+                .build();
+
+        when(recipeRepository.save(recipe)).thenReturn(recipe);
+
+        Recipe result = recipeService.modify(user, recipe, dto);
+        assertThat(result.getName()).isEqualTo(recipeName);
+        assertThat(result.getImgUrl()).isEqualTo(dto.getImgUrl());
+        assertThat(result.getCategory().getTitle()).isEqualTo(category.getTitle());
+    }
+
+
+    @Test(expected = EntityNotFoundException.class)
+    public void modifyToNotExistCategory() {
+        Category category = new Category("카테고리");
+        String recipeName = "초코치킨";
+        Recipe recipe = Recipe.builder()
+                .name(recipeName)
+                .owner(user)
+                .category(category)
+                .build();
+
+        RecipeDTO dto = RecipeDTO.builder()
+                .categoryId(2L)
+                .build();
+
+        when(categoryRepository.findById(2L)).thenReturn(Optional.empty());
+
+        recipeService.modify(user, recipe, dto);
+    }
 }

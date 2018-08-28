@@ -3,6 +3,8 @@ package com.woowahan.techcamp.recipehub.recipe.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.common.domain.AbstractEntity;
+import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
+import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import lombok.Builder;
@@ -56,6 +58,20 @@ public class Recipe extends AbstractEntity {
         return user.equals(this.owner);
     }
 
+    public void complete() {
+        completed = true;
+    }
+
+    public void modify(User user, RecipeDTO dto, Category category) {
+        if (!isOwner(user)) {
+            throw new ForbiddenException();
+        }
+
+        this.category = category != null ? category : this.category;
+        this.name = dto.getName() != null ? dto.getName() : name;
+        this.imgUrl = dto.getImgUrl() != null ? dto.getImgUrl() : imgUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,7 +87,4 @@ public class Recipe extends AbstractEntity {
         return id != null ? id.hashCode() : 0;
     }
 
-    public void complete() {
-        completed = true;
-    }
 }

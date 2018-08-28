@@ -32,4 +32,12 @@ public class RecipeRestController {
     public RestResponse<Recipe> complete(User user, @PathVariable long recipeId) {
         return RestResponse.success(recipeService.completeRecipe(user, recipeId));
     }
+
+
+    @PutMapping("/{recipeId}")
+    @AuthRequired
+    public RestResponse<Recipe> modify(User user, @PathVariable long recipeId, @RequestBody RecipeDTO dto) {
+        Recipe recipe = recipeService.findById(recipeId);
+        return RestResponse.success(recipeService.modify(user, recipe, dto));
+    }
 }
