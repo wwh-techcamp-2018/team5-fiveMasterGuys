@@ -231,23 +231,23 @@ class StepManager {
     }
 
     handleApproveButtonClick(target) {
-            const stepOffer = target.closest('.step-offer');
-            this.requestStepApproval(stepOffer)
-                .then((data) => {
-                   location.reload();
-                })
-                .catch((status) => {
-                    if (typeof status === 'undefined') {
-                        alert('네트워크 오류 발생함');
-                        return;
-                    }
-                    if (status === 401) {
-                        location.href = '/users/login';
-                        return;
-                    }
-                    console.error(status);
-                });
-        }
+        const stepOffer = target.closest('.step-offer');
+        this.requestStepApproval(stepOffer)
+            .then((data) => {
+               location.reload();
+            })
+            .catch((status) => {
+                if (typeof status === 'undefined') {
+                    alert('네트워크 오류 발생함');
+                    return;
+                }
+                if (status === 401) {
+                    location.href = '/users/login';
+                    return;
+                }
+                console.error(status);
+            });
+    }
 
     toggleStepOfferContent(target) {
         toggleHidden(target.nextElementSibling);
@@ -324,7 +324,7 @@ class StepManager {
 
     requestStepApproval(stepOffer) {
         const recipeId = this.recipe.getAttribute('data-recipe-id');
-        const offerId = stepOffer.getAttribute('data-offer-id');
+        const offerId = stepOffer.getAttribute('data-step-id');
 
         return new Promise((resolve, reject) => {
             fetchManager({
