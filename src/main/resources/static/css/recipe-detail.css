@@ -245,7 +245,9 @@
     border-right: 14px solid transparent;
     content: "";
     position: absolute;
-    margin: -14px 10px;
+    float: left;
+    left: 0;
+    margin: -14px 36px;
     z-index: 20;
 }
 
