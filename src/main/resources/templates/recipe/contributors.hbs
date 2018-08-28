@@ -1,13 +1,6 @@
 <div class="shadow-wrapper">
     <div class="contributors-shadow"></div>
     <div class="contributors">
-        <div class="contributor-container">
-            <div class="contributor main-contributor contributor-selected" data-step-id="{{id}}">
-                <div class="approved">Approved</div>
-                <i class="fas fa-user-circle fa-3x"></i>
-                <div>{{writer.name}}</div>
-            </div>
-        </div>
         {{#eqnot recipe.owner user}}
             <div class="contributor-container">
                 <div class="contributor offer">
@@ -16,6 +9,13 @@
                 </div>
             </div>
         {{/eqnot}}
+        <div class="contributor-container">
+            <div class="contributor contributor-selected" data-step-id="{{id}}">
+                <div class="approved fas fa-medal fa-3x"></div>
+                <i class="fas fa-user-circle fa-3x"></i>
+                <div>{{writer.name}}</div>
+            </div>
+        </div>
         {{#offers}}
             {{#eq offerType "MODIFY"}}
                 <div class="contributor-container">
