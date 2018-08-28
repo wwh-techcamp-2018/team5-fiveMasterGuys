@@ -8,8 +8,10 @@ class Templates {
                 Step ${data.sequence}
             </h2>
             ${this.templateStepBox(data)}
+        </div>
+        <div class="step-container">
             <button class="btn-step-add" data-step-id="${data.id}">
-                <i class="fas fa-plus-circle fa-4x"> Step 추가 하기</i>
+                <i class="fas fa-plus-circle fa-3x"> Step 추가 하기</i>
             </button>
         </div>
         `;
@@ -51,6 +53,11 @@ class Templates {
                         </div>
                     </div>
                     <div class="column is-one-fifth">
+                        <div class="is-clearfix">
+                            <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
+                                <i class="fas fa-edit fa-2x"></i>
+                            </div>
+                        </div>
                         <div class="ingredient"></div>
                     </div>
                 </div>
