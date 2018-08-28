@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.service;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
@@ -8,7 +9,6 @@ import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
-import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class RecipeServiceTest {
     private CategoryService categoryService;
 
     @Mock
-    private StepOfferRepository stepOfferRepository;
+    private CategoryRepository categoryRepository;
 
     @InjectMocks
     private RecipeService recipeService;
@@ -135,16 +135,11 @@ public class RecipeServiceTest {
         assertThat(dto).isEqualToIgnoringGivenFields(modified, "categoryId");
         assertThat(modified.getCategory().getTitle()).isEqualTo("카테고리2");
     }
-  
+
     @Test(expected = NotFoundException.class)
     public void searchWithCategory() throws NotFoundException {
         when(categoryService.findById(any())).thenReturn(Optional.empty());
         recipeService.search(1L, null, null);
-    }
-
-    private static List<Recipe> generateRecipeList(int count) {
-        List<Recipe> result = new ArrayList<>();
-      
     }
 
     @Test(expected = ForbiddenException.class)
