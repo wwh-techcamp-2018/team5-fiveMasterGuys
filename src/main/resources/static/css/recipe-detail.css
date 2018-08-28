@@ -29,8 +29,8 @@
     border-radius: 3px;
 }
 
-.step-offers > .box {
-    border-radius: 3px;
+.step-offers .box {
+    border-radius: 0 0 3px 3px;
 }
 
 .step-offers > .step-offer-title {
@@ -86,12 +86,17 @@
     overflow: hidden;
 }
 
-.box > .columns {
+.box > .step-inner-container {
+}
+
+.columns {
     padding: 30px;
 }
 
 .subtitle {
-    padding: 10px;
+    color: #FFF;
+    padding: 10px 10px 10px 30px;
+    background: #de6b6b;
     font-size: 40px;
     font-weight: bold;
     font-style: italic;

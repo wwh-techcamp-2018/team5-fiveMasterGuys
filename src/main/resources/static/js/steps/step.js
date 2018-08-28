@@ -71,7 +71,7 @@ class StepManager {
     showModifyStepForm(target) {
         checkLoginOrRedirect();
         let stepBox = target.closest('.box');
-        const stepBoxInner = stepBox.querySelector('.columns:not(.hidden)');
+        const stepBoxInner = stepBox.querySelector('.step-inner-container:not(.hidden)');
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
 
         const stepForm = stepBox.previousElementSibling;
@@ -82,7 +82,7 @@ class StepManager {
     showModifyOfferStepForm(target) {
         checkLoginOrRedirect();
         let stepBox = target.closest('.box');
-        const stepBoxInner = stepBox.querySelector('.columns:not(.hidden)');
+        const stepBoxInner = stepBox.querySelector('.step-inner-container:not(.hidden)');
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify-offer'));
 
         const stepForm = stepBox.previousElementSibling;
@@ -148,11 +148,11 @@ class StepManager {
                 return;
             }
 
-            let exposedBoxesInner = $All(`.box[data-step-id="${boxId}"] > .columns`);
+            let exposedBoxesInner = $All(`.box[data-step-id="${boxId}"] > .step-inner-container`);
             exposedBoxesInner.forEach(t => t.classList.add('hidden'));
 
             let stepId = target.getAttribute('data-step-id');
-            let overedBoxInner = $(`.columns[data-step-id="${stepId}"]`);
+            let overedBoxInner = $(`.step-inner-container[data-step-id="${stepId}"]`);
             overedBoxInner.classList.toggle(`hidden`);
         }
     }
@@ -213,7 +213,7 @@ class StepManager {
                 const target = stepBox.querySelector('.shadow-wrapper');
                 this.renderStepInnerBefore(target, data);
                 toggleHidden(stepBox);
-                toggleHidden(stepBox.querySelector('.columns:not(.hidden)'));
+                toggleHidden(stepBox.querySelector('.step-inner-container:not(.hidden)'));
                 removeElement(stepForm);
             })
             .catch((status) => {
