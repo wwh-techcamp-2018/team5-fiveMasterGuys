@@ -52,7 +52,7 @@ public class StepOwnerService implements StepService {
     @Override
     @Transactional
     public Step approve(Recipe recipe, Long offerId, User user) {
-        Optional<Step> maybeApprovedStep = null;
+        Optional<Step> maybeApprovedStep = Optional.empty();
         StepOffer offer = stepOfferRepository.findById(offerId)
                 .orElseThrow(EntityNotFoundException::new);
 
