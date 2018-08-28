@@ -14,15 +14,29 @@
 }
 
 #input-box {
-    box-shadow: 0px 0px 40px #444;
+    box-shadow: 0 0 40px #444;
     border-radius: 60px;
+}
+
+#input-box input:hover {
+    outline-style:none;
+    box-shadow:none;
+    border: none;
+}
+
+#input-box input, #input-box a, #input-box select {
+    outline-style:none;
+    box-shadow:none;
+    border: none;
 }
 
 .is-btn-inactive {
     background-color: #EEE;
-    border-color: transparent;
     color: #CCC;
     cursor: default;
+}
+.is-btn-inactive:hover {
+    color: #CCC;
 }
 
 .is-btn-active {
