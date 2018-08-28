@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.recipe.service;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
+import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
@@ -30,6 +31,9 @@ public class RecipeService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public Recipe create(User owner, RecipeDTO dto) {
         Category category = categoryService.findById(dto.getCategoryId()).orElseThrow(BadRequestException::new);
@@ -62,6 +66,12 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    public Recipe modify(User user, Recipe recipe, RecipeDTO dto) {
+        Category category = getCategoryIfIdExist(dto.getCategoryId());
+        recipe.modify(user, dto, category);
+        return recipeRepository.save(recipe);
+    }
+
     public Page<Recipe> search(Long categoryId, String keyword, Pageable pageable) throws NotFoundException {
         return recipeRepository.findByCategoryAndNameContaining(
                 categoryService.findById(categoryId).orElseThrow(NotFoundException::new),
@@ -74,4 +84,12 @@ public class RecipeService {
                 keyword,
                 pageable);
     }
+  
+    private Category getCategoryIfIdExist(Long categoryId) {
+        if (categoryId != null) {
+            return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
+        }
+        return null;
+    }
+
 }

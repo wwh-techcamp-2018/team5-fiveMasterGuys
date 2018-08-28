@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecipeRestAcceptanceTest extends AcceptanceTest {
 
+
     @Autowired
     private RecipeRepository recipeRepository;
 
@@ -112,6 +113,76 @@ public class RecipeRestAcceptanceTest extends AcceptanceTest {
         final long recipeId = defaultRecipe.getId();
         ResponseEntity<String> response = template().getForEntity("/recipes/" + recipeId, String.class);
         assertThat(response.getBody()).doesNotContain("레시피 완성하기");
+    }
+
+    @Test
+    public void modifyRecipeImage() {
+        String newImageUrl = "http://s3.aws.image.com/newimage.png";
+
+
+        RecipeDTO dto = RecipeDTO.builder().imgUrl(newImageUrl).build();
+        ResponseEntity<RestResponse<Recipe>> resp = requestJson(
+                "/api/recipes/" + defaultRecipe.getId(),
+                HttpMethod.PUT,
+                dto,
+                basicAuthRecipeOwner,
+                recipeType());
+
+        Recipe modified = recipeRepository.findById(defaultRecipe.getId()).get();
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(modified.getImgUrl()).isEqualTo(newImageUrl);
+        assertThat(modified).isEqualToComparingOnlyGivenFields(
+                defaultRecipe,
+                "name",
+                "owner");
+        assertThat(modified.getCategory().getTitle()).isEqualTo(defaultRecipe.getCategory().getTitle());
+    }
+
+    @Test
+    public void modifyRecipeImageByNotOwner() {
+        String newImageUrl = "http://s3.aws.image.com/newimage.png";
+
+        RecipeDTO dto = RecipeDTO.builder().imgUrl(newImageUrl).build();
+        ResponseEntity<RestResponse<Recipe>> resp = requestJson(
+                "/api/recipes/" + defaultRecipe.getId(),
+                HttpMethod.PUT,
+                dto,
+                basicAuthUser,
+                recipeType());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    public void modifyRecipeImageByNotLoginedUser() {
+        String newImageUrl = "http://s3.aws.image.com/newimage.png";
+
+        RecipeDTO dto = RecipeDTO.builder().imgUrl(newImageUrl).build();
+        ResponseEntity<RestResponse<Recipe>> resp = requestJson(
+                "/api/recipes/" + defaultRecipe.getId(),
+                HttpMethod.PUT,
+                dto,
+                recipeType());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    public void modifyNotExistRecipe() {
+        String newImageUrl = "http://s3.aws.image.com/newimage.png";
+
+        RecipeDTO dto = RecipeDTO.builder().imgUrl(newImageUrl).build();
+        ResponseEntity<RestResponse<Recipe>> resp = requestJson(
+                "/api/recipes/100",
+                HttpMethod.PUT,
+                dto,
+                basicAuthRecipeOwner,
+                recipeType());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    public ParameterizedTypeReference<RestResponse<Recipe>> recipeType() {
+        return new ParameterizedTypeReference<RestResponse<Recipe>>() {
+        };
     }
 
     @Override

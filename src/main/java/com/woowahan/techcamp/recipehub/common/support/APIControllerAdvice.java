@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,14 @@ public class APIControllerAdvice {
         return errorResponseBuilder.build();
 
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public RestResponse<?> handleNotFoundException(EntityNotFoundException exception) {
+        return RestResponse.error(exception.getMessage()).build();
+    }
+
+
 
     private String getErrorMessage(FieldError fieldError) {
         Optional<String> code = getFirstCode(fieldError);
