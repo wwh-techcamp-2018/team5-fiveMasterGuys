@@ -1,6 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.service;
 
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
+import com.woowahan.techcamp.recipehub.step.domain.OfferType;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
 import com.woowahan.techcamp.recipehub.step.domain.StepOffer;
 import com.woowahan.techcamp.recipehub.step.dto.StepCreationDTO;
@@ -37,8 +38,8 @@ public class StepOwnerServiceTest {
 
     @Mock
     private StepRepository stepRepository;
+
     private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
-    private Step recipeStep;
     private Recipe recipe;
     private User owner;
 
@@ -135,12 +136,13 @@ public class StepOwnerServiceTest {
     }
 
     @Test
-    public void approveWithNullTarget() {
+    public void approveAppendOfferWithNullTarget() {
         long firstSequence = 1L;
 
         StepOffer offer = StepOffer.builder()
                 .id(1L)
                 .target(null)
+                .offerType(OfferType.APPEND)
                 .recipe(recipe)
                 .build();
 
@@ -159,11 +161,11 @@ public class StepOwnerServiceTest {
         assertThat(resultStep.getSequence()).isEqualTo(firstSequence);
 
         verify(stepOfferRepository).approveStepOffer(offer.getId(), firstSequence);
-        verify(stepOfferRepository).rejectAllOffersByTarget(offer.getTarget(), recipe);
+        verify(stepOfferRepository).rejectAppendingOffersByTarget(offer.getTarget());
     }
 
     @Test
-    public void approveWithTarget() {
+    public void approveAppendOfferWithTarget() {
         Step target = Step.builder()
                 .sequence(1L)
                 .recipe(recipe)
@@ -171,9 +173,11 @@ public class StepOwnerServiceTest {
 
         StepOffer offer = StepOffer.builder()
                 .id(1L)
+                .offerType(OfferType.APPEND)
                 .target(target)
                 .recipe(recipe)
                 .build();
+
         Step approvedStep = Step.builder()
                 .id(1L)
                 .sequence(target.getSequence() + 1L)
@@ -184,11 +188,45 @@ public class StepOwnerServiceTest {
         when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approvedStep));
 
         Step resultStep = service.approve(recipe, offer.getId(), owner);
+
         assertThat(resultStep.getId()).isEqualTo(offer.getId());
         assertThat(resultStep.getRecipe()).isEqualTo(offer.getRecipe());
         assertThat(resultStep.getSequence()).isEqualTo(target.getSequence() + 1L);
 
         verify(stepOfferRepository).approveStepOffer(offer.getId(), target.getSequence() + 1L);
-        verify(stepOfferRepository).rejectAllOffersByTarget(offer.getTarget(), recipe);
+        verify(stepOfferRepository).rejectAppendingOffersByTarget(offer.getTarget());
+    }
+
+    @Test
+    public void approveModifyOffer() {
+        Step.StepBuilder targetBuilder = Step.builder().sequence(1L).recipe(this.recipe);
+        Step target = targetBuilder.build();
+        Step closedTarget = targetBuilder.closed(true).build();
+
+        StepOffer offer = StepOffer.builder()
+                .offerType(OfferType.MODIFY)
+                .id(1L)
+                .target(target)
+                .recipe(this.recipe)
+                .build();
+
+        Step approveOffer = Step.builder()
+                .id(1L)
+                .sequence(target.getSequence())
+                .recipe(this.recipe)
+                .build();
+
+        when(stepRepository.save(target)).thenReturn(closedTarget);
+        when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
+        when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approveOffer));
+
+        Step updatedStep = service.approve(this.recipe, offer.getId(), owner);
+
+        assertThat(target.isClosed()).isTrue();
+        assertThat(updatedStep.getSequence()).isEqualTo(target.getSequence());
+
+        verify(stepOfferRepository).rejectModifyingOfferByTarget(target);
+        verify(stepOfferRepository).approveStepOffer(offer.getId(), target.getSequence());
+        verify(stepOfferRepository).changeAppendOffersTarget(target, updatedStep);
     }
 }

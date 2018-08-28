@@ -58,7 +58,7 @@ class Templates {
 
     static templateStepOffer(data) {
         return `
-            <div class="step-offer" data-offer-id=${data.id}>
+            <div class="step-offer" data-step-id=${data.id}>
                 <a class="hero is-info step-offer-title-bar">
                     <h3 class="title">${data.name}
                         <span class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></span>
