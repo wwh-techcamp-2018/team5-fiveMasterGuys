@@ -1,4 +1,4 @@
-<div class="columns{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
+<div class="columns {{#if hidden}} hidden{{/if}} {{#eq offerType "MODIFY"}}step-offer{{/eq}}" data-step-id="{{id}}">
     <div class="column is-one-third">
         {{#if imgUrl}}
             <img class="step-img" src="{{imgUrl}}" alt="{{name}}">
@@ -21,7 +21,10 @@
     <div class="column is-one-fifth">
         {{#eq recipe.owner user}}
             {{#eq offerType "APPEND"}}
-            <button class="btn-approve button is-success">승인</button>
+                <button class="btn-approve button is-success">OK</button>
+            {{/eq}}
+            {{#eq offerType "MODIFY"}}
+                <button class="btn-approve button is-success">OK</button>
             {{/eq}}
             {{#eq writer user}}
                 <div class="is-clearfix">
