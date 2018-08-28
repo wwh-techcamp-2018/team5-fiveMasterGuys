@@ -7,7 +7,7 @@
 }
 
 .step-title {
-    margin: 30px;
+    margin: 20px 0;
 }
 
 .step-title > i {
@@ -26,11 +26,11 @@
     padding: 20px;
     background: #F6F6F6;
     border: #DDD solid 1px;
-    border-radius: 3px;
+    border-radius: 10px;
 }
 
-.step-offers > .box {
-    border-radius: 3px;
+.step-offers .box {
+    border-radius: 0 0 3px 3px;
 }
 
 .step-offers > .step-offer-title {
@@ -86,12 +86,17 @@
     overflow: hidden;
 }
 
-.box > .columns {
+.box > .step-inner-container {
+}
+
+.step-inner-container > .columns {
     padding: 30px;
 }
 
 .subtitle {
-    padding: 10px;
+    color: #FFF;
+    padding: 10px 10px 10px 30px;
+    background: #de6b6b;
     font-size: 40px;
     font-weight: bold;
     font-style: italic;
