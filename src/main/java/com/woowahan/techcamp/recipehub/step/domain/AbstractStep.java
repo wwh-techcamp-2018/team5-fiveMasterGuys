@@ -40,6 +40,7 @@ public abstract class AbstractStep extends AbstractEntity {
     private User writer;
     private String imgUrl;
 
+    @JsonIgnore
     @ManyToMany
     private List<Ingredient> ingredients;
 

@@ -199,33 +199,34 @@ public class StepOwnerServiceTest {
 
     @Test
     public void approveModifyOffer() {
-        Step target = Step.builder()
-                .sequence(1L)
-                .recipe(recipe)
-                .build();
+        Step.StepBuilder targetBuilder = Step.builder().sequence(1L).recipe(this.recipe);
+        Step target = targetBuilder.build();
+        Step closedTarget = targetBuilder.closed(true).build();
 
         StepOffer offer = StepOffer.builder()
                 .offerType(OfferType.MODIFY)
                 .id(1L)
                 .target(target)
-                .recipe(recipe)
+                .recipe(this.recipe)
                 .build();
 
-        Step approveStep = Step.builder()
+        Step approveOffer = Step.builder()
                 .id(1L)
                 .sequence(target.getSequence())
-                .recipe(recipe)
+                .recipe(this.recipe)
                 .build();
 
+        when(stepRepository.save(target)).thenReturn(closedTarget);
         when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
-        when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approveStep));
+        when(stepRepository.findById(offer.getId())).thenReturn(Optional.of(approveOffer));
 
-        Step updatedStep = service.approve(recipe, offer.getId(), owner);
+        Step updatedStep = service.approve(this.recipe, offer.getId(), owner);
 
         assertThat(target.isClosed()).isTrue();
         assertThat(updatedStep.getSequence()).isEqualTo(target.getSequence());
 
         verify(stepOfferRepository).rejectModifyingOfferByTarget(target);
         verify(stepOfferRepository).approveStepOffer(offer.getId(), target.getSequence());
+        verify(stepOfferRepository).changeAppendOffersTarget(target, updatedStep);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
 public class StepOwnerService implements StepService {
@@ -51,37 +52,43 @@ public class StepOwnerService implements StepService {
     @Override
     @Transactional
     public Step approve(Recipe recipe, Long offerId, User user) {
+        Optional<Step> maybeApprovedStep = null;
         StepOffer offer = stepOfferRepository.findById(offerId)
                 .orElseThrow(EntityNotFoundException::new);
 
         if (offer.getOfferType().equals(OfferType.APPEND)) {
-            approveAppend(offer, recipe);
+            return approveAppend(offer, recipe);
         }
 
         if (offer.getOfferType().equals(OfferType.MODIFY)) {
-            approveModify(offer);
+            Step approvedStep = approveModify(offer);
+            stepOfferRepository.changeAppendOffersTarget(offer.getTarget(), approvedStep);
+            return approvedStep;
         }
 
-        return findStepById(offerId);
+        return maybeApprovedStep.orElseThrow(EntityNotFoundException::new);
     }
 
-    private void approveAppend(StepOffer offer, Recipe recipe) {
+    private Step approveAppend(StepOffer offer, Recipe recipe) {
         Long sequence = getSequenceFromOffer(offer);
         stepRepository.increaseSequenceGte(recipe, sequence);
 
         rejectOffersByTarget(offer.getTarget(), recipe);
         stepOfferRepository.approveStepOffer(offer.getId(), sequence);
+        return findStepById(offer.getId());
     }
 
-    private void approveModify(StepOffer offer) {
+    private Step approveModify(StepOffer offer) {
         Step targetStep = offer.getTarget();
         Long targetSequence = targetStep.getSequence();
 
         targetStep.close();
-        stepRepository.save(targetStep);
+        Step closedStep = stepRepository.save(targetStep);
 
         stepOfferRepository.approveStepOffer(offer.getId(), targetSequence);
-        stepOfferRepository.rejectModifyingOfferByTarget(targetStep);
+        stepOfferRepository.rejectModifyingOfferByTarget(closedStep);
+
+        return findStepById(offer.getId());
     }
 
     private Long getNextSequence(StepCreationDTO dto) {
