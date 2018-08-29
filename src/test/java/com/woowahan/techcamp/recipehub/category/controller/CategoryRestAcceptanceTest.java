@@ -3,6 +3,7 @@ package com.woowahan.techcamp.recipehub.category.controller;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
+import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
 import com.woowahan.techcamp.recipehub.support.AcceptanceTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,10 @@ public class CategoryRestAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
+
     private Category categoryA;
     private Category categoryB;
 
@@ -27,8 +32,8 @@ public class CategoryRestAcceptanceTest extends AcceptanceTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        categoryA = categoryRepository.save(new Category("A"));
-        categoryB = categoryRepository.save(new Category("B"));
+        categoryA = categoryRepository.save(Category.builder().title("A").build());
+        categoryB = categoryRepository.save(Category.builder().title("B").build());
     }
 
     @Test
@@ -39,4 +44,5 @@ public class CategoryRestAcceptanceTest extends AcceptanceTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getData()).contains(categoryA, categoryB);
     }
+
 }

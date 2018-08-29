@@ -30,7 +30,7 @@ public class HomeAcceptanceTest extends AcceptanceTest {
     public void mainPageWithRecipes() throws Exception {
         recipeRepository.save(Recipe.builder()
                 .name("Hello")
-                .category(categoryRepository.save(new Category("a")))
+                .category(categoryRepository.save(Category.builder().title("a").build()))
                 .owner(savedUser)
                 .build());
         ResponseEntity<String> response = requestGet("/");

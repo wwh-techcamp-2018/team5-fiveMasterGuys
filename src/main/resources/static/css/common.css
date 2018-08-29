@@ -71,3 +71,10 @@ body, button, input {
     border-color: transparent;
     color: #fff;
 }
+
+.child-vertical-align {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+

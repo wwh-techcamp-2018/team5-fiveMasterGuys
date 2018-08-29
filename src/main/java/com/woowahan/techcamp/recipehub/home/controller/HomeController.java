@@ -1,7 +1,6 @@
 package com.woowahan.techcamp.recipehub.home.controller;
 
 import com.woowahan.techcamp.recipehub.common.dto.PageListDTO;
-import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,17 +41,12 @@ public class HomeController {
                          @RequestParam(name = "q", defaultValue = "") String keyword,
                          @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE) Pageable pageable) {
 
-
-        try {
-            if (categoryId == null) {
-                addAttributes(model, recipeService.search(keyword, zeroBased(pageable)), buildBaseUrl(keyword));
-                return "index";
-            }
-            addAttributes(model, recipeService.search(categoryId, keyword, zeroBased(pageable)), buildBaseUrl(keyword, categoryId));
+        if (categoryId == null) {
+            addAttributes(model, recipeService.search(keyword, zeroBased(pageable)), buildBaseUrl(keyword));
             return "index";
-        } catch (NotFoundException e) {
-            return "support/notfound";
         }
+        addAttributes(model, recipeService.search(categoryId, keyword, zeroBased(pageable)), buildBaseUrl(keyword, categoryId));
+        return "index";
     }
 
     private String buildBaseUrl(String keyword) {

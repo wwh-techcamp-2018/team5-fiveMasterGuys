@@ -3,9 +3,7 @@ package com.woowahan.techcamp.recipehub.recipe.service;
 import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
-import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
-import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -36,8 +34,7 @@ public class RecipeService {
     private CategoryRepository categoryRepository;
 
     public Recipe create(User owner, RecipeDTO dto) {
-        Category category = categoryService.findById(dto.getCategoryId()).orElseThrow(BadRequestException::new);
-        return recipeRepository.save(dto.toEntity(owner, category));
+        return recipeRepository.save(dto.toEntity(owner, findCategoryById(dto.getCategoryId())));
     }
 
     public Recipe findById(Long id) {
@@ -72,9 +69,9 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    public Page<Recipe> search(Long categoryId, String keyword, Pageable pageable) throws NotFoundException {
+    public Page<Recipe> search(Long categoryId, String keyword, Pageable pageable) {
         return recipeRepository.findByCategoryAndNameContaining(
-                categoryService.findById(categoryId).orElseThrow(NotFoundException::new),
+                findCategoryById(categoryId),
                 keyword,
                 pageable);
     }
@@ -87,9 +84,12 @@ public class RecipeService {
 
     private Category getCategoryIfIdExist(Long categoryId) {
         if (categoryId != null) {
-            return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
+            return findCategoryById(categoryId);
         }
         return null;
     }
 
+    private Category findCategoryById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
 }

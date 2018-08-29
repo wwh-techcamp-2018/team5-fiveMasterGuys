@@ -1,8 +1,9 @@
 package com.woowahan.techcamp.recipehub.category.controller;
 
 import com.woowahan.techcamp.recipehub.category.domain.Category;
-import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.support.RestResponse;
+import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +16,13 @@ import java.util.List;
 public class CategoryRestController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
+
+    @Autowired
+    private RecipeService recipeService;
 
     @GetMapping
     public RestResponse<List<Category>> getAllCategories() {
-        return RestResponse.success(categoryRepository.findAll());
+        return RestResponse.success(categoryService.findAll());
     }
 }

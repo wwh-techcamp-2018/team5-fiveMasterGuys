@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.util.Objects;
 
@@ -13,10 +14,12 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Category extends AbstractEntity {
 
+    @Column
     private String title;
 
     @Builder
-    public Category(String title) {
+    public Category(Long id, String title) {
+        this.id = id;
         this.title = title;
     }
 
