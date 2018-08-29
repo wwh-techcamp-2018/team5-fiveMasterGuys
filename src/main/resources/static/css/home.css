@@ -10,6 +10,20 @@
     margin-bottom: 5px;
 }
 
+.card-content {
+    padding: 0;
+}
+
+.card-content-detail {
+    padding: 20px;
+}
+
+.level-item .subtitle {
+    padding: 5px;
+    color: #FFF;
+    font-weight: bold;
+}
+
 .card-content > nav.level {
     border-top: 1px solid #dbdbdb;
     padding-top: 10px;
@@ -27,4 +41,16 @@
     background: #454d4e;
     color: #fff;
     font-weight: bold;
+}
+
+}
+
+.completed {
+    background: #2a97dc;
+    border-radius: 0 0 20px 20px;
+}
+
+.incompleted {
+    background: #f7c630;
+    border-radius: 0 0 20px 20px;
 }

@@ -20,19 +20,23 @@
                             </figure>
                         </div>
                         <div class="card-content">
-                            <p class="title is-4 one-line-ellipsis">{{name}}</p>
-                            <p class="subtitle is-6 one-line-ellipsis">{{owner.name}}</p>
-                            <div class="tags is-right">
-                                <span class="tag">{{category.title}}</span>
+                            <div class="card-content-detail">
+                                <p class="title is-4 one-line-ellipsis">{{name}}</p>
+                                <p class="subtitle is-6 one-line-ellipsis">{{owner.name}}</p>
+                                <div class="tags is-right">
+                                    <span class="tag">{{category.title}}</span>
+                                </div>
                             </div>
                             <nav class="level">
-                                <div class="level-item has-text-centered">
-                                    {{#if completed}}
-                                    <p class="subtitle is-6">완료</p>
-                                    {{else}}
-                                    <p class="subtitle is-6">진행중</p>
-                                    {{/if}}
+                                {{#if completed}}
+                                <div class="level-item has-text-centered completed">
+                                    <p class="subtitle is-6">완성</p>
                                 </div>
+                                {{else}}
+                                <div class="level-item has-text-centered incompleted">
+                                    <p class="subtitle is-6">진행중</p>
+                                </div>
+                                {{/if}}
                             </nav>
                         </div>
                     </div>
@@ -45,7 +49,7 @@
             <ul class="pagination-list">
                 {{#each paginationList.items}}
                 <li>
-                    <a href="{{baseUrl}}page={{number}}" class="pagination-link {{#if current}}btn-green{{/if}}"
+                    <a href="{{baseUrl}}page={{number}}" class="pagination-link {{#if current}}btn-gray{{/if}}"
                        aria-label="Goto page {{number}}">{{number}}</a>
                 </li>
                 {{/each}}
