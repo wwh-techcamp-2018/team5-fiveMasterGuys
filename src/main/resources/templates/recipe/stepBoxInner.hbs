@@ -1,6 +1,6 @@
 <div class="step-inner-container{{#if hidden}} hidden{{/if}}" data-step-id="{{id}}">
 {{#eqnot offerType "APPEND"}}
-    <p class="subtitle one-line-ellipsis">{{name}}</p>
+    <p class="subtitle">{{name}}</p>
 {{/eqnot}}
     <div class="columns{{#eq offerType "MODIFY"}} step-offer{{/eq}}" data-step-id="{{id}}">
         <div class="column is-one-third">
@@ -15,7 +15,7 @@
                 <ol class="step-contents">
                     {{#content}}
                         <li>
-                            <p class="one-line-ellipsis">{{.}}</p>
+                            <p>{{.}}</p>
                         </li>
                     {{/content}}
                 </ol>
