@@ -40,7 +40,7 @@ class Templates {
     static templateStepBoxInner(data) {
         return `
             <div class="step-inner-container" data-step-id="${data.id}">
-                <p class="subtitle one-line-ellipsis">${data.name}</p>
+                <p class="subtitle">${data.name}</p>
                 <div class="columns">
                     <div class="column is-one-third">
                         <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
@@ -48,7 +48,7 @@ class Templates {
                     <div class="column step-article-container">
                         <div class="step-contents-container">
                             <ol class="step-contents">
-                                ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
+                                ${data.content.map((e) => (`<li><p>${e}</p></li>`)).join('\n')}
                             </ol>
                         </div>
                     </div>
@@ -81,7 +81,7 @@ class Templates {
                         <div class="column step-article-container">
                             <div class="step-contents-container">
                                 <ol class="step-contents">
-                                    ${data.content.map((e) => (`<li><p class="one-line-ellipsis">${e}</p></li>`)).join('\n')}
+                                    ${data.content.map((e) => (`<li><p>${e}</p></li>`)).join('\n')}
                                 </ol>
                             </div>
                         </div>
@@ -130,7 +130,7 @@ class Templates {
         return `
         <li class="step-item">
             <div class="columns is-vcentered step-item-container">
-                <p class="column is-11 step-item-contents one-line-ellipsis">${content}</p><button class="btn-minus is-1"><i class="fas fa-minus fa-3x"></i></button>
+                <p class="column is-11 step-item-contents">${content}</p><button class="btn-minus is-1"><i class="fas fa-minus fa-3x"></i></button>
             </div>
         </li>
         `;
