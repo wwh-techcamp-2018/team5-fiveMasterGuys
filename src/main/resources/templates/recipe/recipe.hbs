@@ -4,7 +4,9 @@
     {{#unless completed}}
         <script src="/js/steps/templates.js"></script>
         <script src="/js/steps/step.js"></script>
+        {{#if authorizedUser}}
         <script src="/js/recipes/recipe.js"></script>
+        {{/if}}
     {{/unless}}
 {{/partial}}
 
