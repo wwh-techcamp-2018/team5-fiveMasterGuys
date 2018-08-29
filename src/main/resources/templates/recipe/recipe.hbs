@@ -23,13 +23,14 @@
                             {{else}}
                             <span class="recipe-title is-size-1">{{name}}</span>
                             {{/if}}
-                            <span class="is-size-5">by {{owner.name}}</span>
                         </h2>
+                        <p class="recipe-owner is-size-4">
+                            <i class="fas fa-user-circle fa-2x"></i>{{owner.name}}
+                        </p>
                         <p class="category is-size-4">
                             <i class="fas fa-mortar-pestle fa-2x"></i>{{category.title}}
                         </p>
                     </div>
-
                     <div class="column">
                         <div class="recipe-img-upload-container">
                             {{#if authorizedUser}}

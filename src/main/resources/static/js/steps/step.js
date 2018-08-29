@@ -69,7 +69,7 @@ class StepManager {
     showModifyStepForm(target) {
         checkLoginOrRedirect();
         let stepBox = target.closest('.box');
-        const stepBoxInner = stepBox.querySelector('.columns:not(.hidden)');
+        const stepBoxInner = stepBox.querySelector('.step-inner-container:not(.hidden)');
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
 
         const stepForm = stepBox.previousElementSibling;
