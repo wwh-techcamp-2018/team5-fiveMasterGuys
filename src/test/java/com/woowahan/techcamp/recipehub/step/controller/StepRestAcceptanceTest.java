@@ -65,7 +65,7 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
                 .owner(savedRecipeOwner)
                 .imgUrl("/static/img/image.jpg")
                 .recipeSteps(null)
-                .category(categoryRepository.save(new Category("category")))
+                .category(categoryRepository.save(Category.builder().title("category").build()))
                 .completed(false)
                 .build());
 

@@ -31,7 +31,7 @@ public class SearchAcceptanceTest extends AcceptanceTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        category = categoryRepository.save(new Category("category"));
+        category = categoryRepository.save(Category.builder().title("category").build());
 
         recipeRepository.saveAll(FixtureFactory.generateRecipeList(category, 10));
         recipeRepository.save(Recipe.builder().name(RECIPE_NAME).category(category).build());

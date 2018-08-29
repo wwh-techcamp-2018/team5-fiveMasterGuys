@@ -38,7 +38,7 @@ public class StepRepositoryTest {
         Recipe recipe = recipeRepository.save(
                 Recipe.builder()
                         .name("a")
-                        .category(categoryRepository.save(new Category("category")))
+                        .category(categoryRepository.save(Category.builder().title("category").build()))
                         .completed(false)
                         .build()
         );

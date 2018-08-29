@@ -5,7 +5,6 @@ import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ForbiddenException;
-import com.woowahan.techcamp.recipehub.common.exception.NotFoundException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.repository.RecipeRepository;
@@ -51,14 +50,14 @@ public class RecipeServiceTest {
     public void setUp() throws Exception {
         // Given
         user = User.builder().id(1L).name("Ryun").email("ryuneeee@gmail.com").build();
-        category = Category.builder().title("양식").build();
-        dto = RecipeDTO.builder().name("초코치킨").categoryId(1L).build();
+        category = Category.builder().id(1L).title("양식").build();
+        dto = RecipeDTO.builder().categoryId(category.getId()).name("초코치킨").categoryId(1L).build();
     }
 
     @Test
     public void create() throws Exception {
         // Given
-        when(categoryService.findById(1L)).thenReturn(Optional.ofNullable(category));
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         Recipe recipe = dto.toEntity(user, category);
         when(recipeRepository.save(recipe)).thenReturn(recipe);
 
@@ -70,7 +69,7 @@ public class RecipeServiceTest {
         assertThat(created.getCategory()).isEqualTo(category);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void withNullCategory() throws Exception {
         RecipeDTO dtoWithNullCategory = RecipeDTO.builder().name("초코치킨").categoryId(Long.MAX_VALUE).build();
         recipeService.create(user, dtoWithNullCategory);
@@ -78,6 +77,8 @@ public class RecipeServiceTest {
 
     @Test(expected = BadRequestException.class)
     public void withNullUser() throws Exception {
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+
         RecipeDTO dtoWithNullCategory = RecipeDTO.builder().name("초코치킨").categoryId(1L).build();
         recipeService.create(null, dtoWithNullCategory);
     }
@@ -122,7 +123,7 @@ public class RecipeServiceTest {
     public void modify() {
         Recipe recipe = Recipe.builder().name("초코치킨")
                 .owner(user)
-                .category(new Category("카테고리"))
+                .category(Category.builder().title("카테고리").build())
                 .build();
 
         RecipeDTO dto = RecipeDTO.builder()
@@ -131,7 +132,7 @@ public class RecipeServiceTest {
                 .imgUrl("http://new.com/image.png")
                 .build();
 
-        when(categoryRepository.findById(2L)).thenReturn(Optional.of(new Category("카테고리2")));
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(Category.builder().title("카테고리2").build()));
         when(recipeRepository.save(recipe)).thenReturn(recipe);
 
         Recipe modified = recipeService.modify(user, recipe, dto);
@@ -140,9 +141,9 @@ public class RecipeServiceTest {
         assertThat(modified.getCategory().getTitle()).isEqualTo("카테고리2");
     }
 
-    @Test(expected = NotFoundException.class)
-    public void searchWithCategory() throws NotFoundException {
-        when(categoryService.findById(any())).thenReturn(Optional.empty());
+    @Test(expected = EntityNotFoundException.class)
+    public void searchWithCategory() {
+//        when(categoryService.findById(any())).thenReturn();
         recipeService.search(1L, null, null);
     }
 
@@ -151,7 +152,7 @@ public class RecipeServiceTest {
         User otherUser = User.builder().id(user.getId() + 1).build();
         Recipe recipe = Recipe.builder().name("초코치킨")
                 .owner(user)
-                .category(new Category("카테고리"))
+                .category(Category.builder().title("카테고리").build())
                 .build();
 
         RecipeDTO dto = RecipeDTO.builder()
@@ -159,7 +160,7 @@ public class RecipeServiceTest {
                 .categoryId(2L)
                 .imgUrl("http://new.com/image.png")
                 .build();
-        when(categoryRepository.findById(2L)).thenReturn(Optional.of(new Category("카테고리2")));
+        when(categoryRepository.findById(2L)).thenReturn(Optional.of(Category.builder().title("카테고리2").build()));
 
 
         recipeService.modify(otherUser, recipe, dto);
@@ -168,7 +169,7 @@ public class RecipeServiceTest {
 
     @Test
     public void modifyPartialContents() {
-        Category category = new Category("카테고리");
+        Category category = Category.builder().title("카테고리").build();
         String recipeName = "초코치킨";
         Recipe recipe = Recipe.builder()
                 .name(recipeName)
@@ -191,7 +192,7 @@ public class RecipeServiceTest {
 
     @Test(expected = EntityNotFoundException.class)
     public void modifyToNotExistCategory() {
-        Category category = new Category("카테고리");
+        Category category = Category.builder().title("카테고리").build();
         String recipeName = "초코치킨";
         Recipe recipe = Recipe.builder()
                 .name(recipeName)

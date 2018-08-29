@@ -44,7 +44,7 @@ public class RecipeTest {
                 .imgUrl("http://new.com/image.png")
                 .build();
         String categoryName = "test";
-        Category category = new Category(categoryName);
+        Category category = Category.builder().title(categoryName).build();
 
         recipe.modify(owner, dto, category);
 
@@ -57,7 +57,7 @@ public class RecipeTest {
         User owner = User.builder().id(1L).build();
         String recipeName = "name";
         Recipe recipe = Recipe.builder()
-                .category(new Category())
+                .category(Category.builder().build())
                 .name(recipeName)
                 .owner(owner)
                 .build();
@@ -85,7 +85,7 @@ public class RecipeTest {
                 .imgUrl("http://new.com/image.png")
                 .build();
         String categoryName = "test";
-        Category category = new Category(categoryName);
+        Category category = Category.builder().title(categoryName).build();
 
         recipe.modify(other, dto, category);
     }

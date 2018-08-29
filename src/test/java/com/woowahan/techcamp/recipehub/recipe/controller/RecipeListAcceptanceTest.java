@@ -46,7 +46,7 @@ public class RecipeListAcceptanceTest extends AcceptanceTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        recipeList = generateRecipeList(categoryRepository.save(new Category("category")), PAGE_SIZE * TOTAL_PAGE);
+        recipeList = generateRecipeList(categoryRepository.save(Category.builder().title("category").build()), PAGE_SIZE * TOTAL_PAGE);
         recipeRepository.saveAll(recipeList);
     }
 

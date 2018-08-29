@@ -58,7 +58,7 @@ public class RecipeAcceptanceTest extends AcceptanceTest {
     public void createWrongCategoryId() {
         RecipeDTO dto = RecipeDTO.builder().categoryId(Long.MAX_VALUE).name("초코치킨").build();
         ResponseEntity<String> resp = requestPost("/recipes", dto, basicAuthUser);
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test

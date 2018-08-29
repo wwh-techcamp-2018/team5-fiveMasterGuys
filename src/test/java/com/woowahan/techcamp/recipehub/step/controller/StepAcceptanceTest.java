@@ -54,7 +54,7 @@ public class StepAcceptanceTest extends AcceptanceTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        Category category = categoryRepository.save(new Category("pizza"));
+        Category category = categoryRepository.save(Category.builder().title("pizza").build());
 
         User.UserBuilder userBuilder = User.builder()
                 .email("other@other.com")

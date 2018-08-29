@@ -5,8 +5,8 @@ import com.woowahan.techcamp.recipehub.category.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -18,7 +18,7 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Optional<Category> findById(Long categoryId) {
-        return categoryRepository.findById(categoryId);
+    public Category findById(Long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
     }
 }

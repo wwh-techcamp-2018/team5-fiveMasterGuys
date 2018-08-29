@@ -26,6 +26,23 @@
 
 .card-content > nav.level {
     border-top: 1px solid #dbdbdb;
+    padding-top: 10px;
+}
+
+#category-box {
+    cursor: pointer;
+}
+
+.category:hover {
+    color: #ff3860;
+}
+
+#category-nav {
+    background: #454d4e;
+    color: #fff;
+    font-weight: bold;
+}
+
 }
 
 .completed {
