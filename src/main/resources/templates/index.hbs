@@ -41,7 +41,7 @@
             <ul class="pagination-list">
                 {{#each paginationList.items}}
                 <li>
-                    <a href="{{baseUrl}}page={{number}}" class="pagination-link {{#if current}}is-current{{/if}}"
+                    <a href="{{baseUrl}}page={{number}}" class="pagination-link {{#if current}}btn-green{{/if}}"
                        aria-label="Goto page {{number}}">{{number}}</a>
                 </li>
                 {{/each}}
