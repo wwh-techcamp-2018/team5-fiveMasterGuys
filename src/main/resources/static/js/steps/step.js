@@ -1,6 +1,7 @@
 class StepManager {
-    constructor(imageUploader) {
+    constructor(imageUploader, errorMessageView) {
         this.recipe = $('.recipe');
+        this.errorMessageView = errorMessageView;
         this.imageUploader = imageUploader;
         this.clickEventDelegationMapping = {
             'btn-step-add': this.showAddStepForm,
@@ -39,12 +40,14 @@ class StepManager {
     handleChangeEvent({ target }) {
         if (target.classList.contains('img-upload')) {
             this.imageUploader.upload(this.getFile(target))
-                .then((data) => {
+                .then(({data}) => {
                     const label = $(`label[for=${target.id}]`);
                     label.style.backgroundImage = `url(${data})`;
                     label.innerText = '';
                 })
-                .catch();
+                .catch(({status, errors}) => {
+                    this.handleAjaxError(status, errors);
+                });
             return;
         }
     }
@@ -167,22 +170,13 @@ class StepManager {
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
-            .then((data) => {
+            .then(({data}) => {
                 this.renderStep(stepForm, data);
                 this.closeAddForm(stepForm);
-            }).catch((status) => {
+            }).catch(({status, errors}) => {
                 target.disabled = false;
-
-                if (typeof status === 'undefined') {
-                    alert('네트워크 오류 발생함');
-                    return;
-                }
-                if (status === 401) {
-                    location.href = '/users/login';
-                    return;
-                }
-                console.error(status);
-            })
+                this.handleAjaxError(status, errors);
+            });
     }
 
     handleAddFormCancelButtonClick(target) {
@@ -194,16 +188,14 @@ class StepManager {
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
-            .then((data) => {
+            .then(({data}) => {
                 const stepBox = stepForm.nextElementSibling;
                 stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepBox(data));
                 removeElement(stepBox);
                 removeElement(stepForm);
             })
-            .catch((status) => {
-                if (status === 401) {
-                    location.href = '/users/login';
-                }
+            .catch(({status, errors}) => {
+                this.handleAjaxError(status, errors);
             });
     }
 
@@ -213,7 +205,7 @@ class StepManager {
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
-            .then((data) => {
+            .then(({data}) => {
                 this.removeSelectedContributor(requestBody.targetStepId);
                 const contributorsBox = $(`.box[data-step-id="${requestBody.targetStepId}"] .contributors`);
                 contributorsBox.insertAdjacentHTML('beforeend', Templates.templateStepContributor(data));
@@ -226,12 +218,9 @@ class StepManager {
                 toggleHidden(stepBox.querySelector('.step-inner-container:not(.hidden)'));
                 removeElement(stepForm);
             })
-            .catch((status) => {
+            .catch(({status, errors}) => {
                 target.disabled = false;
-
-                if (status === 401) {
-                    location.href = '/users/login';
-                }
+                this.handleAjaxError(status, errors);
             });
     }
 
@@ -247,64 +236,50 @@ class StepManager {
 
         const stepOffer = target.closest('.step-offer');
         this.requestStepApproval(stepOffer)
-            .then((data) => {
-                location.reload();
+            .then(({data}) => {
+               location.reload();
             })
-            .catch((status) => {
+            .catch(({status, errors}) => {
                 target.disabled = false;
-
-                if (typeof status === 'undefined') {
-                    alert('네트워크 오류 발생함');
-                    return;
-                }
-                if (status === 401) {
-                    location.href = '/users/login';
-                    return;
-                }
-                console.error(status);
+                this.handleAjaxError(status, errors);
             });
+    }
+
+    handleAjaxError(status, errors) {
+        if (typeof status === 'undefined') {
+            this.errorMessageView.showMessage('네트워크 오류 발생함');
+            return;
+        }
+        if (status === 401) {
+            location.href = '/users/login';
+            return;
+        }
+
+        if (errors) {
+            this.errorMessageView.showMessage(errors[0].message);
+            return;
+        }
     }
 
     toggleStepOfferContent(target) {
         toggleHidden(target.nextElementSibling);
     }
 
+
     requestStepAddition(requestBody) {
-        return new Promise((resolve, reject) => {
-            fetchManager({
-                url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps`,
-                headers: { "Content-Type": "application/json" },
-                method: 'POST',
-                body: JSON.stringify(requestBody),
-                onSuccess: ({ json }) => {
-                    resolve(json.data);
-                },
-                onFailed: ({ status }) => {
-                    reject(status);
-                },
-                onError: () => {
-                    reject();
-                }
-            });
+        return fetchManager({
+            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps`,
+            headers: {"Content-Type": "application/json"},
+            method: 'POST',
+            body: JSON.stringify(requestBody)
         });
     }
 
     requestStep(stepId) {
-        return new Promise((resolve, reject) => {
-            fetchManager({
-                url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${stepId}`,
-                headers: { "Content-Type": "application/json" },
-                method: 'GET',
-                onSuccess: ({ json }) => {
-                    resolve(json.data);
-                },
-                onFailed: ({ status }) => {
-                    reject(status);
-                },
-                onError: () => {
-                    reject();
-                }
-            })
+        return fetchManager({
+            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${stepId}`,
+            headers: {"Content-Type": "application/json"},
+            method: 'GET'
         });
     }
 
@@ -319,44 +294,23 @@ class StepManager {
     }
 
     requestStepModification(requestBody) {
-        return new Promise((resolve, reject) => {
-            fetchManager({
-                url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${requestBody.targetStepId}`,
-                headers: { "Content-Type": "application/json" },
-                method: 'PUT',
-                body: JSON.stringify(requestBody),
-                onSuccess: ({ json }) => {
-                    resolve(json.data);
-                },
-                onFailed: ({ status }) => {
-                    reject(status);
-                },
-                onError: () => {
-                    reject();
-                }
-            })
+        return fetchManager({
+            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${requestBody.targetStepId}`,
+            headers: {"Content-Type": "application/json"},
+            method: 'PUT',
+            body: JSON.stringify(requestBody)
         });
     }
+
 
     requestStepApproval(stepOffer) {
         const recipeId = this.recipe.getAttribute('data-recipe-id');
         const offerId = stepOffer.getAttribute('data-step-id');
 
-        return new Promise((resolve, reject) => {
-            fetchManager({
-                url: `/api/recipes/${recipeId}/steps/${offerId}/approve`,
-                headers: { "Content-Type": "application/json" },
-                method: 'GET',
-                onSuccess: ({ json }) => {
-                    resolve(json.data);
-                },
-                onFailed: ({ status }) => {
-                    reject(status);
-                },
-                onError: () => {
-                    reject();
-                }
-            });
+        return fetchManager({
+            url: `/api/recipes/${recipeId}/steps/${offerId}/approve`,
+            headers: {"Content-Type": "application/json"},
+            method: 'GET'
         });
     }
 
@@ -433,11 +387,10 @@ class StepManager {
     completeRecipe(target) {
         fetchManager({
             url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/complete`,
-            method: 'POST',
-            onSuccess: () => {
-                location.reload();
-            }
-        })
+            method: 'POST'
+        }).then(() => {
+            location.reload();
+        });
     }
 
     renderStepInnerBefore(target, data) {
@@ -446,5 +399,6 @@ class StepManager {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new StepManager(new ImageUploader());
+    const errorMessageView = new ErrorMessageView($('.error-msg-box'));
+    new StepManager(new ImageUploader(), errorMessageView);
 });

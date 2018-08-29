@@ -386,3 +386,12 @@
 .btn-approve i{
     margin-right: 10px;
 }
+
+.error-msg-box {
+    position: fixed;
+    border-radius: 0px;
+    width: 100%;
+    z-index: -1;
+    top: 0;
+    transition: all 0.3s;
+}
