@@ -96,6 +96,10 @@ public class StepResponseDTO {
                 .build();
     }
 
+    public static List<StepResponseDTO> from(List<StepOffer> stepOffers) {
+        return stepOffers.stream().map(StepResponseDTO::fromStepOffer).collect(Collectors.toList());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

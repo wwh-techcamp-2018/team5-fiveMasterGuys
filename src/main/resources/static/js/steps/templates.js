@@ -54,7 +54,7 @@ class Templates {
                     </div>
                     <div class="column is-one-fifth">
                         <div class="is-clearfix">
-                            <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
+                            <div class="btn-step-modify icon is-pulled-right ${ data.hasOwnProperty('offerType') ? 'hidden' : ''}">
                                 <i class="fas fa-edit fa-2x"></i>
                             </div>
                         </div>

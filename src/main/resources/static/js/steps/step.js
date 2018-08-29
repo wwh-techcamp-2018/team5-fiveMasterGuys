@@ -99,7 +99,7 @@ class StepManager {
         imgLabel.innerText = '';
 
         const stepItemList = stepForm.querySelector('ol.step-contents');
-        const stepItems = this.getStepItemTexts(stepForm);
+        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
 
         removeElement(stepItemList.firstElementChild);
@@ -361,9 +361,14 @@ class StepManager {
 
     makeRequestBody(stepForm) {
         const stepId = stepForm.getAttribute('data-step-id') !== "null" ? stepForm.getAttribute('data-step-id') : null;
+        const content = this.getStepItemTexts(stepForm.querySelectorAll('.step-item-contents'));
+        const input = stepForm.querySelector('.step-item-input');
+        if (input !== null && input.value.trim() !== '') {
+            content.push(input.value);
+        }
         return {
             name: stepForm.querySelector('.subtitle-input').value,
-            content: this.getStepItemTexts(stepForm),
+            content,
             targetStepId: stepId,
             imgUrl: this.findImageUrl(stepId)
         }
@@ -375,15 +380,8 @@ class StepManager {
         return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
-    getStepItemTexts(stepForm) {
-        const stepContents = stepForm.querySelectorAll('.step-item-contents');
-        const itemTexts = [...stepContents].map(contentElement => contentElement.innerText);
-        const input = stepForm.querySelector('.step-item-input');
-        if (input !== null && input.value.trim() !== '') {
-            itemTexts.push(input.value);
-            return itemTexts;
-        }
-        return itemTexts;
+    getStepItemTexts(itemElements) {
+        return [...itemElements].map(contentElement => contentElement.innerText);
     }
 
     completeRecipe(target) {
