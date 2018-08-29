@@ -6,6 +6,7 @@ import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,12 +23,14 @@ public class HomeController {
     public static final int DEFAULT_PAGE_CONTENT_SIZE = 9;
     private static final int SHOWING_PAGE_SIZE = 5;
 
+    private static final String SORT_BY_CREATED_AT = "createdAt";
+
     @Autowired
     private RecipeService recipeService;
 
     @GetMapping
     public String home(Model model,
-                       @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE) Pageable pageable) {
+                       @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE, sort = SORT_BY_CREATED_AT, direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Recipe> recipePage = recipeService.findAllByPageable(zeroBased(pageable));
 
         addAttributes(model, recipePage, "/?");
@@ -39,7 +42,7 @@ public class HomeController {
     public String search(Model model,
                          @RequestParam(name = "category", required = false) Long categoryId,
                          @RequestParam(name = "q", defaultValue = "") String keyword,
-                         @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE) Pageable pageable) {
+                         @PageableDefault(size = DEFAULT_PAGE_CONTENT_SIZE, page = ONE_BASED_DEFAULT_PAGE, sort = SORT_BY_CREATED_AT, direction = Sort.Direction.DESC) Pageable pageable) {
 
         if (categoryId == null) {
             addAttributes(model, recipeService.search(keyword, zeroBased(pageable)), buildBaseUrl(keyword));
