@@ -36,7 +36,7 @@ class StepManager {
         });
     }
 
-    handleChangeEvent({target}) {
+    handleChangeEvent({ target }) {
         if (target.classList.contains('img-upload')) {
             this.imageUploader.upload(this.getFile(target))
                 .then((data) => {
@@ -96,7 +96,7 @@ class StepManager {
         imgLabel.innerText = '';
 
         const stepItemList = stepForm.querySelector('ol.step-contents');
-        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
+        const stepItems = this.getStepItemTexts(stepForm);
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
 
         removeElement(stepItemList.firstElementChild);
@@ -141,7 +141,7 @@ class StepManager {
         (selected && selected.classList.remove('contributor-selected'));
     }
 
-    handleMouseOverEvent({target}) {
+    handleMouseOverEvent({ target }) {
         if (target.classList.contains('contributor')) {
 
             let boxId = target.closest('.box').getAttribute('data-step-id');
@@ -162,7 +162,7 @@ class StepManager {
     }
 
     handleAddFormConfirmButtonClick(target) {
-        toggleButton(target);
+        target.disabled = true;
 
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
@@ -171,18 +171,18 @@ class StepManager {
                 this.renderStep(stepForm, data);
                 this.closeAddForm(stepForm);
             }).catch((status) => {
-            toggleButton(target);
+                target.disabled = false;
 
-            if (typeof status === 'undefined') {
-                alert('네트워크 오류 발생함');
-                return;
-            }
-            if (status === 401) {
-                location.href = '/users/login';
-                return;
-            }
-            console.error(status);
-        })
+                if (typeof status === 'undefined') {
+                    alert('네트워크 오류 발생함');
+                    return;
+                }
+                if (status === 401) {
+                    location.href = '/users/login';
+                    return;
+                }
+                console.error(status);
+            })
     }
 
     handleAddFormCancelButtonClick(target) {
@@ -208,7 +208,7 @@ class StepManager {
     }
 
     handleOfferModifyFormConfirmButtonClick(target) {
-        toggleButton(target);
+        target.disabled = true;
 
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
@@ -227,7 +227,7 @@ class StepManager {
                 removeElement(stepForm);
             })
             .catch((status) => {
-                toggleButton(target);
+                target.disabled = false;
 
                 if (status === 401) {
                     location.href = '/users/login';
@@ -243,15 +243,15 @@ class StepManager {
     }
 
     handleApproveButtonClick(target) {
-        toggleButton(target);
+        target.disabled = true;
 
         const stepOffer = target.closest('.step-offer');
         this.requestStepApproval(stepOffer)
             .then((data) => {
-               location.reload();
+                location.reload();
             })
             .catch((status) => {
-                toggleButton(target);
+                target.disabled = false;
 
                 if (typeof status === 'undefined') {
                     alert('네트워크 오류 발생함');
@@ -273,13 +273,13 @@ class StepManager {
         return new Promise((resolve, reject) => {
             fetchManager({
                 url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps`,
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 method: 'POST',
                 body: JSON.stringify(requestBody),
-                onSuccess: ({json}) => {
+                onSuccess: ({ json }) => {
                     resolve(json.data);
                 },
-                onFailed: ({status}) => {
+                onFailed: ({ status }) => {
                     reject(status);
                 },
                 onError: () => {
@@ -293,12 +293,12 @@ class StepManager {
         return new Promise((resolve, reject) => {
             fetchManager({
                 url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${stepId}`,
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 method: 'GET',
-                onSuccess: ({json}) => {
+                onSuccess: ({ json }) => {
                     resolve(json.data);
                 },
-                onFailed: ({status}) => {
+                onFailed: ({ status }) => {
                     reject(status);
                 },
                 onError: () => {
@@ -322,13 +322,13 @@ class StepManager {
         return new Promise((resolve, reject) => {
             fetchManager({
                 url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${requestBody.targetStepId}`,
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 method: 'PUT',
                 body: JSON.stringify(requestBody),
-                onSuccess: ({json}) => {
+                onSuccess: ({ json }) => {
                     resolve(json.data);
                 },
-                onFailed: ({status}) => {
+                onFailed: ({ status }) => {
                     reject(status);
                 },
                 onError: () => {
@@ -345,12 +345,12 @@ class StepManager {
         return new Promise((resolve, reject) => {
             fetchManager({
                 url: `/api/recipes/${recipeId}/steps/${offerId}/approve`,
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 method: 'GET',
-                onSuccess: ({json}) => {
+                onSuccess: ({ json }) => {
                     resolve(json.data);
                 },
-                onFailed: ({status}) => {
+                onFailed: ({ status }) => {
                     reject(status);
                 },
                 onError: () => {
@@ -409,7 +409,7 @@ class StepManager {
         const stepId = stepForm.getAttribute('data-step-id') !== "null" ? stepForm.getAttribute('data-step-id') : null;
         return {
             name: stepForm.querySelector('.subtitle-input').value,
-            content: this.getStepItemTexts(stepForm.querySelectorAll('.step-item-contents')),
+            content: this.getStepItemTexts(stepForm),
             targetStepId: stepId,
             imgUrl: this.findImageUrl(stepId)
         }
@@ -421,8 +421,15 @@ class StepManager {
         return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
-    getStepItemTexts(itemElements) {
-        return [...itemElements].map(contentElement => contentElement.innerText);
+    getStepItemTexts(stepForm) {
+        const stepContents = stepForm.querySelectorAll('.step-item-contents');
+        const itemTexts = [...stepContents].map(contentElement => contentElement.innerText);
+        const input = stepForm.querySelector('.step-item-input');
+        if (input !== null && input.value.trim() !== '') {
+            itemTexts.push(input.value);
+            return itemTexts;
+        }
+        return itemTexts;
     }
 
     completeRecipe(target) {
