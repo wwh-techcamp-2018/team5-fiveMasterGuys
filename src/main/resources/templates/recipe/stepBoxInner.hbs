@@ -23,19 +23,15 @@
         </div>
         <div class="column is-one-fifth">
             {{#eq recipe.owner user}}
-                {{#eq offerType "APPEND"}}
-                    <button class="btn-approve button is-success">승인</button>
-                {{/eq}}
-                {{#eq offerType "MODIFY"}}
-                    <button class="btn-approve button is-success">OK</button>
-                {{/eq}}
-                {{#eq writer user}}
-                    <div class="is-clearfix">
-                        <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
-                            <i class="fas fa-edit fa-2x"></i>
-                        </div>
+                {{#if offerType}}
+                <button class="btn-approve button is-success">승인</button>
+                {{else}}
+                <div class="is-clearfix">
+                    <div class="btn-step-modify icon is-pulled-right {{#if hidden}} hidden{{/if}}">
+                        <i class="fas fa-edit fa-2x"></i>
                     </div>
-                {{/eq}}
+                </div>
+                {{/if}}
             {{/eq}}
             <div class="ingredient"></div>
         </div>

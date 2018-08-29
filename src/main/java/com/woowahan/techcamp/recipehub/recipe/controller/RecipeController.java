@@ -8,6 +8,7 @@ import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeDTO;
 import com.woowahan.techcamp.recipehub.recipe.dto.RecipeResponseDTO;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
+import com.woowahan.techcamp.recipehub.step.dto.StepResponseDTO;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,7 @@ public class RecipeController {
                 });
 
         if (!recipe.isCompleted()) {
-            model.addAttribute(FIRST_OFFERS, recipeService.findNullTargetStepOffersByRecipe(recipe));
+            model.addAttribute(FIRST_OFFERS, StepResponseDTO.from(recipeService.findNullTargetStepOffersByRecipe(recipe)));
         }
 
         return TEMPLATE_RECIPE_DETAIL;
