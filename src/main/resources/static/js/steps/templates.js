@@ -11,7 +11,7 @@ class Templates {
         </div>
         <div class="step-container">
             <button class="btn-step-add" data-step-id="${data.id}">
-                <i class="fas fa-plus-circle fa-3x"> Step 추가 하기</i>
+                <i class="fas fa-plus-circle fa-3x"></i> <div>Step 추가 하기</div> 
             </button>
         </div>
         `;
