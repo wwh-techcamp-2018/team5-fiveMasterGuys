@@ -1,11 +1,43 @@
-@import url(//fonts.googleapis.com/earlyaccess/kopubbatang.css);
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    font-weight: 400;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    font-weight: 700;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf') format('truetype')
+}
+
+@font-face {
+    font-family: 'NanumBarunGothic';
+    font-style: normal;
+    font-weight: 300;
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot');
+    src: url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot?#iefix') format('embedded-opentype'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.woff') format('woff'), url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype');
+}
+
 
 .navbar {
     box-shadow: 0 2px 0 0 #f5f5f5;
 }
 
+.navbar-brand .title {
+    font-weight: 100;
+}
+
 .hidden {
     display: none !important;
+}
+
+input:focus {
+    outline-style:none !important;
+    box-shadow:none !important;
 }
 
 .one-line-ellipsis {
@@ -20,5 +52,18 @@ img {
 }
 
 body, button, input {
-    font-family: 'KoPub Batang', sans-serif;
+    font-family: 'NanumBarunGothic', sans-serif;
+}
+
+
+.btn-green {
+    background-color: #4f969d;
+    border-color: transparent;
+    color: #fff;
+}
+
+.btn-green:hover {
+    background-color: #447f86;
+    border-color: transparent;
+    color: #fff;
 }
