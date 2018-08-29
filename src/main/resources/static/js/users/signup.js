@@ -1,17 +1,17 @@
 import { validateEmailValue, validatePasswordValue, validateNameValue } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Signup();
+    new Signup(new ErrorMessageView($('#error-msg-box')));
 })
 
 class Signup {
-    constructor() {
+    constructor(errorMessageView) {
         this.emailField = $('#email-field');
         this.passwordField = $('#password-field');
         this.passwordCheckField = $('#password-check-field');
         this.nameField = $('#name-field');
         this.signupBtn = $('#signup-btn');
-        this.errorBox = $('#error-msg-box');
+        this.errorMessageView = errorMessageView;
 
         this.registerEvents();
     }
@@ -44,24 +44,23 @@ class Signup {
                     password,
                     passwordCheck,
                     name
-                }),
-                onSuccess: () => {
-                    location.href = document.referrer;
-                },
-                onFailed: ({json}) => {
-                    this.errorBox.innerText = json.message;
-                },
-                onError: () => {
-                    this.errorBox.innerText = '요청 중 문제가 발생하였습네다. 다시 요청해주세요.';
+                })
+            }).then(() => {
+                location.href = document.referrer;
+            }).catch(({errors}) => {
+                if (errors) {
+                    this.errorMessageView.showMessage(errors[0].message, false);
+                    return;
                 }
-            })
+                this.errorMessageView.showMessage('요청 중 문제가 발생하였습네다. 다시 요청해주세요.', false);
+            });
         })
     }
 
     checkSignupForm() {
-        return validateEmailValue(this.emailField.value, this.errorBox)
-                && validatePasswordValue(this.passwordField.value, this.errorBox)
-                && validatePasswordValue(this.passwordCheckField.value, this.errorBox)
-                && validateNameValue(this.nameField.value, this.errorBox);
+        return validateEmailValue(this.emailField.value, this.errorMessageView)
+                && validatePasswordValue(this.passwordField.value, this.errorMessageView)
+                && validatePasswordValue(this.passwordCheckField.value, this.errorMessageView)
+                && validateNameValue(this.nameField.value, this.errorMessageView);
     }
 }

@@ -8,11 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function setUserLogout() {
     fetchManager({
         url: '/api/users/logout',
-        method: 'POST',
-        onSuccess: () => {
-            location.reload();
-        },
-        onFailed: () => {},
-        onError: () => {}
-    });
+        method: 'POST'
+    })
+    .then(() => { location.reload() })
+    .catch(() => {});
 }

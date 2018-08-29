@@ -29,24 +29,13 @@ class RecipeManager {
 
     requestRecipeModification() {
         const image = this.findImageUrl();
-        return new Promise((resolve, reject) => {
-            fetchManager({
-                url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}`,
-                headers: {"Content-Type": "application/json"},
-                method: 'PUT',
-                body: JSON.stringify({
-                    imgUrl: image,
-                    name: this.titleInput.value
-                }),
-                onSuccess: ({json}) => {
-                    resolve(json.data);
-                },
-                onFailed: ({status}) => {
-                    reject(status);
-                },
-                onError: () => {
-                    reject();
-                }
+        return fetchManager({
+            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}`,
+            headers: {"Content-Type": "application/json"},
+            method: 'PUT',
+            body: JSON.stringify({
+                imgUrl: image,
+                name: this.titleInput.value
             })
         });
     }

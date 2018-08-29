@@ -1,15 +1,15 @@
 import { validateEmailValue, validatePasswordValue } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Login();
+    new Login(new ErrorMessageView($('#error-msg-box')));
 })
 
 class Login {
-    constructor() {
+    constructor(errorMessageView) {
         this.emailField = $('#email-field');
         this.passwordField = $('#password-field');
         this.loginBtn = $('#login-btn');
-        this.errorBox = $('#error-msg-box');
+        this.errorMessageView = errorMessageView;
 
         this.registerEvents();
     }
@@ -42,21 +42,20 @@ class Login {
             body: JSON.stringify({
                 email,
                 password
-            }),
-            onSuccess: () => {
-                location.href = document.referrer;
-            },
-            onFailed: () => {
-                this.errorBox.innerText = '아이디 또는 비밀번호가 일치하지 않습니다.';
-            },
-            onError: () => {
-                this.errorBox.innerText = '요청중 문제가 발생하였습니다. 재접속 후 시도해주세요.';
+            })
+        }).then(() => {
+            location.href = document.referrer;
+        }).catch(({errors}) => {
+            if (errors) {
+                this.errorMessageView.showMessage('아이디 또는 비밀번호가 일치하지 않습니다.', false);
+                return;
             }
-        })
+            this.errorMessageView.showMessage('요청중 문제가 발생하였습니다. 재접속 후 시도해주세요.', false);
+        });
     }
 
     checkLoginFields() {
-        return validateEmailValue(this.emailField.value, this.errorBox)
-            && validatePasswordValue(this.passwordField.value, this.errorBox);
+        return validateEmailValue(this.emailField.value, this.errorMessageView)
+            && validatePasswordValue(this.passwordField.value, this.errorMessageView);
     }
 }

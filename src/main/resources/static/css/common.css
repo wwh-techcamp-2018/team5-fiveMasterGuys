@@ -6,6 +6,10 @@
     display: none !important;
 }
 
+.invisible {
+    opacity: 0;
+}
+
 .one-line-ellipsis {
     white-space: nowrap;
     overflow: hidden;

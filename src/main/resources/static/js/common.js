@@ -6,20 +6,28 @@ function $All(selector) {
     return document.querySelectorAll(selector);
 }
 
-function fetchManager({url, method, body, headers, onSuccess, onFailed, onError}) {
-    fetch(url, {method, body, headers, credentials: "same-origin"})
-        .then((response) => {
-            let callback;
-            const status = response.status;
-            if (status >= 400) {
-                callback = onFailed;
-            } else callback = onSuccess;
 
-            console.log(response);
+function fetchManager({url, method, body, headers}) {
+    return new Promise((resolve, reject) => {
+        fetch(url, {method, body, headers, credentials: "same-origin"})
+            .then((response) => {
+                const status = response.status;
+                const callback = (json) => {
+                    if (status >= 400) {
+                        const errors = json ? json.errors : undefined;
+                        reject({status, errors});
+                        return;
+                    }
 
-            response.json().then(json => callback({status, json})).catch(() => callback({status}))
-        }).catch(onError)
+                    const data = json ? json.data : undefined;
+                    resolve({status, data});
+                }
+
+                response.json().then(callback).catch(callback);
+            }).catch(() => reject());
+    });
 }
+
 
 function validate(regex, value) {
     return RegExp(regex).test(value);
@@ -63,26 +71,43 @@ class ImageUploader {
     upload(file) {
         const data = new FormData();
         data.append('file', file);
-        return new Promise((resolve, reject) => {
-            fetchManager({
+        return fetchManager({
                 url: '/images',
                 method: 'POST',
                 body: data,
-                onSuccess: ({json}) => {
-                    resolve(json.data);
-                },
-                onFailed: () => {
-                    reject();
-                },
-                onError: () => {
-                    reject();
-                }
-            }); 
-        })
+        });
     }
 }
 
 function autoGrow(element) {
     element.style.height = "5px";
     element.style.height = (element.scrollHeight)+"px";
+}
+
+class ErrorMessageView {
+    constructor(errorMessageBox) {
+        this.errorMessageBox = errorMessageBox;
+        this.timeout = 3000;
+    }
+
+    showMessage(msg, willHide=true) {
+        this.errorMessageBox.innerText = msg;
+        this.errorMessageBox.style.zIndex = "100";
+        this.errorMessageBox.classList.remove('invisible');
+        if (willHide) {
+            this.reserveHide();
+        }
+    }
+
+    reserveHide() {
+        if (this.reserved) {
+            clearTimeout(this.reserved);
+        }
+        this.reserved = setTimeout(() => this.hide(), this.timeout);
+    }
+
+    hide() {
+        this.errorMessageBox.classList.add('invisible');
+        this.errorMessageBox.style.zIndex = "-1";
+    }
 }
