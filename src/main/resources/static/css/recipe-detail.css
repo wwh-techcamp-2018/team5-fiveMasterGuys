@@ -300,7 +300,7 @@
     justify-content: center;
 }
 
-.category > i {
+.column-recipe-info i {
     padding: 0px 20px 0px 10px;
 }
 
@@ -332,4 +332,8 @@
 .recipe-title {
     width: 500px;
     display: inline-block;
+}
+
+.recipe-owner {
+    margin-bottom: 30px;
 }
