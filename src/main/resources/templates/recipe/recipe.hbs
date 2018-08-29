@@ -14,35 +14,39 @@
     {{#recipe}}
     <div class="error-msg-box notification has-text-centered is-danger invisible"></div>
     <div class="recipe" data-recipe-id="{{id}}">
-        <section class="hero is-fullwidth hero-recipe-info">
+        <section class="hero is-fullwidth hero-recipe-info is-medium">
             <div class="hero-body">
-                <article class="columns">
-                    <div class="column-recipe-info column child-vertical-align">
-                        <h2 class="recipe-title-container has-text-weight-bold">
-                            {{#if authorizedUser}}
-                            <textarea class="is-size-1 recipe-title-input has-text-weight-bold" rows="1" maxlength="15">{{name}}</textarea>
-                            {{else}}
-                            <span class="recipe-title is-size-1">{{name}}</span>
-                            {{/if}}
-                            <span class="is-size-5">by {{owner.name}}</span>
-                        </h2>
-                        <p class="category is-size-4">
-                            <i class="fas fa-mortar-pestle fa-2x"></i>{{category.title}}
-                        </p>
-                    </div>
-
-                    <div class="column">
-                        <div class="recipe-img-upload-container">
-                            {{#if authorizedUser}}
-                            <input type="file" accept="image/*" style="height:400px;" name="recipe-img-upload" id="recipe-img-upload" class="img-upload">
-                            <label for="recipe-img-upload" class="has-text-centered" style="background-image: url({{imgUrl}})">{{#unless imgUrl}}이미지를 업로드하려면 클릭하세요{{/unless}}</label>
-                            <button class="btn-recipe-image-modify button is-primary is-fullwidth">레시피 정보 수정하기</button>
-                            {{else}}
-                            <img class="recipe-img" src="{{imgUrl}}">
-                            {{/if}}
+                <div class="container">
+                    <article class="columns">
+                        <div class="column column-recipe-info child-vertical-align">
+                            <h2 class="recipe-title-container has-text-weight-bold">
+                                {{#if authorizedUser}}
+                                    <textarea class="is-size-1 recipe-title-input has-text-weight-bold" rows="1" maxlength="15">{{name}}</textarea>
+                                {{else}}
+                                    <span class="recipe-title is-size-1">{{name}}</span>
+                                {{/if}}
+                            </h2>
+                            <p class="recipe-owner is-size-5">
+                                <i class="fas fa-user"></i>by {{owner.name}}
+                            </p>
+                            <p class="category is-size-5">
+                                <i class="fas fa-tag"></i>{{category.title}}
+                            </p>
                         </div>
-                    </div>
-                </article>
+                        <div class="column is-one-third">
+                            <div class="recipe-img-upload-container">
+                                {{#if authorizedUser}}
+                                    <input type="file" accept="image/*" style="height:400px;" name="recipe-img-upload" id="recipe-img-upload" class="img-upload">
+                                    <label for="recipe-img-upload" class="has-text-centered" style="background-image: url({{imgUrl}})">{{#unless imgUrl}}이미지를 업로드하려면 클릭하세요{{/unless}}</label>
+                                    <button class="button btn-recipe-image-modify btn-green is-fullwidth">레시피 정보 수정하기</button>
+                                {{else}}
+                                    <img class="recipe-img" src="{{imgUrl}}">
+                                {{/if}}
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
             </div>
         </section>
         <div class="section">
@@ -66,7 +70,7 @@
             </div>
             {{#if authorizedUser}}
             <div class="container has-text-centered">
-                <button class="button is-primary is-large btn-recipe-complete" id="btn-recipe-complete">레시피 완성하기</button>
+                <button class="button is-large btn-recipe-complete btn-green" id="btn-recipe-complete">레시피 완성하기</button>
             </div>
             {{/if}}
         </div>

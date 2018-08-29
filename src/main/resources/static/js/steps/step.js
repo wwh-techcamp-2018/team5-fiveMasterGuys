@@ -37,7 +37,7 @@ class StepManager {
         });
     }
 
-    handleChangeEvent({target}) {
+    handleChangeEvent({ target }) {
         if (target.classList.contains('img-upload')) {
             this.imageUploader.upload(this.getFile(target))
                 .then(({data}) => {
@@ -72,7 +72,7 @@ class StepManager {
     showModifyStepForm(target) {
         checkLoginOrRedirect();
         let stepBox = target.closest('.box');
-        const stepBoxInner = stepBox.querySelector('.columns:not(.hidden)');
+        const stepBoxInner = stepBox.querySelector('.step-inner-container:not(.hidden)');
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
 
         const stepForm = stepBox.previousElementSibling;
@@ -99,7 +99,7 @@ class StepManager {
         imgLabel.innerText = '';
 
         const stepItemList = stepForm.querySelector('ol.step-contents');
-        const stepItems = this.getStepItemTexts(stepBox.querySelectorAll('ol.step-contents li p'));
+        const stepItems = this.getStepItemTexts(stepForm);
         stepForm.querySelector('.subtitle-input').value = stepBox.querySelector('.subtitle').innerText;
 
         removeElement(stepItemList.firstElementChild);
@@ -144,7 +144,7 @@ class StepManager {
         (selected && selected.classList.remove('contributor-selected'));
     }
 
-    handleMouseOverEvent({target}) {
+    handleMouseOverEvent({ target }) {
         if (target.classList.contains('contributor')) {
 
             let boxId = target.closest('.box').getAttribute('data-step-id');
@@ -165,6 +165,8 @@ class StepManager {
     }
 
     handleAddFormConfirmButtonClick(target) {
+        target.disabled = true;
+
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
@@ -172,6 +174,7 @@ class StepManager {
                 this.renderStep(stepForm, data);
                 this.closeAddForm(stepForm);
             }).catch(({status, errors}) => {
+                target.disabled = false;
                 this.handleAjaxError(status, errors);
             });
     }
@@ -197,6 +200,8 @@ class StepManager {
     }
 
     handleOfferModifyFormConfirmButtonClick(target) {
+        target.disabled = true;
+
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
@@ -214,6 +219,7 @@ class StepManager {
                 removeElement(stepForm);
             })
             .catch(({status, errors}) => {
+                target.disabled = false;
                 this.handleAjaxError(status, errors);
             });
     }
@@ -226,12 +232,15 @@ class StepManager {
     }
 
     handleApproveButtonClick(target) {
+        target.disabled = true;
+
         const stepOffer = target.closest('.step-offer');
         this.requestStepApproval(stepOffer)
             .then(({data}) => {
                location.reload();
             })
             .catch(({status, errors}) => {
+                target.disabled = false;
                 this.handleAjaxError(status, errors);
             });
     }
@@ -245,7 +254,7 @@ class StepManager {
             location.href = '/users/login';
             return;
         }
-        
+
         if (errors) {
             this.errorMessageView.showMessage(errors[0].message);
             return;
@@ -273,6 +282,7 @@ class StepManager {
             method: 'GET'
         });
     }
+
     renderStep(stepForm, data) {
         if (data.offerType === 'APPEND') {
             const targetStepId = stepForm.getAttribute('data-step-id');
@@ -353,7 +363,7 @@ class StepManager {
         const stepId = stepForm.getAttribute('data-step-id') !== "null" ? stepForm.getAttribute('data-step-id') : null;
         return {
             name: stepForm.querySelector('.subtitle-input').value,
-            content: this.getStepItemTexts(stepForm.querySelectorAll('.step-item-contents')),
+            content: this.getStepItemTexts(stepForm),
             targetStepId: stepId,
             imgUrl: this.findImageUrl(stepId)
         }
@@ -365,8 +375,15 @@ class StepManager {
         return backgroundImageUrl === "" ? null : backgroundImageUrl.match(/url\("(.*)"\)$/)[1];
     }
 
-    getStepItemTexts(itemElements) {
-        return [...itemElements].map(contentElement => contentElement.innerText);
+    getStepItemTexts(stepForm) {
+        const stepContents = stepForm.querySelectorAll('.step-item-contents');
+        const itemTexts = [...stepContents].map(contentElement => contentElement.innerText);
+        const input = stepForm.querySelector('.step-item-input');
+        if (input !== null && input.value.trim() !== '') {
+            itemTexts.push(input.value);
+            return itemTexts;
+        }
+        return itemTexts;
     }
 
     completeRecipe(target) {
