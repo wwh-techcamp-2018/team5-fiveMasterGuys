@@ -40,7 +40,7 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query(value = "UPDATE Step s " +
-            "SET s.TYPE = 'Step', s.CLOSED = false, s.SEQUENCE = :seq, s.TARGET_ID = NULL, s.OFFER_TYPE = NULL, s.REJECTED = NULL " +
+            "SET s.TYPE = 'step', s.CLOSED = false, s.SEQUENCE = :seq, s.TARGET_ID = NULL, s.OFFER_TYPE = NULL, s.REJECTED = NULL " +
             "WHERE s.ID = :id",
             nativeQuery = true)
     void approveStepOffer(@Param("id") Long offerId, @Param("seq") Long sequence);
