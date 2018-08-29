@@ -101,7 +101,6 @@
     border-radius: 10px;
     padding: 0px;
     overflow: hidden;
-    box-shadow: 0px 0px 10px 0px rgba(68, 68, 68, 0.3);
 }
 
 .box > .step-inner-container {

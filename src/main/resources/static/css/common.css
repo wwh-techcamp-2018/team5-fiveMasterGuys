@@ -59,7 +59,6 @@ body, button, input {
     font-family: 'NanumBarunGothic', sans-serif;
 }
 
-
 .btn-green {
     background-color: #4f969d;
     border-color: transparent;
@@ -70,4 +69,18 @@ body, button, input {
     background-color: #447f86;
     border-color: transparent;
     color: #fff;
+}
+
+.btn-gray {
+    background-color: #808080;
+    border-color: transparent;
+    color: #fff;
+    font-weight: bold;
+}
+
+.btn-gray:hover {
+    background-color: #6b6b6b;
+    border-color: transparent;
+    color: #fff;
+    font-weight: bold;
 }
