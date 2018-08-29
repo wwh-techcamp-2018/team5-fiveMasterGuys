@@ -39,7 +39,7 @@ public interface StepOfferRepository extends JpaRepository<StepOffer, Long> {
     void rejectAppendingOffersByNullTarget(@Param("recipe") Recipe recipe);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = "UPDATE Step s " +
+    @Query(value = "UPDATE step s " +
             "SET s.TYPE = 'Step', s.CLOSED = false, s.SEQUENCE = :seq, s.TARGET_ID = NULL, s.OFFER_TYPE = NULL, s.REJECTED = NULL " +
             "WHERE s.ID = :id",
             nativeQuery = true)
