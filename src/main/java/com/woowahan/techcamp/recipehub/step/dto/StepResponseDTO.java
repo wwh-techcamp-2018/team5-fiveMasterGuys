@@ -128,4 +128,8 @@ public class StepResponseDTO {
 
         return Objects.hash(id, recipe, name, content, writer, imgUrl, ingredients, sequence, closed);
     }
+
+    public boolean getHasAppendOffer() {
+        return this.getOffers().stream().anyMatch(s -> s.offerType.equals(OfferType.APPEND));
+    }
 }

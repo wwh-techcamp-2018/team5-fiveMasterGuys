@@ -38,6 +38,10 @@
     border-radius: 0 0 10px 10px;
 }
 
+.step-offers .is-one-third {
+    max-height: 400px;
+}
+
 .step-offers > .step-offer-title {
     font-style: italic;
     font-weight: 500;
