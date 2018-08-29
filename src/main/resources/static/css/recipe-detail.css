@@ -24,6 +24,7 @@
 
 .step-offers {
     padding: 20px;
+    margin-bottom: 20px;
     background: #F6F6F6;
     border: #DDD solid 1px;
     border-radius: 10px;
@@ -47,9 +48,16 @@
     margin: auto;
     display: block;
     outline: none;
-    padding: 40px;
+    padding: 10px;
     background: transparent;
     cursor: pointer;
+}
+
+.btn-step-add > div {
+    margin-top: 20px;
+
+    font-size: 30px;
+    font-family: 'KoPub Batang', sans-serif;
 }
 
 .img-upload {
@@ -84,6 +92,7 @@
     border-radius: 10px;
     padding: 0px;
     overflow: hidden;
+    box-shadow: 0px 0px 10px 0px rgba(68, 68, 68, 0.3);
 }
 
 .box > .step-inner-container {
@@ -95,9 +104,9 @@
 
 .subtitle {
     color: #FFF;
-    padding: 10px 10px 10px 30px;
+    padding: 16px 10px 10px 30px;
     background: #de6b6b;
-    font-size: 40px;
+    font-size: 34px;
     font-weight: bold;
     font-style: italic;
 }
@@ -115,6 +124,7 @@
     right: -100%;
     top: -100%;
     bottom: -100%;
+    box-shadow: 0px 0px 20px 0px rgba(68, 68, 68, 0.3);
 }
 
 .step-img-container {
@@ -225,6 +235,7 @@
 .contributor > div {
     font-size: 14px;
     margin-top: 4px;
+    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -313,6 +324,7 @@
 .recipe-img {
     border: none;
     height: 400px;
+    box-shadow: 0px 0px 40px 0px rgba(68, 68, 68, 0.3);
 }
 
 .recipe-title-input {
