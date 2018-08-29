@@ -6,12 +6,10 @@
 
 {{#unless completed}}
     <div class="step-container">
-    {{#if offers}}
+    {{#if hasAppendOffer}}
         {{> recipe/stepOffer}}
     {{/if}}
 
-    {{#unless completed}}
-        {{> recipe/addBtn id=id}}
-    {{/unless}}
+    {{> recipe/addBtn id=id}}
     </div>
 {{/unless}}
