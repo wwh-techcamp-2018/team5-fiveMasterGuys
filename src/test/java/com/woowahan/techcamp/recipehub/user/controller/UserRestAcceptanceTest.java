@@ -148,7 +148,6 @@ public class UserRestAcceptanceTest extends AcceptanceTest {
         ResponseEntity<RestResponse<User>> response = responseSignup(dto);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(response.getBody().getMessage()).isEqualTo("이미 존재하는 아이디 입니다.");
 
     }
 

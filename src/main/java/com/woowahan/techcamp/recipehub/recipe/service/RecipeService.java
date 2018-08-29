@@ -84,7 +84,7 @@ public class RecipeService {
                 keyword,
                 pageable);
     }
-  
+
     private Category getCategoryIfIdExist(Long categoryId) {
         if (categoryId != null) {
             return categoryRepository.findById(categoryId).orElseThrow(EntityNotFoundException::new);
