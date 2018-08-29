@@ -1,5 +1,3 @@
-import {Templates} from './templates.js';
-
 class StepManager {
     constructor(imageUploader) {
         this.recipe = $('.recipe');
