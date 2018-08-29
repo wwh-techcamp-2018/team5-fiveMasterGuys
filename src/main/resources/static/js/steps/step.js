@@ -162,6 +162,8 @@ class StepManager {
     }
 
     handleAddFormConfirmButtonClick(target) {
+        target.disabled = true;
+
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepAddition(requestBody)
@@ -169,6 +171,8 @@ class StepManager {
                 this.renderStep(stepForm, data);
                 this.closeAddForm(stepForm);
             }).catch((status) => {
+                target.disabled = false;
+
                 if (typeof status === 'undefined') {
                     alert('네트워크 오류 발생함');
                     return;
@@ -204,6 +208,8 @@ class StepManager {
     }
 
     handleOfferModifyFormConfirmButtonClick(target) {
+        target.disabled = true;
+
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
@@ -221,6 +227,8 @@ class StepManager {
                 removeElement(stepForm);
             })
             .catch((status) => {
+                target.disabled = false;
+
                 if (status === 401) {
                     location.href = '/users/login';
                 }
@@ -235,12 +243,16 @@ class StepManager {
     }
 
     handleApproveButtonClick(target) {
+        target.disabled = true;
+
         const stepOffer = target.closest('.step-offer');
         this.requestStepApproval(stepOffer)
             .then((data) => {
                 location.reload();
             })
             .catch((status) => {
+                target.disabled = false;
+
                 if (typeof status === 'undefined') {
                     alert('네트워크 오류 발생함');
                     return;
