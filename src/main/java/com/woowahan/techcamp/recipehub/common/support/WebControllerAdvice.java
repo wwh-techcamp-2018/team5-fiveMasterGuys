@@ -29,7 +29,6 @@ public class WebControllerAdvice {
         return "/support/badrequest";
     }
 
-    // TODO: Web/JSON 둘 다 한꺼번에 잡아서 이슈 발생
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ModelAndView handleUnAuthorization(UnauthorizedException exception) {

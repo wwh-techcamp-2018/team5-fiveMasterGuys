@@ -2,6 +2,7 @@ package com.woowahan.techcamp.recipehub.common.support;
 
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.ResourceExistsException;
+import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,8 @@ public class APIControllerAdvice {
 
     @ExceptionHandler(ResourceExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestResponse<?> handleResourceExistsException(BadRequestException exception) {
-        RestResponse.ErrorResponseBuilder errorResponseBuilder = RestResponse.error();
-        errorResponseBuilder.appendError(exception.getMessage());
-        return errorResponseBuilder.build();
-
+    public RestResponse<?> handleResourceExistsException(ResourceExistsException exception) {
+        return RestResponse.error(exception.getMessage()).build();
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -54,6 +52,18 @@ public class APIControllerAdvice {
     }
 
 
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RestResponse<?> handleBadRequestException(BadRequestException exception) {
+        return RestResponse.error(exception.getMessage()).build();
+    }
+
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public RestResponse<?> handleUnauthorizedException(UnauthorizedException exception) {
+        return RestResponse.error(exception.getMessage()).build();
+    }
 
     private String getErrorMessage(FieldError fieldError) {
         Optional<String> code = getFirstCode(fieldError);
