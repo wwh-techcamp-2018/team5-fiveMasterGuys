@@ -1,3 +1,7 @@
+.navbar {
+    box-shadow: 0px 0px 20px 4px rgba(68, 68, 68, 0.5);
+}
+
 .step-container {
     border: solid #FAFAFA 2px;
     border-radius: 20px;
@@ -31,7 +35,7 @@
 }
 
 .step-offers .box {
-    border-radius: 0 0 3px 3px;
+    border-radius: 0 0 10px 10px;
 }
 
 .step-offers > .step-offer-title {
@@ -57,7 +61,7 @@
     margin-top: 20px;
 
     font-size: 30px;
-    font-family: 'KoPub Batang', sans-serif;
+    font-family: 'NanumBarunGothic', sans-serif;
 }
 
 .img-upload {
@@ -78,6 +82,7 @@
     line-height: 400px;
     background: no-repeat center;
     background-size: cover;
+    border: dashed #CCC 2px;
 }
 
 .img-upload:focus + label,
@@ -109,6 +114,7 @@
     font-size: 34px;
     font-weight: bold;
     font-style: italic;
+    box-shadow: 0px 0px 20px 0px rgba(68, 68, 68, 0.2);
 }
 
 .step-img {
@@ -137,13 +143,20 @@
 
 .subtitle-input {
     padding: 10px;
+    margin-bottom: 20px;
     font-size: 30px;
     font-weight: bold;
     font-style: italic;
 }
 
 .step-contents {
-    margin-left: 40px;
+    margin-left: 60px;
+    list-style: decimal outside;
+}
+
+.step-contents > li {
+    padding: 10px;
+
 }
 
 .step-item-contents {
@@ -152,6 +165,10 @@
 
 .step-item {
     padding-top: 28px;
+}
+
+.step-item button {
+    background: transparent;
 }
 
 .step-contents-container {
@@ -280,6 +297,7 @@
     bottom: 50px;
     position: fixed;
     border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(68, 68, 68, 0.2);
 }
 
 .contributor.offer {
@@ -294,11 +312,15 @@
 }
 
 .column-recipe-info {
-    margin-left: 100px;
+    margin-left: 30px;
+}
+
+.btn-recipe-image-modify {
+    border-radius: 5px;
 }
 
 .recipe-title-container {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .recipe-title-container > i {
@@ -317,7 +339,7 @@
 
 .recipe-img-upload-container {
     width: 400px;
-    margin-right: 100px;
+    margin-right: 30px;
     float: right;
 }
 
@@ -347,5 +369,20 @@
 }
 
 .recipe-owner {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+}
+
+.step-form {
+    padding: 30px;
+}
+
+.btn-add-confirm, .btn-add-cancel {
+    width: 70px;
+    height: 40px;
+    margin-left: 6px;
+
+}
+
+.btn-approve i{
+    margin-right: 10px;
 }

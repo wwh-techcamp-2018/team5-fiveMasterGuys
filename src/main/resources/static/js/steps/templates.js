@@ -102,14 +102,15 @@ class Templates {
 
     static templateStepForm(targetStepId, type) {
         return `
-        <article class="box" data-step-id=${targetStepId}>
+
+        <article class="box step-form" data-step-id=${targetStepId}>
+        <input class="input subtitle-input" type="text" placeholder="스텝 제목">
             <div class="columns">
                 <div class="column is-one-third">
                     <input type="file" accept="image/*" style="min-height:400px;" name="img-upload" id="img-upload-${targetStepId}" class="img-upload"></input>
                     <label for="img-upload-${targetStepId}" class="has-text-centered">이미지를 업로드하려면 클릭하세요</label>
                 </div>
                 <div class="column step-article-container">
-                    <input class="input subtitle-input" type="text" placeholder="스텝 제목">
                     <div class="step-contents-container">
                         <ol class="step-contents">
                             ${this.templateStepContentInput()}
@@ -118,7 +119,7 @@ class Templates {
                 </div>
             </div>
             <div class="buttons is-right">
-                <button class="btn-${type}-confirm button is-primary">${type === 'add' ? '추가' : '수정'}</button>
+                <button class="btn-${type}-confirm button is-info">${type === 'add' ? '추가' : '수정'}</button>
                 <button class="btn-${type}-cancel button is-danger">취소</button>
             </div>
         </article>
@@ -139,7 +140,7 @@ class Templates {
         return `
         <li class="step-item">
             <div class="columns is-vcentered step-item-input-container">
-                <input type="text" class="column is-11 is-large step-item-input input" placeholder="hello"><button class="btn-plus is-2"><i class="far fa-plus-square fa-3x"></i></button>
+                <input type="text" class="column is-11 is-large step-item-input input" placeholder="생선을 잘라 10분간 물에 담가둔다."><button class="btn-plus is-2"><i class="fas fa-plus fa-3x"></i></button>
             </div>
         </li>
         `;

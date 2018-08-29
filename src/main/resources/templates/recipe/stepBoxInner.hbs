@@ -21,13 +21,15 @@
                 </ol>
             </div>
         </div>
-        <div class="column is-one-fifth">
+        <div class="column is-one-fifth has-text-right">
             {{#eq recipe.owner user}}
                 {{#eq offerType "APPEND"}}
-                    <button class="btn-approve button is-success">승인</button>
+                    <button class="btn-approve button btn-green">
+                        <i class="fas fa-check"></i>승인
+                    </button>
                 {{/eq}}
                 {{#eq offerType "MODIFY"}}
-                    <button class="btn-approve button is-success">OK</button>
+                    <button class="btn-approve button btn-green">OK</button>
                 {{/eq}}
                 {{#eq writer user}}
                     <div class="is-clearfix">
