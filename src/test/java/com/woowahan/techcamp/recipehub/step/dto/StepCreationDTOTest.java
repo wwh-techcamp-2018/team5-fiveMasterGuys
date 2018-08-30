@@ -34,19 +34,19 @@ public class StepCreationDTOTest extends ValidationTest {
     @Test
     public void nameIsEmpty() {
         StepCreationDTO dto = pizzaBuilder.name("").build();
-        assertConstraintViolations(dto, 1);
+        assertConstraintViolations(dto, 2);
     }
 
     @Test
     public void nameIsNull() {
         StepCreationDTO dto = pizzaBuilder.name(null).build();
-        assertConstraintViolations(dto, 1);
+        assertConstraintViolations(dto, 2);
     }
 
     @Test
     public void allConstraintViolations() {
         StepCreationDTO dto = StepCreationDTO.builder().build();
-        assertConstraintViolations(dto, 1);
+        assertConstraintViolations(dto, 2);
     }
 
 

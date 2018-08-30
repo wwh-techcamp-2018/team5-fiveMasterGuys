@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class RecipeDTO {
     @NotNull
     private Long categoryId;
 
+    @Size(min = 1, max = 40)
     @NotBlank
     @NotNull
     private String name;
@@ -27,7 +29,7 @@ public class RecipeDTO {
     private String imgUrl;
 
     @Builder
-    public RecipeDTO(@NotNull Long categoryId, @NotBlank @NotNull String name, String imgUrl) {
+    public RecipeDTO(Long categoryId, String name, String imgUrl) {
         this.categoryId = categoryId;
         this.name = name;
         this.imgUrl = imgUrl;
