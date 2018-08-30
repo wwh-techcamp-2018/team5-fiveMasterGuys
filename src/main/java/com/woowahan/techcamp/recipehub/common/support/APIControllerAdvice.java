@@ -5,6 +5,8 @@ import com.woowahan.techcamp.recipehub.common.exception.ResourceExistsException;
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice(annotations = RestController.class)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class APIControllerAdvice {
 
     @Resource(name = "messageSourceAccessor")

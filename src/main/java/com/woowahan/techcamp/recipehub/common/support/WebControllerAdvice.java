@@ -3,6 +3,8 @@ package com.woowahan.techcamp.recipehub.common.support;
 import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -15,6 +17,7 @@ import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @ControllerAdvice(annotations = Controller.class)
+@Order(Ordered.LOWEST_PRECEDENCE)
 public class WebControllerAdvice {
 
     @ExceptionHandler(BindException.class)
