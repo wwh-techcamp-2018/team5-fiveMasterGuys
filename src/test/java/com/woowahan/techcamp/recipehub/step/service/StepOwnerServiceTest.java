@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.step.service;
 
+import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.OfferType;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.support.MessageSourceAccessor;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +41,9 @@ public class StepOwnerServiceTest {
 
     @Mock
     private StepRepository stepRepository;
+
+    @Mock
+    private MessageSourceAccessor messageSourceAccessor;
 
     private StepCreationDTO.StepCreationDTOBuilder dtoBuilder;
     private Recipe recipe;
@@ -195,6 +201,33 @@ public class StepOwnerServiceTest {
 
         verify(stepOfferRepository).approveStepOffer(offer.getId(), target.getSequence() + 1L);
         verify(stepOfferRepository).rejectAppendingOffersByTarget(offer.getTarget());
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void approveAppendOfferClosedTarget() {
+        Step target = Step.builder()
+                .sequence(1L)
+                .recipe(recipe)
+                .closed(true)
+                .build();
+
+        StepOffer offer = StepOffer.builder()
+                .id(1L)
+                .offerType(OfferType.APPEND)
+                .target(target)
+                .recipe(recipe)
+                .build();
+
+        Step approvedStep = Step.builder()
+                .id(1L)
+                .sequence(target.getSequence() + 1L)
+                .recipe(recipe)
+                .build();
+
+        when(stepOfferRepository.findById(offer.getId())).thenReturn(Optional.of(offer));
+        when(messageSourceAccessor.getMessage(anyString())).thenReturn(anyString());
+
+        service.approve(recipe, offer.getId(), owner);
     }
 
     @Test
