@@ -21,7 +21,8 @@
                         <div class="column column-recipe-info child-vertical-align">
                             <h2 class="recipe-title-container has-text-weight-bold">
                                 {{#if authorizedUser}}
-                                    <textarea class="is-size-1 recipe-title-input has-text-weight-bold" rows="1" maxlength="15">{{name}}</textarea>
+                                <textarea class="is-size-1 recipe-title-input has-text-weight-bold" rows="1"
+                                          maxlength="40">{{name}}</textarea>
                                 {{else}}
                                     <span class="recipe-title is-size-1">{{name}}</span>
                                 {{/if}}
