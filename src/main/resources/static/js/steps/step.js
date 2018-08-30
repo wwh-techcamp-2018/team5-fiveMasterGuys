@@ -185,6 +185,8 @@ class StepManager {
     }
 
     handleModifyFormConfirmButtonClick(target) {
+        target.disabled = true;
+
         const stepForm = target.closest('.box');
         const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
@@ -195,6 +197,7 @@ class StepManager {
                 removeElement(stepForm);
             })
             .catch(({status, errors}) => {
+                target.disabled = false;
                 this.handleAjaxError(status, errors);
             });
     }
