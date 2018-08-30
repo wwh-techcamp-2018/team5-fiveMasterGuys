@@ -323,6 +323,45 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    public void modifyOfferToClosedStep() throws Exception {
+
+        //given
+        Step targetStep = stepRepository.save(
+                Step.builder()
+                        .recipe(recipe)
+                        .writer(savedUser)
+                        .sequence(1L)
+                        .closed(true)
+                        .imgUrl("")
+                        .content(new ArrayList<>())
+                        .name("test step")
+                        .build());
+
+        User.UserBuilder userBuilder = User.builder()
+                .email("other@other.com")
+                .name("Other")
+                .password("asdfqwer1234");
+
+        User contributor = userBuilder.build();
+
+        userRepository.save(userBuilder
+                .password(new BCryptPasswordEncoder().encode("asdfqwer1234"))
+                .build());
+
+
+        //when
+        List<String> content = Arrays.asList("토마토 페이스트를 딴다", "적당량을 붓는다", "얇게 펴준다");
+        StepCreationDTO dto = StepCreationDTO.builder().name("Put tomato paste")
+                .ingredients(null).targetStepId(targetStep.getId()).content(content).build();
+
+        //then
+        ResponseEntity<RestResponse<Step>> request = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + targetStep.getId(),
+                HttpMethod.PUT, dto, contributor, stepType());
+        assertThat(request.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     public void modifyByNotLoginedUser() {
         StepCreationDTO dto = creationDtoBuilder.targetStepId(firstStep.getId()).build();
         ResponseEntity<RestResponse<Step>> response = requestJson(
