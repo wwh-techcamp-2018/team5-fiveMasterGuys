@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,19 +16,30 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class StepCreationDTO {
+    private static final int MAX_CONTENT_LENGTH = 45;
 
     @Size(min = 1, max = 30)
     @NotBlank
     @NotNull
     private String name;
 
-    // TODO
+    @Size(max = 5)
     private List<String> content;
 
     private List<Long> ingredients;
 
     private String imgUrl;
     private Long targetStepId;
+
+    @AssertTrue
+    private boolean isContentLengthExceeded() {
+        for (String item : content) {
+            if (item.length() > MAX_CONTENT_LENGTH) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     @Builder
     public StepCreationDTO(@NotBlank @NotNull String name, List<String> content, List<Long> ingredients, String imgUrl, Long targetStepId) {

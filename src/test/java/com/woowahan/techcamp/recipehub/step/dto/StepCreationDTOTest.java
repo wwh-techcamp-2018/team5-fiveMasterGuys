@@ -5,6 +5,8 @@ import com.woowahan.techcamp.recipehub.support.ValidationTest;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StepCreationDTOTest extends ValidationTest {
@@ -16,6 +18,7 @@ public class StepCreationDTOTest extends ValidationTest {
     public void setUp() throws Exception {
         super.setUp();
         pizzaBuilder = StepCreationDTO.builder()
+                .content(Arrays.asList("a"))
                 .name("Pizza");
     }
 
@@ -45,10 +48,27 @@ public class StepCreationDTOTest extends ValidationTest {
 
     @Test
     public void allConstraintViolations() {
-        StepCreationDTO dto = StepCreationDTO.builder().build();
-        assertConstraintViolations(dto, 2);
+        StepCreationDTO dto = StepCreationDTO.builder()
+                .content(Arrays.asList("1234567890123456789012345678901234567890123456", "b", "c", "d", "e", "f"))
+                .build();
+        assertConstraintViolations(dto, 4);
     }
 
+    @Test
+    public void contentMoreThan5() {
+        StepCreationDTO dto = pizzaBuilder
+                .content(Arrays.asList("a", "b", "c", "d", "e", "f"))
+                .build();
+        assertConstraintViolations(dto, 1);
+    }
+
+    @Test
+    public void contentItemLengthOver45() {
+        StepCreationDTO dto = pizzaBuilder
+                .content(Arrays.asList("1234567890123456789012345678901234567890123456"))
+                .build();
+        assertConstraintViolations(dto, 1);
+    }
 
     public static void assertDtoEqualToStep(StepCreationDTO dto, Step step) {
         assertThat(dto).isEqualToComparingOnlyGivenFields(

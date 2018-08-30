@@ -388,3 +388,7 @@
 .step-contents li p {
     word-break: break-all;
 }
+
+.step-item:nth-of-type(n+6) {
+    display: none;
+}
