@@ -14,9 +14,17 @@ class CategoryManager {
     handleClickEvent({target}) {
         if (target.classList.contains('category')) {
             const categoryId = target.getAttribute('data-category-id');
-            location.href = `/search?category=${categoryId}`;
+            const baseUrl = target.getAttribute('data-url');
+            location.href = this.getLocationUrl(baseUrl, categoryId);
             return;
         }
+    }
+
+    getLocationUrl(baseUrl, categoryId) {
+        if (baseUrl.match(/\/search\?(.+)/)) {
+            return baseUrl + `category=${categoryId}`;
+        }
+        return `/search?category=${categoryId}`;
     }
 }
 
