@@ -1,5 +1,6 @@
 package com.woowahan.techcamp.recipehub.home.controller;
 
+import com.woowahan.techcamp.recipehub.category.service.CategoryService;
 import com.woowahan.techcamp.recipehub.common.dto.PageListDTO;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.recipe.service.RecipeService;
@@ -27,6 +28,9 @@ public class HomeController {
 
     @Autowired
     private RecipeService recipeService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public String home(Model model,
@@ -64,6 +68,7 @@ public class HomeController {
         model.addAttribute("recipes", recipePage.getContent());
         model.addAttribute("paginationList", PageListDTO.from(recipePage, SHOWING_PAGE_SIZE));
         model.addAttribute("baseUrl", baseUrl);
+        model.addAttribute("categories", categoryService.findAll());
     }
 
     private static Pageable zeroBased(Pageable pageable) {
