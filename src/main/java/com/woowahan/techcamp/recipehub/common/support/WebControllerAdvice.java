@@ -30,7 +30,7 @@ public class WebControllerAdvice {
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.MOVED_PERMANENTLY)
     public ModelAndView handleUnAuthorization(UnauthorizedException exception) {
         return new ModelAndView("redirect:/users/login");
     }

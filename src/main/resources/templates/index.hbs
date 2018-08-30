@@ -1,5 +1,7 @@
 {{#partial "head"}}
 <link href="/css/home.css" rel="stylesheet">
+<link href="/css/recipe-create.css" rel="stylesheet">
+<script src="/js/recipes/create.js"></script>
 <script src="/js/category/category.js"></script>
 {{/partial}}
 
@@ -7,6 +9,10 @@
     <div id="category-nav">
         <div id="category-box" class="container level menu-list"></div>
     </div>
+    {{#eq baseUrl "/?"}}
+        {{> recipe/create}}
+    {{/eq}}
+
 <section class="section">
     <div class="container">
         <div class="columns is-multiline">
