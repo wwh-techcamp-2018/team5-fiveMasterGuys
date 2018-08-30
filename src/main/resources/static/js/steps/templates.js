@@ -130,7 +130,7 @@ class Templates {
         return `
         <li class="step-item">
             <div class="columns is-vcentered step-item-container">
-                <p class="column is-11 step-item-contents">${content}</p><button class="btn-minus is-1"><i class="fas fa-minus fa-3x"></i></button>
+                <p class="column is-11 step-item-contents" contenteditable="true">${content}</p><button class="btn-minus is-1"><i class="fas fa-minus fa-3x"></i></button>
             </div>
         </li>
         `;
