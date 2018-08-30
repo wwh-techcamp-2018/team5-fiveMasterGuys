@@ -103,7 +103,7 @@ class Templates {
     static templateStepForm(targetStepId, type) {
         return `
 
-        <article class="box step-form" data-step-id=${targetStepId}>
+        <article class="box step-form" id="step-form-${targetStepId}" data-step-id=${targetStepId}>
         <input class="input subtitle-input" type="text" placeholder="스텝 제목">
             <div class="columns">
                 <div class="column is-one-third">

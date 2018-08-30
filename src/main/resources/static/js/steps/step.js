@@ -73,7 +73,9 @@ class StepManager {
         checkLoginOrRedirect();
         let stepBox = target.closest('.box');
         const stepBoxInner = stepBox.querySelector('.step-inner-container:not(.hidden)');
-        stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepBox.getAttribute('data-step-id'), 'modify'));
+        const targetStepId = stepBox.getAttribute('data-step-id');
+        stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(targetStepId, 'modify'));
+        location.href=`#step-form-${targetStepId}`
 
         const stepForm = stepBox.previousElementSibling;
         this.copyValuesToForm(stepBoxInner, stepForm);
@@ -87,7 +89,8 @@ class StepManager {
         const stepId = stepBox.getAttribute('data-step-id');
         const stepBoxInner = stepBox.querySelector(`.step-inner-container[data-step-id='${stepId}']`);
         stepBox.insertAdjacentHTML('beforebegin', Templates.templateStepForm(stepId, 'modify-offer'));
-
+        location.href=`#step-form-${stepId}`
+        
         const stepForm = stepBox.previousElementSibling;
         this.copyValuesToForm(stepBoxInner, stepForm);
         toggleHidden(stepBox);
