@@ -21,9 +21,6 @@ class CategoryManager {
     }
 
     getLocationUrl(baseUrl, categoryId) {
-        if (baseUrl.match(/\/search\?(.+)/)) {
-            return baseUrl + `category=${categoryId}`;
-        }
         return `/search?category=${categoryId}`;
     }
 }
