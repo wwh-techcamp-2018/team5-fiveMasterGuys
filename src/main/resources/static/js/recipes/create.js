@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     function toggleBtn(target) {
-        if (target.value.length > 0) {
+        if (target.value.trim().length > 0) {
             $("#submit").classList.remove("is-btn-inactive");
             $("#submit").classList.add("is-danger");
         } else {
@@ -13,14 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
     $('input.box').addEventListener('keyup', ({target}) => toggleBtn(target));
     $('input.box').addEventListener('keypress', e => {
         e.keyCode = e.keyCode || e.which;
-        if (e.keyCode === 13 && e.target.value.length <= 0) {
+        if (e.keyCode === 13){
             e.preventDefault();
+            submit();
             return false;
         }
     });
 
     function submit() {
-        if ($('input.box').value.length > 0) $('#create-form').submit();
+        checkLoginOrRedirect();
+        if ($('input.box').value.trim().length > 0) {
+            $('#create-form').submit();
+        }
     }
 
     toggleBtn($('input.box'));

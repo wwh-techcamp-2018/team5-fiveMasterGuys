@@ -30,7 +30,7 @@
                     <input class="input" id="input-search" type="text" placeholder="레시피 이름">
                 </p>
                 <p class="control">
-                    <a class="button is-info btn-search" id="btn-search">
+                    <a class="button btn-search" id="btn-search">
                         검색하기
                     </a>
                 </p>
@@ -41,11 +41,6 @@
                 {{#if user}}
                     <div class="navbar-item">
                         {{user.name}}님 환영!
-                    </div>
-                    <div class="navbar-item">
-                        <a class="button input is-danger" href="/recipes/create">
-                            레시피 만들기
-                        </a>
                     </div>
                     <div class="navbar-item">
                         <button id="logout" class="button">Logout</button>

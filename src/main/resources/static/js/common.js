@@ -59,7 +59,7 @@ function getCookie(cookieName) {
 
 function checkLoginOrRedirect() {
     if (getCookie('isLoggedIn') !== 'true') {
-        location.href = "/users/login"
+        window.location.href = "/users/login"
     }
 }
 

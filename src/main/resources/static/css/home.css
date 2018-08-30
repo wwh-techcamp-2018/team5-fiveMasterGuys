@@ -1,3 +1,12 @@
+.hero {
+    box-shadow: 0px 0px 10px 4px rgba(68, 68, 68, 0.6);
+    margin-bottom: 50px;
+}
+
+.hero.is-large .hero-body {
+    padding-bottom: 24rem;
+}
+
 .card {
     border-radius: 20px;
 }
@@ -28,26 +37,31 @@
     border-top: 1px solid #dbdbdb;
 }
 
-#category-box {
-    cursor: pointer;
-}
-
 .category:hover {
     color: #ff3860;
 }
 
-#category-nav {
-    background: #454d4e;
+#category-box {
+    cursor: pointer;
+    padding: 6px 0;
     color: #fff;
     font-weight: bold;
+    font-size: 18px;
+}
+
+#category-nav {
+    position: relative;
+    background: #222;
+    box-shadow: 0px 0px 20px 2px rgba(68, 68, 68, 0.6);
+    z-index: 30;
 }
 
 .completed {
-    background: #2a97dc;
+    background: #333;
     border-radius: 0 0 20px 20px;
 }
 
 .incompleted {
-    background: #f7c630;
+    background: #ffaa00;
     border-radius: 0 0 20px 20px;
 }
