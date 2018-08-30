@@ -87,7 +87,7 @@ function autoGrow(element) {
 class ErrorMessageView {
     constructor(errorMessageBox) {
         this.errorMessageBox = errorMessageBox;
-        this.timeout = 3000;
+        this.timeout = 1750;
     }
 
     showMessage(msg, willHide=true) {
