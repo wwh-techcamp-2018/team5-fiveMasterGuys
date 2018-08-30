@@ -4,6 +4,7 @@ import com.woowahan.techcamp.recipehub.category.domain.Category;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.support.ValidationTest;
 import com.woowahan.techcamp.recipehub.user.domain.User;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +42,7 @@ public class RecipeDTOTest extends ValidationTest {
     @Test
     public void withBlankName() {
         RecipeDTO dto = RecipeDTO.builder().name("").build();
-        assertConstraintViolations(dto, 2);
+        assertConstraintViolations(dto, 3);
 
         dto = RecipeDTO.builder().name(" ").build();
         assertConstraintViolations(dto, 2);
@@ -69,6 +70,13 @@ public class RecipeDTOTest extends ValidationTest {
         assertThat(entity.getName()).isEqualTo(name);
         assertThat(entity.getCategory()).isEqualTo(category);
         assertThat(entity.getImgUrl()).isEqualTo(Recipe.DEFAULT_RECIPE_IMAGE_URL);
+    }
+
+    @Test
+    public void tooLongName() {
+        RecipeDTO dto = RecipeDTO.builder().categoryId(1L).name(StringUtils.repeat("a", 41)).categoryId(1L).build();
+
+        assertConstraintViolations(dto, 1);
     }
 
     @Test

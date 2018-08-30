@@ -165,10 +165,15 @@ class StepManager {
     }
 
     handleAddFormConfirmButtonClick(target) {
-        target.disabled = true;
-
         const stepForm = target.closest('.box');
+        const subtitleValue = stepForm.querySelector('.subtitle-input').value;
+        if (subtitleValue.trim() === '' || subtitleValue.length > 30) {
+            this.errorMessageView.showMessage('스텝 제목은 1 ~ 30자 사이여야 합니다.');
+            return;
+        }
+
         const requestBody = this.makeRequestBody(stepForm);
+        target.disabled = true;
         this.requestStepAddition(requestBody)
             .then(({data}) => {
                 this.renderStep(stepForm, data);
@@ -185,10 +190,16 @@ class StepManager {
     }
 
     handleModifyFormConfirmButtonClick(target) {
-        target.disabled = true;
-
+        
         const stepForm = target.closest('.box');
+        const subtitleValue = stepForm.querySelector('.subtitle-input').value;
+        if (subtitleValue.trim() === '' || subtitleValue.length > 30) {
+            this.errorMessageView.showMessage('스텝 제목은 1 ~ 30자 사이여야 합니다.');
+            return;
+        }
+        
         const requestBody = this.makeRequestBody(stepForm);
+        target.disabled = true;
         this.requestStepModification(requestBody)
             .then(({data}) => {
                 const stepBox = stepForm.nextElementSibling;
@@ -203,10 +214,16 @@ class StepManager {
     }
 
     handleOfferModifyFormConfirmButtonClick(target) {
+        const stepForm = target.closest('.box');
+        const subtitleValue = stepForm.querySelector('.subtitle-input').value;
+        if (subtitleValue.trim() === '' || subtitleValue.length > 30) {
+            this.errorMessageView.showMessage('스텝 제목은 1 ~ 30자 사이여야 합니다.');
+            return;
+        }
+        
+        const requestBody = this.makeRequestBody(stepForm);
         target.disabled = true;
 
-        const stepForm = target.closest('.box');
-        const requestBody = this.makeRequestBody(stepForm);
         this.requestStepModification(requestBody)
             .then(({data}) => {
                 this.removeSelectedContributor(requestBody.targetStepId);
@@ -275,14 +292,6 @@ class StepManager {
             headers: {"Content-Type": "application/json"},
             method: 'POST',
             body: JSON.stringify(requestBody)
-        });
-    }
-
-    requestStep(stepId) {
-        return fetchManager({
-            url: `/api/recipes/${this.recipe.getAttribute('data-recipe-id')}/steps/${stepId}`,
-            headers: {"Content-Type": "application/json"},
-            method: 'GET'
         });
     }
 
