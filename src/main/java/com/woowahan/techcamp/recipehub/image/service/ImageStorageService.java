@@ -26,7 +26,7 @@ public class ImageStorageService {
 
     private void validateImage(MultipartFile file) throws InvalidFileException {
         if (file.isEmpty() || !file.getContentType().startsWith("image/")) {
-            throw new InvalidFileException();
+            throw new InvalidFileException("");
         }
     }
 
@@ -40,7 +40,7 @@ public class ImageStorageService {
     private String extractFileExtension(MultipartFile file) throws InvalidFileException {
         int dotIndex = file.getOriginalFilename().lastIndexOf(".");
         if (dotIndex == -1) {
-            throw new InvalidFileException();
+            throw new InvalidFileException("");
         }
         return file.getOriginalFilename().substring(dotIndex + 1);
     }
