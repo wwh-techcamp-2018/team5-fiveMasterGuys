@@ -354,6 +354,7 @@
 .recipe-title {
     width: 500px;
     display: inline-block;
+    word-break: break-all;
 }
 
 .recipe-owner {
@@ -382,4 +383,8 @@
     z-index: -1;
     top: 0;
     transition: all 0.3s;
+}
+
+.step-contents li p {
+    word-break: break-all;
 }
