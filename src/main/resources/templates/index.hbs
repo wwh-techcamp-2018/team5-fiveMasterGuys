@@ -1,7 +1,6 @@
 {{#partial "head"}}
 <link href="/css/home.css" rel="stylesheet">
 <link href="/css/recipe-create.css" rel="stylesheet">
-<script src="/js/recipes/create.js"></script>
 <script src="/js/category/category.js"></script>
 {{/partial}}
 
@@ -15,6 +14,7 @@
         </div>
     </div>
     {{#eq baseUrl "/?"}}
+        <script src="/js/recipes/create.js"></script>
         {{> recipe/create}}
     {{/eq}}
 
