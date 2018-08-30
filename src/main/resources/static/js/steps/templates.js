@@ -140,7 +140,7 @@ class Templates {
         return `
         <li class="step-item">
             <div class="columns is-vcentered step-item-input-container">
-                <input type="text" class="column is-11 is-large step-item-input input" placeholder="생선을 잘라 10분간 물에 담가둔다."><button class="btn-plus is-2"><i class="fas fa-plus fa-3x"></i></button>
+                <input type="text" class="column is-11 is-large step-item-input input" maxlength="45" placeholder="생선을 잘라 10분간 물에 담가둔다."><button class="btn-plus is-2"><i class="fas fa-plus fa-3x"></i></button>
             </div>
         </li>
         `;
