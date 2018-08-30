@@ -7,7 +7,12 @@
 
 {{#partial "contents"}}
     <div id="category-nav">
-        <div id="category-box" class="container level menu-list"></div>
+        <div id="category-box" class="container level menu-list">
+            {{#each categories}}
+                <p class="category has-text-centered column child-vertical-align"
+                   data-category-id={{id}} data-url="{{baseUrl}}">{{title}}</p>
+            {{/each}}
+        </div>
     </div>
     {{#eq baseUrl "/?"}}
         {{> recipe/create}}

@@ -73,6 +73,7 @@ public class HomeController {
         model.addAttribute("recipes", recipePage.getContent());
         model.addAttribute("paginationList", PageListDTO.from(recipePage, SHOWING_PAGE_SIZE));
         model.addAttribute("baseUrl", baseUrl);
+        model.addAttribute("categories", categoryService.findAll());
     }
 
     private static Pageable zeroBased(Pageable pageable) {
