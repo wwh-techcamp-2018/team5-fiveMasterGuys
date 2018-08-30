@@ -1,5 +1,7 @@
 package com.woowahan.techcamp.recipehub.step.service;
 
+import com.woowahan.techcamp.recipehub.common.exception.BadRequestException;
+import com.woowahan.techcamp.recipehub.common.support.Message;
 import com.woowahan.techcamp.recipehub.recipe.domain.Recipe;
 import com.woowahan.techcamp.recipehub.step.domain.OfferType;
 import com.woowahan.techcamp.recipehub.step.domain.Step;
@@ -9,9 +11,11 @@ import com.woowahan.techcamp.recipehub.step.repository.StepOfferRepository;
 import com.woowahan.techcamp.recipehub.step.repository.StepRepository;
 import com.woowahan.techcamp.recipehub.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
@@ -23,6 +27,9 @@ public class StepOwnerService implements StepService {
 
     @Autowired
     private StepOfferRepository stepOfferRepository;
+
+    @Resource(name = "messageSourceAccessor")
+    private MessageSourceAccessor messageSourceAccessor;
 
     @Override
     @Transactional
@@ -55,6 +62,10 @@ public class StepOwnerService implements StepService {
         Optional<Step> maybeApprovedStep = Optional.empty();
         StepOffer offer = stepOfferRepository.findById(offerId)
                 .orElseThrow(EntityNotFoundException::new);
+
+        if (offer.getTarget() != null && offer.getTarget().isClosed()) {
+            throw new BadRequestException(messageSourceAccessor.getMessage(Message.STEP_CLOSED));
+        }
 
         if (offer.getOfferType().equals(OfferType.APPEND)) {
             return approveAppend(offer, recipe);

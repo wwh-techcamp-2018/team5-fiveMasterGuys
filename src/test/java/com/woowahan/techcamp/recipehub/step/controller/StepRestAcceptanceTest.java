@@ -207,6 +207,31 @@ public class StepRestAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    public void approveOfferByClosedTarget() {
+        Step closedStep = stepRepository.save(Step.builder()
+                .name("recipe-closed-step")
+                .writer(savedRecipeOwner)
+                .content(Arrays.asList("Closed", "Step"))
+                .imgUrl("/static/img/image.jpg")
+                .offers(null)
+                .recipe(recipe)
+                .sequence(1L)
+                .closed(true)
+                .ingredients(null)
+                .build());
+
+        StepOffer offer = stepOfferBuilder.target(closedStep).build();
+
+        ResponseEntity<RestResponse<Step>> response = requestJson(
+                "/api/recipes/" + recipe.getId() + "/steps/" + offer.getId() + "/approve",
+                HttpMethod.GET,
+                basicAuthRecipeOwner,
+                stepType());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
     public void getStep() throws Exception {
         Step savedStep = stepRepository.save(
                 Step.builder()
