@@ -87,6 +87,7 @@ class Templates {
                                 </div>
                             </div>
                         </div>
+                        <div class="step-offer-writer"><i class="fas fa-user"></i> ${data.writer.name}</div>
                     </div>
                 </article>
             </div>

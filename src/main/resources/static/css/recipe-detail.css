@@ -392,3 +392,10 @@
 .step-item:nth-of-type(n+6) {
     display: none;
 }
+
+.step-offer-writer {
+    float: right;
+    color: #888;
+    font-size: 22px;
+    padding: 0 20px 14px 20px;
+}
