@@ -73,16 +73,18 @@ class Templates {
                         <span class="step-offer-open is-pulled-right"><i class="fas fa-angle-down"></i></span></span>
                     </h3>
                 </a>
-                <article class="box step-offer-content hidden">
-                    <div class="columns">
-                        <div class="column is-one-third">
-                            <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
-                        </div>
-                        <div class="column step-article-container">
-                            <div class="step-contents-container">
-                                <ol class="step-contents">
-                                    ${data.content.map((e) => (`<li><p>${e}</p></li>`)).join('\n')}
-                                </ol>
+                <article class="box hidden">            
+                    <div class="step-inner-container" data-step-id="${data.id}">
+                        <div class="columns" data-step-id="${data.id}">
+                            <div class="column is-one-third">
+                                <img src="${data.imgUrl || "/img/recipe-default.png"}" class="step-img" alt="${data.name}">
+                            </div>
+                            <div class="column step-article-container">
+                                <div class="step-contents-container">
+                                    <ol class="step-contents">
+                                        ${data.content.map((e) => (`<li><p>${e}</p></li>`)).join('\n')}
+                                    </ol>
+                                </div>
                             </div>
                         </div>
                     </div>

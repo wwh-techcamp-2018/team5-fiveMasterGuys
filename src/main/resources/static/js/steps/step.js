@@ -356,8 +356,8 @@ class StepManager {
     }
 
     renderStepOfferContainer(targetStepId, data) {
-        const el = $(`article[data-step-id="${targetStepId}"]`);
-        el.insertAdjacentHTML('afterend', Templates.templateStepOfferContainer(data));
+        const el = $(`.btn-step-add[data-step-id="${targetStepId}"]`);
+        el.insertAdjacentHTML('beforebegin', Templates.templateStepOfferContainer(data));
     }
 
     renderNullStepOfferContainer(data) {
